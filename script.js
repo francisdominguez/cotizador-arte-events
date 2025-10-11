@@ -1,722 +1,797 @@
+// Asegurar que las librerías se carguen
+const { jsPDF } = window.jspdf;
+
+// ----------------------------------------------------
+// DATOS INICIALES Y ESTRUCTURA DE LA APLICACIÓN
+// ----------------------------------------------------
+
 // Datos iniciales - CONFIGURACIÓN COMPLETA
 let configuracion = {
     paquetes: [
-        { id: 1, nombre: "Globo Azul", precio: 1200 },
-        { id: 2, nombre: "Globo Dorado", precio: 1500 },
-        { id: 3, nombre: "Globo Blanco", precio: 1000 },
-        { id: 4, nombre: "Globo Rosa", precio: 1300 }
+        { id: 1, nombre: "Globo Azul", precio: 1200, emoji: '💙', cantidad: 0 },
+        { id: 2, nombre: "Globo Dorado", precio: 1500, emoji: '✨', cantidad: 0 },
+        { id: 3, nombre: "Globo Blanco", precio: 1000, emoji: '☁️', cantidad: 0 },
+        { id: 4, nombre: "Globo Rosa", precio: 1300, emoji: '💖', cantidad: 0 }
     ],
     accesorios: [
-        { id: 1, nombre: "Mampara", precio: 800 },
-        { id: 2, nombre: "Cilindro", precio: 400 },
-        { id: 3, nombre: "Mesa", precio: 300 },
-        { id: 4, nombre: "Silla", precio: 150 },
-        { id: 5, nombre: "Alfombra", precio: 600 },
-        { id: 6, nombre: "Transporte", precio: 500 }
-    ]
+        { id: 1, nombre: "Mampara Circular", precio: 800, emoji: '🖼️', cantidad: 0 },
+        { id: 2, nombre: "Cilindro Decorativo", precio: 400, emoji: '🏺', cantidad: 0 },
+        { id: 3, nombre: "Mesa Principal", precio: 300, emoji: '🪑', cantidad: 0 },
+        { id: 4, nombre: "Sillas Tiffany (x10)", precio: 1500, emoji: '🪑', cantidad: 0 },
+        { id: 5, nombre: "Alfombra Roja", precio: 600, emoji: '🟥', cantidad: 0 }
+    ],
+    manoObraPorcentaje: 30
 };
 
 // Información completa de la cotización
 let cotizacion = {
-    // Información del cliente
+    currentStep: 1,
     cliente: {
-        nombre: '',
-        telefono: '',
-        email: '',
-        fechaEvento: '',
-        lugarEvento: '',
-        notas: ''
+        nombre: '', telefono: '', email: '', fechaEvento: '', lugarEvento: '', notas: ''
     },
-    // Detalles del evento
     tipoEvento: '',
-    paquetes: [],
-    accesorios: [],
-    // Costos calculados
+    // Inicializar artículos de cotización como copia de la configuración base
+    articulos: {
+        paquetes: JSON.parse(JSON.stringify(configuracion.paquetes)),
+        accesorios: JSON.parse(JSON.stringify(configuracion.accesorios)),
+        manuales: [] // { id, nombre, precioUnitario, cantidad }
+    },
     costos: {
         materiales: 0,
+        transporte: 0,
         manoObra: 0,
+        manoObraPorcentaje: configuracion.manoObraPorcentaje,
         total: 0
     }
 };
 
+let manualItemIdCounter = 1;
+let configIdCounter = 100;
+
 // FUNCIÓN PARA FORMATEAR MONEDA DOMINICANA
 function formatoMonedaRD(monto) {
-    return `RD$${monto.toLocaleString('es-DO', {
+    if (isNaN(monto) || monto === null) monto = 0;
+    const numero = parseFloat(monto);
+    return `RD$${numero.toLocaleString('es-DO', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     })}`;
 }
 
-// Inicializar la aplicación
+// ----------------------------------------------------
+// INICIALIZACIÓN Y EVENT LISTENERS
+// ----------------------------------------------------
+
 document.addEventListener('DOMContentLoaded', function() {
-    inicializarConfiguracion();
-    actualizarCotizador();
-    actualizarResumen();
+    cargarConfiguracion();
     inicializarEventListeners();
     cargarFechaActual();
+    updateStepUI();
+    renderizarArticulos('paquetes');
+    renderizarConfiguracion();
+    actualizarResumen();
 });
 
-// CONFIGURACIÓN - PANEL OCULTO
-function toggleConfig() {
-    const panel = document.getElementById('configPanel');
-    panel.classList.toggle('active');
-}
-
-function inicializarConfiguracion() {
-    renderizarPaquetesConfig();
-    renderizarAccesoriosConfig();
-}
-
-function renderizarPaquetesConfig() {
-    const container = document.getElementById('config-paquetes');
-    container.innerHTML = '';
-    
-    configuracion.paquetes.forEach(paquete => {
-        const item = document.createElement('div');
-        item.className = 'config-item';
-        item.innerHTML = `
-            <input type="text" value="${paquete.nombre}" 
-                   onchange="actualizarPaquete(${paquete.id}, 'nombre', this.value)">
-            <input type="number" value="${paquete.precio}" 
-                   onchange="actualizarPaquete(${paquete.id}, 'precio', parseInt(this.value))">
-            <button class="btn-remove" onclick="eliminarPaquete(${paquete.id})">×</button>
-        `;
-        container.appendChild(item);
-    });
-}
-
-function renderizarAccesoriosConfig() {
-    const container = document.getElementById('config-accesorios');
-    container.innerHTML = '';
-    
-    configuracion.accesorios.forEach(accesorio => {
-        const item = document.createElement('div');
-        item.className = 'config-item';
-        item.innerHTML = `
-            <input type="text" value="${accesorio.nombre}" 
-                   onchange="actualizarAccesorio(${accesorio.id}, 'nombre', this.value)">
-            <input type="number" value="${accesorio.precio}" 
-                   onchange="actualizarAccesorio(${accesorio.id}, 'precio', parseInt(this.value))">
-            <button class="btn-remove" onclick="eliminarAccesorio(${accesorio.id})">×</button>
-        `;
-        container.appendChild(item);
-    });
-}
-
-function agregarPaquete() {
-    const nuevoId = Math.max(...configuracion.paquetes.map(p => p.id), 0) + 1;
-    configuracion.paquetes.push({
-        id: nuevoId,
-        nombre: "Nuevo Globo",
-        precio: 1000
-    });
-    renderizarPaquetesConfig();
-    actualizarCotizador();
-}
-
-function agregarAccesorio() {
-    const nuevoId = Math.max(...configuracion.accesorios.map(a => a.id), 0) + 1;
-    configuracion.accesorios.push({
-        id: nuevoId,
-        nombre: "Nuevo Accesorio",
-        precio: 500
-    });
-    renderizarAccesoriosConfig();
-    actualizarCotizador();
-}
-
-function actualizarPaquete(id, campo, valor) {
-    const paquete = configuracion.paquetes.find(p => p.id === id);
-    if (paquete) {
-        paquete[campo] = valor;
-        actualizarCotizador();
-    }
-}
-
-function actualizarAccesorio(id, campo, valor) {
-    const accesorio = configuracion.accesorios.find(a => a.id === id);
-    if (accesorio) {
-        accesorio[campo] = valor;
-        actualizarCotizador();
-    }
-}
-
-function eliminarPaquete(id) {
-    configuracion.paquetes = configuracion.paquetes.filter(p => p.id !== id);
-    renderizarPaquetesConfig();
-    actualizarCotizador();
-}
-
-function eliminarAccesorio(id) {
-    configuracion.accesorios = configuracion.accesorios.filter(a => a.id !== id);
-    renderizarAccesoriosConfig();
-    actualizarCotizador();
-}
-
-// EVENT LISTENERS MEJORADOS
-function inicializarEventListeners() {
-    // Tipo de evento
-    document.querySelectorAll('.option-card').forEach(card => {
-        card.addEventListener('click', function() {
-            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-            this.classList.add('selected');
-            cotizacion.tipoEvento = this.dataset.value;
-            actualizarResumen();
-            actualizarProgreso();
-        });
-    });
-
-    // Información del cliente en tiempo real
-    document.getElementById('cliente-nombre').addEventListener('input', function() {
-        cotizacion.cliente.nombre = this.value;
-        actualizarResumen();
-    });
-
-    document.getElementById('cliente-telefono').addEventListener('input', function() {
-        cotizacion.cliente.telefono = this.value;
-        actualizarResumen();
-    });
-
-    document.getElementById('cliente-email').addEventListener('input', function() {
-        cotizacion.cliente.email = this.value;
-        actualizarResumen();
-    });
-
-    document.getElementById('evento-fecha').addEventListener('change', function() {
-        cotizacion.cliente.fechaEvento = this.value;
-        actualizarResumen();
-    });
-
-    document.getElementById('evento-lugar').addEventListener('input', function() {
-        cotizacion.cliente.lugarEvento = this.value;
-        actualizarResumen();
-    });
-
-    document.getElementById('evento-notas').addEventListener('input', function() {
-        cotizacion.cliente.notas = this.value;
-    });
-}
-
-// FUNCIÓN PARA CARGAR FECHA ACTUAL
 function cargarFechaActual() {
-    const hoy = new Date();
-    const fechaInput = document.getElementById('evento-fecha');
-    fechaInput.value = hoy.toISOString().split('T')[0];
-    cotizacion.cliente.fechaEvento = fechaInput.value;
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha-evento').value = today;
+}
+
+function inicializarEventListeners() {
+    // Escuchar cambios en los inputs del Paso 1 para actualizar resumen
+    ['cliente-nombre', 'fecha-evento', 'tipo-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.addEventListener('input', guardarDatosPaso1);
+    });
+    // Escuchar cambios en los inputs del Paso 3
+    document.getElementById('costo-transporte').addEventListener('input', (e) => actualizarCostoManual('transporte', e.target.value));
+    document.getElementById('porcentaje-mano-obra').addEventListener('input', (e) => actualizarCostoManual('manoObraPorcentaje', e.target.value));
+}
+
+// ----------------------------------------------------
+// CONTROL DE PASOS Y VALIDACIÓN
+// ----------------------------------------------------
+
+function nextStep() {
+    if (cotizacion.currentStep === 1) {
+        if (!validarPaso1()) return;
+        guardarDatosPaso1();
+    } else if (cotizacion.currentStep === 2) {
+        // Se puede añadir lógica de validación para el paso 2 aquí si es necesario
+    }
+    
+    if (cotizacion.currentStep < 3) {
+        cotizacion.currentStep++;
+        updateStepUI();
+    }
+}
+
+function prevStep() {
+    if (cotizacion.currentStep > 1) {
+        cotizacion.currentStep--;
+        updateStepUI();
+    }
+}
+
+function updateStepUI() {
+    const steps = [
+        document.getElementById('step-1'),
+        document.getElementById('step-2'),
+        document.getElementById('step-3')
+    ];
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progress = document.getElementById('progress');
+    const generarBtn = document.getElementById('generar-cotizacion');
+
+    steps.forEach((step, index) => {
+        step.style.display = (index + 1 === cotizacion.currentStep) ? 'block' : 'none';
+    });
+    
+    prevBtn.style.display = cotizacion.currentStep > 1 ? 'inline-flex' : 'none';
+    
+    if (cotizacion.currentStep === 3) {
+        nextBtn.style.display = 'none';
+        // El resumen se actualiza antes de entrar en el paso 3
+    } else {
+        nextBtn.style.display = 'inline-flex';
+        nextBtn.textContent = 'Siguiente →';
+    }
+    
+    // Habilitar/Deshabilitar el botón de PDF
+    generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
+
+    const progressPercent = (cotizacion.currentStep / 3) * 100;
+    progress.style.width = `${progressPercent}%`;
+
+    if (cotizacion.currentStep === 2) {
+        const activeTabButton = document.querySelector('.tabs .tab-button.active');
+        const activeTab = activeTabButton ? activeTabButton.dataset.tab : 'paquetes';
+        switchTab(activeTab); // Asegurar que el contenido del tab activo se muestre y se renderice
+        renderizarArticulosManuales();
+    } else if (cotizacion.currentStep === 3) {
+        // Asegurar que los inputs del paso 3 reflejen los datos actuales
+        document.getElementById('costo-transporte').value = cotizacion.costos.transporte;
+        document.getElementById('porcentaje-mano-obra').value = cotizacion.costos.manoObraPorcentaje;
+    }
     actualizarResumen();
 }
 
-// ACTUALIZAR COTIZADOR COMPLETO
-function actualizarCotizador() {
-    renderizarGlobosCliente();
-    renderizarAccesoriosCliente();
+// ----------------------------------------------------
+// PASO 1: INFORMACIÓN DEL CLIENTE
+// ----------------------------------------------------
+
+function validarPaso1() {
+    const nombre = document.getElementById('cliente-nombre').value.trim();
+    const fecha = document.getElementById('fecha-evento').value.trim();
+    const tipo = document.getElementById('tipo-evento').value;
+
+    if (!nombre || !fecha || !tipo) {
+        mostrarNotificación('⚠️ Faltan campos obligatorios: Nombre del Cliente, Fecha del Evento y Tipo de Evento.', 'warning');
+        return false;
+    }
+    return true;
 }
 
-// FUNCIÓN NUEVA: Renderizar globos con forma de globo
-function renderizarGlobosCliente() {
-    const container = document.getElementById('globos-cliente');
-    container.innerHTML = '';
+function guardarDatosPaso1() {
+    cotizacion.cliente.nombre = document.getElementById('cliente-nombre').value.trim();
+    cotizacion.cliente.telefono = document.getElementById('cliente-telefono').value.trim();
+    cotizacion.cliente.email = document.getElementById('cliente-email').value.trim();
+    cotizacion.cliente.fechaEvento = document.getElementById('fecha-evento').value.trim();
+    cotizacion.cliente.lugarEvento = document.getElementById('lugar-evento').value.trim();
+    cotizacion.cliente.notas = document.getElementById('cliente-notas').value.trim();
+    cotizacion.tipoEvento = document.getElementById('tipo-evento').value;
     
-    configuracion.paquetes.forEach(paquete => {
-        const color = paquete.nombre.toLowerCase().replace('globo ', '');
-        const emoji = getGloboEmoji(color);
-        const colorFondo = getGloboColor(color);
-        
-        const item = document.createElement('div');
-        item.className = 'globo-item';
-        item.innerHTML = `
-            <div class="globo-color" style="background: ${colorFondo}">
-                ${emoji}
+    aplicarTema(cotizacion.tipoEvento);
+    actualizarResumen();
+}
+
+function aplicarTema(tipo) {
+    const body = document.body;
+    // Eliminar temas anteriores
+    body.className = body.className.split(' ').filter(className => !className.startsWith('theme-')).join(' ');
+
+    // Aplicar nuevo tema si existe
+    if (tipo) {
+        body.classList.add(`theme-${tipo.toLowerCase().replace(' ', '-')}`);
+    }
+}
+
+// ----------------------------------------------------
+// PASO 2: SELECCIÓN DE ARTÍCULOS
+// ----------------------------------------------------
+
+function switchTab(tabName) {
+    // Ocultar todos los contenidos de tabs
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.style.display = 'none';
+    });
+    // Desactivar todos los botones
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active');
+    });
+
+    // Mostrar el contenido activo y activar el botón
+    const activeContent = document.getElementById(`tab-${tabName}`);
+    const activeBtn = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
+    
+    if (activeContent) activeContent.style.display = 'block';
+    if (activeBtn) activeBtn.classList.add('active');
+    
+    // Renderizar los artículos correspondientes
+    if (tabName === 'paquetes' || tabName === 'accesorios') {
+        renderizarArticulos(tabName);
+    } else if (tabName === 'manual') {
+        renderizarArticulosManuales();
+    }
+}
+
+function renderizarArticulos(tipo) {
+    const container = document.getElementById(`${tipo}-container`);
+    if (!container) return;
+    container.innerHTML = '';
+    const listaArticulos = cotizacion.articulos[tipo];
+    
+    listaArticulos.forEach(articulo => {
+        const isSelected = articulo.cantidad > 0;
+        const card = document.createElement('div');
+        card.className = `item-card ${isSelected ? 'selected' : ''}`;
+        card.id = `${tipo}-${articulo.id}`;
+        card.innerHTML = `
+            <div class="item-details" onclick="toggleArticulo('${tipo}', ${articulo.id})">
+                <h4>${articulo.emoji || '📦'} ${articulo.nombre}</h4>
+                <p>Costo unitario: ${formatoMonedaRD(articulo.precio)}</p>
             </div>
-            <div class="globo-info">
-                <div class="globo-name">${paquete.nombre}</div>
-                <div class="globo-price">${formatoMonedaRD(paquete.precio)}</div>
-                <div class="cantidad-globo">
-                    <input type="number" min="0" value="0" 
-                           onchange="actualizarCantidadPaquete(${paquete.id}, parseInt(this.value))"
-                           placeholder="Cantidad">
-                </div>
+            <div class="item-footer">
+                <span class="price">${formatoMonedaRD(articulo.precio * articulo.cantidad)}</span>
+                <div class="quantity-control">
+                    <button onclick="updateCantidad('${tipo}', ${articulo.id}, -1)">-</button>
+                    <input type="number" value="${articulo.cantidad}" min="0" 
+                            oninput="updateCantidadInput('${tipo}', ${articulo.id}, this.value)">
+                    <button onclick="updateCantidad('${tipo}', ${articulo.id}, 1)">+</button>
+            </div>
             </div>
         `;
-        container.appendChild(item);
+        container.appendChild(card);
     });
 }
 
-// FUNCIÓN NUEVA: Renderizar accesorios
-function renderizarAccesoriosCliente() {
-    const container = document.getElementById('accesorios-cliente');
+function toggleArticulo(tipo, id) {
+    const articulo = cotizacion.articulos[tipo].find(a => a.id === id);
+    if (articulo) {
+        if (articulo.cantidad > 0) {
+            articulo.cantidad = 0; // Deseleccionar
+        } else {
+            articulo.cantidad = 1; // Seleccionar y establecer a 1
+        }
+        renderizarArticulos(tipo);
+        actualizarResumen();
+    }
+}
+
+function updateCantidad(tipo, id, cambio) {
+    const articulo = cotizacion.articulos[tipo].find(a => a.id === id);
+    if (articulo) {
+        articulo.cantidad = Math.max(0, articulo.cantidad + cambio);
+        renderizarArticulos(tipo);
+        actualizarResumen();
+    }
+}
+
+function updateCantidadInput(tipo, id, valor) {
+    const articulo = cotizacion.articulos[tipo].find(a => a.id === id);
+    if (articulo) {
+        articulo.cantidad = Math.max(0, parseInt(valor) || 0);
+        renderizarArticulos(tipo); // Re-render para aplicar clase 'selected'
+        actualizarResumen();
+    }
+}
+
+// Artículos Manuales
+function agregarArticuloManual() {
+    const newId = manualItemIdCounter++;
+    cotizacion.articulos.manuales.push({
+        id: newId,
+        nombre: `Artículo Personalizado ${newId}`,
+        precioUnitario: 0,
+        cantidad: 1,
+        tipo: 'manual'
+    });
+    renderizarArticulosManuales();
+    actualizarResumen();
+}
+
+function renderizarArticulosManuales() {
+    const container = document.getElementById('manual-items-container');
+    if (!container) return;
     container.innerHTML = '';
     
-    configuracion.accesorios.forEach(accesorio => {
-        const item = document.createElement('div');
-        item.className = 'elemento-item';
-        item.innerHTML = `
-            <div class="item-info">
-                <div class="item-name">${accesorio.nombre}</div>
-                <div class="item-price">${formatoMonedaRD(accesorio.precio)}</div>
-            </div>
-            <div class="cantidad-selector">
-                <input type="number" min="0" value="0" 
-                       onchange="actualizarCantidadAccesorio(${accesorio.id}, parseInt(this.value))"
-                       placeholder="Cantidad">
-            </div>
+    cotizacion.articulos.manuales.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'manual-item';
+        div.innerHTML = `
+            <input type="text" placeholder="Nombre del Artículo" value="${item.nombre}" 
+                    oninput="actualizarArticuloManual(${item.id}, 'nombre', this.value)">
+            <input type="number" placeholder="Precio Unitario" value="${item.precioUnitario}" min="0"
+                    oninput="actualizarArticuloManual(${item.id}, 'precioUnitario', this.value)">
+            <input type="number" placeholder="Cantidad" value="${item.cantidad}" min="1"
+                    oninput="actualizarArticuloManual(${item.id}, 'cantidad', this.value)">
+            <button class="btn-remove" onclick="eliminarArticuloManual(${item.id})">×</button>
         `;
-        container.appendChild(item);
+        container.appendChild(div);
     });
 }
 
-// FUNCIONES AUXILIARES PARA GLOBOS
-function getGloboEmoji(color) {
-    const emojis = {
-        'azul': '🔵',
-        'dorado': '🟡',
-        'blanco': '⚪',
-        'rosa': '🩷',
-        'rojo': '🔴',
-        'verde': '🟢',
-        'morado': '🟣',
-        'negro': '⚫',
-        'naranja': '🟠'
-    };
-    return emojis[color] || '🎈';
-}
-
-function getGloboColor(color) {
-    const colores = {
-        'azul': '#4169E1',
-        'dorado': '#FFD700',
-        'blanco': '#FFFFFF',
-        'rosa': '#FF69B4',
-        'rojo': '#FF0000',
-        'verde': '#32CD32',
-        'morado': '#9370DB',
-        'negro': '#000000',
-        'naranja': '#FFA500'
-    };
-    return colores[color] || '#8a2be2';
-}
-
-// ACTUALIZAR CANTIDADES
-function actualizarCantidadPaquete(id, cantidad) {
-    const existente = cotizacion.paquetes.find(p => p.id === id);
-    
-    if (cantidad > 0) {
-        if (existente) {
-            existente.cantidad = cantidad;
+function actualizarArticuloManual(id, campo, valor) {
+    const item = cotizacion.articulos.manuales.find(a => a.id === id);
+    if (item) {
+        if (campo === 'nombre') {
+            item.nombre = valor;
         } else {
-            const paquete = configuracion.paquetes.find(p => p.id === id);
-            cotizacion.paquetes.push({
-                ...paquete,
-                cantidad: cantidad
-            });
+            // Se usa parseFloat para precio y parseInt para cantidad
+            item[campo] = campo === 'cantidad' ? Math.max(1, parseInt(valor) || 1) : parseFloat(valor) || 0;
         }
-    } else {
-        cotizacion.paquetes = cotizacion.paquetes.filter(p => p.id !== id);
+        actualizarResumen();
     }
-    
-    actualizarResumen();
-    actualizarProgreso();
 }
 
-function actualizarCantidadAccesorio(id, cantidad) {
-    const existente = cotizacion.accesorios.find(a => a.id === id);
-    
-    if (cantidad > 0) {
-        if (existente) {
-            existente.cantidad = cantidad;
-        } else {
-            const accesorio = configuracion.accesorios.find(a => a.id === id);
-            cotizacion.accesorios.push({
-                ...accesorio,
-                cantidad: cantidad
-            });
-        }
-    } else {
-        cotizacion.accesorios = cotizacion.accesorios.filter(a => a.id !== id);
-    }
-    
+function eliminarArticuloManual(id) {
+    cotizacion.articulos.manuales = cotizacion.articulos.manuales.filter(a => a.id !== id);
+    renderizarArticulosManuales();
     actualizarResumen();
-    actualizarProgreso();
 }
 
-// ACTUALIZAR RESUMEN COMPLETO
+// ----------------------------------------------------
+// PASO 3: CÁLCULOS Y RESUMEN
+// ----------------------------------------------------
+
+function actualizarCostoManual(tipo, valor) {
+    let numVal = parseFloat(valor) || 0;
+
+    if (tipo === 'transporte') {
+        cotizacion.costos.transporte = numVal;
+    } else if (tipo === 'manoObraPorcentaje') {
+        cotizacion.costos.manoObraPorcentaje = Math.min(100, Math.max(0, numVal));
+    }
+    // Asegurar que el input se mantenga actualizado con el valor limitado
+    document.getElementById('porcentaje-mano-obra').value = cotizacion.costos.manoObraPorcentaje;
+    actualizarResumen();
+}
+
+function calcularTotalCotizacion() {
+    let subtotalMateriales = 0;
+
+    // 1. Sumar Paquetes y Accesorios
+    const articulosNormales = [
+        ...cotizacion.articulos.paquetes,
+        ...cotizacion.articulos.accesorios
+    ];
+
+    articulosNormales.forEach(item => {
+        subtotalMateriales += item.precio * item.cantidad;
+    });
+
+    // 2. Sumar Artículos Manuales
+    cotizacion.articulos.manuales.forEach(item => {
+        subtotalMateriales += (item.precioUnitario * item.cantidad);
+    });
+
+    // 3. Calcular Mano de Obra
+    cotizacion.costos.materiales = subtotalMateriales;
+    const porcentajeManoObra = cotizacion.costos.manoObraPorcentaje / 100;
+    const costoManoObra = subtotalMateriales * porcentajeManoObra;
+    cotizacion.costos.manoObra = costoManoObra;
+
+    // 4. Calcular Total
+    cotizacion.costos.total = subtotalMateriales + costoManoObra + cotizacion.costos.transporte;
+}
+
 function actualizarResumen() {
-    // Información del cliente
+    calcularTotalCotizacion();
+
+    // Actualizar Resumen de Cliente
     document.getElementById('resumen-cliente').textContent = cotizacion.cliente.nombre || '-';
-    document.getElementById('resumen-contacto').textContent = 
-        (cotizacion.cliente.telefono || cotizacion.cliente.email) ? 
-        `${cotizacion.cliente.telefono || ''} ${cotizacion.cliente.email || ''}` : '-';
+    document.getElementById('resumen-evento').textContent = cotizacion.tipoEvento || '-';
+    document.getElementById('resumen-fecha').textContent = cotizacion.cliente.fechaEvento || '-';
+
+    // Contar items seleccionados
+    const totalPaquetes = cotizacion.articulos.paquetes.filter(a => a.cantidad > 0).length + 
+                            cotizacion.articulos.manuales.filter(a => a.cantidad > 0).length;
+    const totalAccesorios = cotizacion.articulos.accesorios.filter(a => a.cantidad > 0).length;
+
+    document.getElementById('resumen-paquetes').textContent = `${totalPaquetes} item(s)`;
+    document.getElementById('resumen-accesorios').textContent = `${totalAccesorios} item(s)`;
+
+    // Actualizar Resumen de Costos
+    document.getElementById('resumen-materiales').textContent = formatoMonedaRD(cotizacion.costos.materiales);
+    document.getElementById('mano-obra-porcentaje').textContent = cotizacion.costos.manoObraPorcentaje;
+    document.getElementById('resumen-mano-obra').textContent = formatoMonedaRD(cotizacion.costos.manoObra);
+    document.getElementById('resumen-transporte').textContent = formatoMonedaRD(cotizacion.costos.transporte);
+    document.getElementById('total-cotizacion').textContent = formatoMonedaRD(cotizacion.costos.total);
     
-    document.getElementById('resumen-evento').textContent = cotizacion.tipoEvento 
-        ? cotizacion.tipoEvento.charAt(0).toUpperCase() + cotizacion.tipoEvento.slice(1)
-        : '-';
-    
-    document.getElementById('resumen-fecha').textContent = cotizacion.cliente.fechaEvento 
-        ? new Date(cotizacion.cliente.fechaEvento).toLocaleDateString('es-ES')
-        : '-';
-
-    document.getElementById('resumen-lugar').textContent = cotizacion.cliente.lugarEvento || '-';
-
-    // Detalles de la cotización CON "PAQUETE DE" PARA GLOBOS
-    const paquetesTexto = cotizacion.paquetes.length > 0 
-        ? cotizacion.paquetes.map(p => {
-            const cantidadTexto = p.cantidad > 0 ? `${p.cantidad} paquete${p.cantidad > 1 ? 's' : ''} de ` : '';
-            return `${cantidadTexto}${p.nombre} ${formatoMonedaRD(p.precio)}`;
-        }).join('<br>')
-        : '-';
-
-    document.getElementById('resumen-paquetes').innerHTML = paquetesTexto;
-
-    const accesoriosTexto = cotizacion.accesorios.length > 0 
-        ? cotizacion.accesorios.map(a => {
-            const cantidad = a.cantidad || 1;
-            const cantidadTexto = cantidad > 0 ? `${cantidad} ` : '';
-            const precioTotal = a.precio * cantidad;
-            return `${cantidadTexto}${a.nombre} ${formatoMonedaRD(precioTotal)}`;
-        }).join('<br>')
-        : '-';
-    
-    document.getElementById('resumen-accesorios').innerHTML = accesoriosTexto;
-
-    // Calcular costos
-    const costoMateriales = calcularCostoMateriales();
-    const manoObra = costoMateriales * 0.3; // 30% de mano de obra
-    const total = costoMateriales + manoObra;
-
-    // Actualizar costos con formato RD$
-    document.getElementById('resumen-materiales').textContent = formatoMonedaRD(costoMateriales);
-    document.getElementById('resumen-mano-obra').textContent = formatoMonedaRD(manoObra);
-    document.getElementById('total-cotizacion').textContent = formatoMonedaRD(total);
-
-    // Guardar en objeto cotización
-    cotizacion.costos.materiales = costoMateriales;
-    cotizacion.costos.manoObra = manoObra;
-    cotizacion.costos.total = total;
+    // Habilitar/Deshabilitar el botón de PDF
+    const generarBtn = document.getElementById('generar-cotizacion');
+    if (generarBtn) {
+        generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
+    }
 }
 
-// CALCULAR COSTO DE MATERIALES
-function calcularCostoMateriales() {
-    let total = 0;
+// ----------------------------------------------------
+// PDF GENERATION (CONSTRUCCIÓN LIMPIA CON JSPDF)
+// ----------------------------------------------------
+
+function generarCotizacionPDF() {
+    const { jsPDF } = window.jspdf;
     
-    // Sumar globos
-    cotizacion.paquetes.forEach(p => {
-        total += p.precio * p.cantidad;
+    if (typeof jsPDF === 'undefined') {
+        mostrarNotificación('❌ Error: La librería jsPDF no se ha cargado correctamente.', 'error');
+        return;
+    }
+
+    const doc = new jsPDF();
+    const total = cotizacion.costos.total;
+    const itemsSeleccionados = [
+        ...cotizacion.articulos.paquetes.filter(p => p.cantidad > 0),
+        ...cotizacion.articulos.accesorios.filter(a => a.cantidad > 0),
+        ...cotizacion.articulos.manuales.filter(m => m.cantidad > 0)
+    ];
+
+    // --- Configuración Inicial ---
+    const margin = 15;
+    let yPos = margin + 5;
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const maxY = pageHeight - margin - 10;
+    
+    // Función para manejar el salto de página
+    function checkPageBreak(neededSpace) {
+        if (yPos + neededSpace > maxY) {
+            doc.addPage();
+            yPos = margin;
+        }
+    }
+
+    // --- ENCABEZADO ELEGANTE ---
+    doc.setFillColor(138, 43, 226); // Color principal: Púrpura
+    doc.rect(0, 0, pageWidth, 35, 'F');
+    
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(255, 255, 255);
+    doc.text("ARTE Y EVENTS", pageWidth / 2, 15, { align: "center" });
+    
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.text("COTIZACIÓN PROFESIONAL", pageWidth / 2, 22, { align: "center" });
+    
+    yPos = 45;
+
+    // --- INFORMACIÓN DE LA COTIZACIÓN ---
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Fecha de Creación: ${new Date().toLocaleDateString('es-DO')}`, pageWidth - margin, yPos + 10, { align: "right" });
+    yPos += 10;
+
+    // --- SECCIÓN: INFORMACIÓN DEL CLIENTE Y EVENTO ---
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(138, 43, 226);
+    doc.text("Información del Cliente y Evento", margin, yPos);
+    yPos += 7;
+    
+    doc.setDrawColor(200, 200, 200);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 10;
+
+    // Información del cliente en dos columnas
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(0, 0, 0);
+    
+    // Columna izquierda
+    doc.text(`Cliente: ${cotizacion.cliente.nombre || 'N/A'}`, margin, yPos);
+    doc.text(`Fecha del Evento: ${formatearFecha(cotizacion.cliente.fechaEvento) || 'N/A'}`, margin, yPos + 5);
+    doc.text(`Contacto: ${cotizacion.cliente.telefono || ''} / ${cotizacion.cliente.email || ''}`, margin, yPos + 10);
+  
+    // Columna derecha - Evento y Lugar alineados a la derecha
+    const xRight = pageWidth - margin;
+    doc.text(`Evento: ${cotizacion.tipoEvento || 'N/A'}`, xRight, yPos, { align: "right" });
+    doc.text(`Lugar: ${cotizacion.cliente.lugarEvento || 'N/A'}`, xRight, yPos + 5, { align: "right" });
+    
+    yPos += 20;
+
+    // --- SECCIÓN: DETALLE DE ARTÍCULOS ---
+    checkPageBreak(50);
+
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(138, 43, 226);
+    doc.text("Detalle de Artículos y Servicios", margin, yPos);
+    yPos += 7;
+
+    // Encabezados de la tabla con diseño elegante
+    doc.setFillColor(245, 245, 245);
+    doc.rect(margin, yPos, pageWidth - 2 * margin, 7, 'F');
+    
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(80, 80, 80);
+    doc.text("Descripción", margin + 2, yPos + 5);
+    doc.text("Cant.", pageWidth - margin - 35, yPos + 5);
+    doc.text("Precio Total", pageWidth - margin - 5, yPos + 5, { align: "right" });
+    
+    yPos += 7;
+
+    // Líneas de detalle de la tabla
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(50, 50, 50);
+
+    itemsSeleccionados.forEach(item => {
+        checkPageBreak(5);
+        const nombre = item.nombre;
+        const cantidad = item.cantidad || 1;
+        
+        let precioUnitario;
+        if (item.tipo === 'manual') {
+            precioUnitario = item.precioUnitario;
+        } else {
+            precioUnitario = item.precio;
+        }
+
+        const precioTotalItem = precioUnitario * cantidad;
+
+        doc.text(nombre, margin + 2, yPos + 4);
+        doc.text(cantidad.toString(), pageWidth - margin - 35, yPos + 4, { align: "right" });
+        doc.text(formatoMonedaRD(precioTotalItem), pageWidth - margin - 5, yPos + 4, { align: "right" });
+        yPos += 6;
     });
-    
-    // Sumar accesorios
-    cotizacion.accesorios.forEach(a => {
-        total += a.precio * (a.cantidad || 1);
-    });
-    
-    return total;
-}
 
-function actualizarProgreso() {
-    let progreso = 0;
-    
-    if (cotizacion.cliente.nombre) progreso += 25;
-    if (cotizacion.tipoEvento) progreso += 25;
-    if (cotizacion.paquetes.length > 0) progreso += 25;
-    if (cotizacion.accesorios.length > 0) progreso += 25;
-    
-    document.getElementById('progress').style.width = `${progreso}%`;
-}
+    yPos += 10;
 
-// GUARDAR COTIZACIÓN
-function guardarCotizacion() {
-    const cotizacionData = {
-        ...cotizacion,
-        fechaCreacion: new Date().toISOString(),
-        id: Date.now()
-    };
+    // --- SECCIÓN: RESUMEN DE COSTOS ---
+    checkPageBreak(50);
     
-    // Guardar en localStorage
-    const cotizacionesGuardadas = JSON.parse(localStorage.getItem('cotizaciones')) || [];
-    cotizacionesGuardadas.push(cotizacionData);
-    localStorage.setItem('cotizaciones', JSON.stringify(cotizacionesGuardadas));
+    /// Línea decorativa COMPLETA
+doc.setDrawColor(138, 43, 226);
+doc.setLineWidth(0.3);
+doc.line(margin, yPos, pageWidth - margin, yPos);
+yPos += 8;
+    const xCostos = pageWidth - margin - 5;
     
+    doc.setFontSize(10);
+    doc.text("Costo de Materiales:", pageWidth / 2, yPos, { align: "left" });
+    doc.text(formatoMonedaRD(cotizacion.costos.materiales), xCostos, yPos, { align: "right" });
+    yPos += 5;
+
+    doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
+    doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
+    yPos += 5;
+
+    doc.text("Costo de Transporte:", pageWidth / 2, yPos, { align: "left" });
+    doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
+    yPos += 8;
+    
+    // Línea doble antes del total
+    doc.setDrawColor(138, 43, 226);
+    doc.setLineWidth(0.5);
+    doc.line(pageWidth / 2, yPos, pageWidth - margin, yPos);
+    yPos += 1;
+    doc.line(pageWidth / 2, yPos, pageWidth - margin, yPos);
+    yPos += 8;
+
+    // TOTAL FINAL con diseño destacado
+    doc.setFillColor(245, 245, 245);
+    doc.rect(pageWidth / 2 - 10, yPos - 5, pageWidth / 2 - margin + 10, 12, 'F');
+    
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(138, 43, 226);
+    doc.text("TOTAL COTIZADO:", pageWidth / 2, yPos, { align: "left" });
+    doc.text(formatoMonedaRD(total), xCostos, yPos, { align: "right" });
+    yPos += 15;
+    
+    // --- NOTAS (si existen) ---
+    if (cotizacion.cliente.notas) {
+        checkPageBreak(20);
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(0, 0, 0);
+        doc.text("Notas Adicionales:", margin, yPos);
+        yPos += 4;
+        
+        doc.setFontSize(9);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(80, 80, 80);
+        const textLines = doc.splitTextToSize(cotizacion.cliente.notas, pageWidth - 2 * margin);
+        doc.text(textLines, margin, yPos);
+        yPos += textLines.length * 4;
+    }
+    
+    // --- PIE DE PÁGINA ELEGANTE ---
+    checkPageBreak(20);
+    doc.setFillColor(245, 245, 245);
+    doc.rect(0, pageHeight - 20, pageWidth, 20, 'F');
+    
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(150, 150, 150);
+    
+    doc.text("Arte y Events - Decoración Profesional", pageWidth / 2, pageHeight - 10, { align: "center" });
+
+    // Guardar el PDF
+    const nombreArchivo = `cotizacion-${cotizacion.cliente.nombre.replace(/ /g, '_') || 'arte-events'}-${new Date().getTime()}.pdf`;
+    doc.save(nombreArchivo);
+
+    // Limpiar campos después de generar la cotización
+    limpiarCamposCotizacion();
+
     // Mostrar notificación
-    mostrarNotificación('✅ Cotización guardada como plantilla');
+    mostrarNotificación('✅ ¡Cotización generada con éxito!');
 }
 
-// LIMPIAR CAMPOS MEJORADO
-function limpiarCampos() {
+// Función auxiliar para formatear la fecha
+function formatearFecha(fechaISO) {
+    if (!fechaISO) return '';
+    const fecha = new Date(fechaISO);
+    return fecha.toLocaleDateString('es-DO');
+}
+
+// Función para limpiar campos después de generar la cotización
+function limpiarCamposCotizacion() {
     // Limpiar información del cliente
     document.getElementById('cliente-nombre').value = '';
     document.getElementById('cliente-telefono').value = '';
     document.getElementById('cliente-email').value = '';
-    document.getElementById('evento-lugar').value = '';
-    document.getElementById('evento-notas').value = '';
+    document.getElementById('lugar-evento').value = '';
+    document.getElementById('cliente-notas').value = '';
+    document.getElementById('tipo-evento').value = '';
     
-    // Limpiar tipo de evento
-    document.querySelectorAll('.option-card').forEach(card => {
-        card.classList.remove('selected');
-    });
-    
-    // Limpiar selecciones
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.value = '0';
-    });
-    
-    // Resetear cotización
-    cotizacion = {
-        cliente: {
-            nombre: '',
-            telefono: '',
-            email: '',
-            fechaEvento: '',
-            lugarEvento: '',
-            notas: ''
-        },
-        tipoEvento: '',
-        paquetes: [],
-        accesorios: [],
-        costos: {
-            materiales: 0,
-            manoObra: 0,
-            total: 0
-        }
-    };
-    
-    // Cargar fecha actual
+    // Restablecer fecha a la actual
     cargarFechaActual();
-    actualizarResumen();
-    actualizarProgreso();
     
-    mostrarNotificación('🔄 Nueva cotización lista');
+    // Limpiar selección de artículos
+    cotizacion.articulos.paquetes.forEach(p => p.cantidad = 0);
+    cotizacion.articulos.accesorios.forEach(a => a.cantidad = 0);
+    cotizacion.articulos.manuales = [];
+    
+    // Restablecer costos
+    document.getElementById('costo-transporte').value = 0;
+    document.getElementById('porcentaje-mano-obra').value = 30;
+    
+    // Actualizar la UI
+    renderizarArticulos('paquetes');
+    renderizarArticulos('accesorios');
+    renderizarArticulosManuales();
+    actualizarResumen();
+    
+    // Volver al paso 1
+    cotizacion.currentStep = 1;
+    updateStepUI();
 }
 
-// NOTIFICACIÓN MEJORADA
-function mostrarNotificación(mensaje) {
+// ----------------------------------------------------
+// UTILIDADES Y PANEL DE CONFIGURACIÓN
+// ----------------------------------------------------
+
+function mostrarNotificación(mensaje, tipo = 'success') {
     const notification = document.getElementById('notification');
-    notification.innerHTML = `<span>${mensaje}</span>`;
-    notification.classList.add('show');
-    
+    notification.textContent = mensaje;
+    notification.className = `notification show ${tipo === 'warning' ? 'warning' : ''} ${tipo === 'error' ? 'error' : ''}`;
     setTimeout(() => {
         notification.classList.remove('show');
     }, 3000);
 }
 
-// GENERAR COTIZACIÓN PDF (UNA SOLA PÁGINA MEJORADA)
-function generarCotizacionPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const total = cotizacion.costos.total;
-    
-    // Configuración para UNA SOLA PÁGINA
-    const margin = 15;
-    let yPos = margin + 5;
-    const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-    const maxY = pageHeight - margin - 20;
-
-    // FUNCIÓN MEJORADA: Solo ajusta formato, nunca elimina contenido
-    function checkAndAdjustSpace(neededLines) {
-        const spaceNeeded = yPos + (neededLines * 5);
-        if (spaceNeeded > maxY) {
-            // REDUCIR progresivamente en lugar de eliminar
-            if (doc.internal.getFontSize() > 7) {
-                doc.setFontSize(doc.internal.getFontSize() - 0.5);
-            }
-            // Reducir espaciado ligeramente
-            return 3; // espaciado reducido
-        }
-        return 5; // espaciado normal
-    }
-
-    // Logo y encabezado COMPACTOS
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(138, 43, 226);
-    doc.text("ARTE Y EVENTOS", margin, yPos);
-    
-    yPos += 5;
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(100, 100, 100);
-    doc.text("Decoración Profesional de Eventos", margin, yPos);
-    
-    yPos += 8;
-    
-    // Línea separadora
-    doc.setDrawColor(200, 200, 200);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 6;
-
-    // Título de cotización
-    doc.setFontSize(14);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(0, 0, 0);
-    doc.text("COTIZACIÓN", margin, yPos);
-    yPos += 10;
-
-    // Información del cliente - NUNCA SE ELIMINA
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "normal");
-    
-    if (cotizacion.cliente.nombre) {
-        doc.text(`Cliente: ${cotizacion.cliente.nombre}`, margin, yPos);
-        yPos += checkAndAdjustSpace(1);
-    }
-    
-    if (cotizacion.cliente.telefono || cotizacion.cliente.email) {
-        const contacto = `${cotizacion.cliente.telefono || ''} ${cotizacion.cliente.email || ''}`;
-        doc.text(`Contacto: ${contacto}`, margin, yPos);
-        yPos += checkAndAdjustSpace(1);
-    }
-    
-    if (cotizacion.cliente.fechaEvento) {
-        doc.text(`Fecha: ${new Date(cotizacion.cliente.fechaEvento).toLocaleDateString('es-ES')}`, margin, yPos);
-        yPos += checkAndAdjustSpace(1);
-    }
-    
-    if (cotizacion.cliente.lugarEvento) {
-        doc.text(`Lugar: ${cotizacion.cliente.lugarEvento}`, margin, yPos);
-        yPos += checkAndAdjustSpace(1);
-    }
-    
-    if (cotizacion.tipoEvento) {
-        doc.text(`Evento: ${cotizacion.tipoEvento.charAt(0).toUpperCase() + cotizacion.tipoEvento.slice(1)}`, margin, yPos);
-        yPos += checkAndAdjustSpace(1);
-    }
-
-    yPos += 3;
-
-    // GLOBOS Y DECORACIÓN - SECCIÓN SIEMPRE VISIBLE
-    if (cotizacion.paquetes.length > 0) {
-        const spacing = checkAndAdjustSpace(4);
-        
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(138, 43, 226);
-        doc.text("GLOBOS Y DECORACIÓN", margin, yPos);
-        yPos += spacing;
-        
-        // Línea separadora
-        doc.setDrawColor(138, 43, 226);
-        doc.line(margin, yPos, margin + 60, yPos);
-        yPos += spacing;
-
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(0, 0, 0);
-        
-        // ITEMS DE GLOBOS - CON "PAQUETE DE"
-        cotizacion.paquetes.forEach(globo => {
-            const spacing = checkAndAdjustSpace(1);
-            const cantidadTexto = globo.cantidad > 0 ? `${globo.cantidad} paquete${globo.cantidad > 1 ? 's' : ''} de ` : '';
-            const nombre = `${cantidadTexto}${globo.nombre}`;
-            const precio = formatoMonedaRD(globo.precio); // Precio unitario
-            
-            doc.text(nombre, margin, yPos);
-            doc.text(precio, pageWidth - margin - 15, yPos, { align: "right" });
-            yPos += spacing;
-        });
-        
-        yPos += 3;
-    }
-
-    // ACCESORIOS Y MATERIALES - SECCIÓN SIEMPRE VISIBLE
-    if (cotizacion.accesorios.length > 0) {
-        const spacing = checkAndAdjustSpace(4);
-
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(138, 43, 226);
-        doc.text("ACCESORIOS Y MATERIALES", margin, yPos);
-        yPos += spacing;
-        
-        // Línea separadora
-        doc.setDrawColor(138, 43, 226);
-        doc.line(margin, yPos, margin + 75, yPos);
-        yPos += spacing;
-
-        doc.setFontSize(8);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(0, 0, 0);
-        
-        // ITEMS DE ACCESORIOS - CON CANTIDADES
-        cotizacion.accesorios.forEach(accesorio => {
-            const spacing = checkAndAdjustSpace(1);
-            const cantidad = accesorio.cantidad || 1;
-            const cantidadTexto = cantidad > 0 ? `${cantidad} ` : '';
-            const nombre = `${cantidadTexto}${accesorio.nombre}`;
-            const precio = formatoMonedaRD(accesorio.precio * cantidad); // Precio total
-            
-            doc.text(nombre, margin, yPos);
-            doc.text(precio, pageWidth - margin - 15, yPos, { align: "right" });
-            yPos += spacing;
-        });
-        
-        yPos += 5;
-    }
-
-    // Línea separadora antes del total
-    const spacing = checkAndAdjustSpace(6);
-    doc.setDrawColor(200, 200, 200);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += spacing;
-
-    // Costos detallados - SIEMPRE VISIBLES
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "normal");
-    
-    doc.text("Costo de Materiales:", margin, yPos);
-    doc.text(formatoMonedaRD(cotizacion.costos.materiales), pageWidth - margin - 15, yPos, { align: "right" });
-    yPos += checkAndAdjustSpace(1);
-
-    doc.text("Mano de Obra:", margin, yPos);
-    doc.text(formatoMonedaRD(cotizacion.costos.manoObra), pageWidth - margin - 15, yPos, { align: "right" });
-    yPos += checkAndAdjustSpace(1);
-
-    // Total - SIEMPRE VISIBLE
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(0, 0, 0);
-    doc.text("TOTAL:", margin, yPos);
-    doc.text(formatoMonedaRD(total), pageWidth - margin - 15, yPos, { align: "right" });
-    yPos += 10;
-
-    // Mensaje final - SIEMPRE VISIBLE
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "italic");
-    doc.setTextColor(100, 100, 100);
-    doc.text("Gracias por confiar en Arte y Eventos", pageWidth / 2, yPos, { align: "center" });
-    yPos += 4;
-    doc.text("Transformamos tus espacios en experiencias inolvidables", pageWidth / 2, yPos, { align: "center" });
-
-    // Guardar el PDF
-    const nombreArchivo = `cotizacion-${cotizacion.cliente.nombre || 'cliente'}-${new Date().getTime()}.pdf`;
-    doc.save(nombreArchivo);
-
-    // Mostrar notificación
-    mostrarNotificación('✅ Cotización PDF generada en una sola hoja');
-    
-    // Limpiar campos después de generar PDF
-    setTimeout(() => {
-        limpiarCampos();
-    }, 2000);
+function toggleConfig() {
+    document.getElementById('configPanel').classList.toggle('active');
 }
-// ==================== PWA - INSTALAR COMO APP MÓVIL ====================
 
+function cargarConfiguracion() {
+    const configGuardada = localStorage.getItem('arteyevents_config');
+    if (configGuardada) {
+        configuracion = JSON.parse(configGuardada);
+        // Recopiar la estructura limpia (solo ítems sin cantidad) a la cotización
+        cotizacion.articulos.paquetes = configuracion.paquetes.map(p => ({...p, cantidad: 0}));
+        cotizacion.articulos.accesorios = configuracion.accesorios.map(a => ({...a, cantidad: 0}));
+        cotizacion.costos.manoObraPorcentaje = configuracion.manoObraPorcentaje;
+    }
+}
+
+function guardarConfiguracion() {
+    // 1. Actualizar el porcentaje de mano de obra antes de guardar
+    configuracion.manoObraPorcentaje = parseFloat(document.getElementById('porcentaje-mano-obra').value) || 0;
+    
+    // 2. Limpiar las cantidades para guardar solo la plantilla base
+    const configToSave = {
+        paquetes: configuracion.paquetes.map(({ id, nombre, precio, emoji }) => ({ id, nombre, precio, emoji: emoji || '🎈' })),
+        accesorios: configuracion.accesorios.map(({ id, nombre, precio, emoji }) => ({ id, nombre, precio, emoji: emoji || '✨' })),
+        manoObraPorcentaje: configuracion.manoObraPorcentaje
+    };
+    
+    localStorage.setItem('arteyevents_config', JSON.stringify(configToSave));
+    mostrarNotificación('✅ Configuración guardada con éxito.');
+    toggleConfig();
+    
+    // 3. Recargar la configuración en la aplicación para aplicar cambios
+    cargarConfiguracion();
+    renderizarArticulos('paquetes');
+    actualizarResumen();
+}
+
+function renderizarConfiguracion() {
+    const configPaquetesContainer = document.getElementById('config-paquetes');
+    const configAccesoriosContainer = document.getElementById('config-accesorios');
+    
+    if (configPaquetesContainer) configPaquetesContainer.innerHTML = '';
+    if (configAccesoriosContainer) configAccesoriosContainer.innerHTML = '';
+    
+    // Renderizar Paquetes
+    configuracion.paquetes.forEach(item => {
+        if (configPaquetesContainer) configPaquetesContainer.innerHTML += createConfigItemHTML('paquete', item);
+    });
+
+    // Renderizar Accesorios
+    configuracion.accesorios.forEach(item => {
+        if (configAccesoriosContainer) configAccesoriosContainer.innerHTML += createConfigItemHTML('accesorio', item);
+    });
+}
+
+function createConfigItemHTML(tipo, item) {
+    return `
+        <div class="config-item" data-id="${item.id}" data-tipo="${tipo}">
+            <input type="text" placeholder="Nombre" value="${item.nombre}" 
+                    oninput="actualizarConfigItem('${tipo}', ${item.id}, 'nombre', this.value)">
+            <input type="number" placeholder="Precio" value="${item.precio}" min="0" 
+                    oninput="actualizarConfigItem('${tipo}', ${item.id}, 'precio', this.value)">
+            <button class="btn-remove" onclick="eliminarConfigItem('${tipo}', ${item.id})">×</button>
+        </div>
+    `;
+}
+
+function agregarPaquete() {
+    const newId = configIdCounter++;
+    configuracion.paquetes.push({ id: newId, nombre: `Nuevo Globo ${newId}`, precio: 0, emoji: '🎈', cantidad: 0 });
+    renderizarConfiguracion();
+}
+
+function agregarAccesorio() {
+    const newId = configIdCounter++;
+    configuracion.accesorios.push({ id: newId, nombre: `Nuevo Accesorio ${newId}`, precio: 0, emoji: '✨', cantidad: 0 });
+    renderizarConfiguracion();
+}
+
+function actualizarConfigItem(tipo, id, campo, valor) {
+    const lista = configuracion[`${tipo}s`];
+    const item = lista.find(a => a.id === id);
+    if (item) {
+        if (campo === 'nombre') {
+            item.nombre = valor;
+        } else if (campo === 'precio') {
+            item.precio = parseFloat(valor) || 0;
+        }
+    }
+}
+
+function eliminarConfigItem(tipo, id) {
+    configuracion[`${tipo}s`] = configuracion[`${tipo}s`].filter(a => a.id !== id);
+    renderizarConfiguracion();
+}
+
+// Lógica PWA (Se mantiene por si estaba en uso)
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  
-  // Mostrar botón de instalación después de 3 segundos
-  setTimeout(() => {
-    mostrarBotonInstalacion();
-  }, 3000);
+    e.preventDefault();
+    deferredPrompt = e;
+    // Mostrar botón de instalación si no se ha instalado
+    // if (!localStorage.getItem('pwa_installed')) showInstallButton();
 });
 
-function mostrarBotonInstalacion() {
-  if (document.querySelector('.install-btn')) return;
-  
+// Función de ejemplo para mostrar el botón de instalación (si es necesario)
+function showInstallButton() {
   const installBtn = document.createElement('button');
-  installBtn.textContent = '📱 Instalar App';
-  installBtn.className = 'install-btn';
+  installBtn.id = 'install-btn';
+  installBtn.textContent = 'Instalar App';
   installBtn.style.cssText = `
     position: fixed;
     bottom: 20px;
@@ -751,6 +826,7 @@ function mostrarBotonInstalacion() {
       if (outcome === 'accepted') {
         installBtn.style.display = 'none';
         mostrarNotificación('✅ App instalada correctamente');
+        localStorage.setItem('pwa_installed', 'true');
       }
       deferredPrompt = null;
     }
@@ -761,18 +837,11 @@ function mostrarBotonInstalacion() {
 
 // Registrar Service Worker
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(function(registration) {
-        console.log('✅ ServiceWorker registrado correctamente');
-      })
-      .catch(function(error) {
-        console.log('❌ ServiceWorker falló: ', error);
-      });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').then(registration => {
+      // console.log('SW registered: ', registration);
+    }).catch(registrationError => {
+      // console.log('SW registration failed: ', registrationError);
+    });
   });
-}
-
-// Detectar si está en modo app instalada
-window.addEventListener('appinstalled', () => {
-  console.log('✅ App instalada correctamente en el dispositivo');
-});
+} 
