@@ -7,16 +7,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Cotizador">
-    <link rel="manifest" href="/cotizador-arte-events/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <title>Arte y Events - Cotizador Profesional</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
+    </head>
 <body>
-    <!-- BOTÓN DE CONFIGURACIÓN (SOLO PARA TI) -->
     <div class="config-toggle" onclick="toggleConfig()">⚙️</div>
 
-    <!-- PANEL DE CONFIGURACIÓN OCULTO -->
     <div class="config-panel" id="configPanel">
         <div class="config-header">
             <h2>🛠️ Panel de Configuración</h2>
@@ -24,219 +21,191 @@
         </div>
         
         <div class="config-content">
-            <!-- Configurar Globos -->
             <div class="config-section">
-                <h3>Globos y Decoración</h3>
+                <h3>Globos por Color</h3>
                 <div class="config-grid" id="config-paquetes">
-                    <!-- Los globos se generarán dinámicamente -->
-                </div>
+                    </div>
                 <button class="btn-add" onclick="agregarPaquete()">+ Agregar Globo</button>
             </div>
 
-            <!-- Configurar Accesorios -->
             <div class="config-section">
-                <h3>Accesorios y Materiales</h3>
+                <h3>Accesorios y Mobiliario</h3>
                 <div class="config-grid" id="config-accesorios">
-                    <!-- Los accesorios se generarán dinámicamente -->
-                </div>
+                    </div>
                 <button class="btn-add" onclick="agregarAccesorio()">+ Agregar Accesorio</button>
             </div>
+            
+            <button class="btn-primary" onclick="guardarConfiguracion()">Guardar Configuración</button>
         </div>
     </div>
 
-    <!-- INTERFAZ PRINCIPAL (COTIZADORA PROFESIONAL) -->
-    <div class="container" id="mainContainer">
+    <div class="container">
         <header>
-            <div class="logo">
-                <div class="logo-icon">🎈</div>
-                <div class="logo-text">
-                    <h1>Arte y Eventos</h1>
-                    <p>COTIZADOR PROFESIONAL</p>
-                </div>
-            </div>
-            <p>Herramienta profesional para cotizaciones de decoración</p>
+            <h1>Arte y Events</h1>
+            <p>Cotizador Profesional de Eventos</p>
         </header>
 
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
-        </div>
-
         <div class="app-container">
-            <div class="form-sections">
-                <!-- INFORMACIÓN DEL CLIENTE -->
-                <section id="info-cliente" class="form-section">
-                    <div class="section-title">
-                        <div class="number">1</div>
-                        <h2>Información del Cliente</h2>
+            <div class="main-panel">
+                
+                <div class="progress-bar-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
                     </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>👤 Nombre del Cliente</label>
-                            <input type="text" id="cliente-nombre" placeholder="Ej: María González">
-                        </div>
-                        <div class="form-group">
-                            <label>📞 Teléfono</label>
-                            <input type="tel" id="cliente-telefono" placeholder="Ej: 555-123-4567">
-                        </div>
-                        <div class="form-group">
-                            <label>📧 Email</label>
-                            <input type="email" id="cliente-email" placeholder="Ej: cliente@email.com">
-                        </div>
-                        <div class="form-group">
-                            <label>📅 Fecha del Evento</label>
-                            <input type="date" id="evento-fecha">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>📍 Lugar del Evento</label>
-                            <input type="text" id="evento-lugar" placeholder="Ej: Salón de Fiestas Las Palmas">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>📝 Notas Especiales</label>
-                            <textarea id="evento-notas" placeholder="Requerimientos especiales, colores preferidos, etc." rows="3"></textarea>
-                        </div>
-                    </div>
-                </section>
+                </div>
 
-                <!-- TIPO DE EVENTO -->
-                <section id="tipo-evento" class="form-section">
-                    <div class="section-title">
-                        <div class="number">2</div>
-                        <h2>Tipo de Evento</h2>
+                <div class="steps-container">
+                    <div class="step-section" id="step-1">
+                        <h2>1. Información del Cliente y Evento</h2>
+                        <div class="form-section">
+                            <div class="form-group">
+                                <label for="cliente-nombre">Nombre del Cliente (*)</label>
+                                <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
+                            </div>
+                            <div class="form-group">
+                                <label for="cliente-telefono">Teléfono</label>
+                                <input type="tel" id="cliente-telefono" placeholder="Ej: 809-555-1234">
+                            </div>
+                            <div class="form-group">
+                                <label for="cliente-email">Email</label>
+                                <input type="email" id="cliente-email" placeholder="Ej: correo@ejemplo.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha-evento">Fecha del Evento (*)</label>
+                                <input type="date" id="fecha-evento">
+                            </div>
+                            <div class="form-group">
+                                <label for="lugar-evento">Lugar/Dirección del Evento</label>
+                                <input type="text" id="lugar-evento" placeholder="Ej: Salón de Eventos Bella Vista">
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo-evento">Tipo de Evento (*)</label>
+                                <select id="tipo-evento" onchange="aplicarTema()">
+                                    <option value="">Seleccione un tipo</option>
+                                    <option value="Bodas">Bodas</option>
+                                    <option value="Cumpleanos">Cumpleaños</option>
+                                    <option value="Corporativo">Corporativo</option>
+                                    <option value="Baby Shower">Baby Shower</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cliente-notas">Notas Adicionales</label>
+                                <textarea id="cliente-notas" rows="3" placeholder="Detalles especiales, colores, temáticas, etc."></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <div class="options-grid">
-                        <div class="option-card" data-value="bodas">
-                            <div class="icon">💍</div>
-                            <span>Bodas</span>
-                        </div>
-                        <div class="option-card" data-value="cumpleanos">
-                            <div class="icon">🎂</div>
-                            <span>Cumpleaños</span>
-                        </div>
-                        <div class="option-card" data-value="corporativo">
-                            <div class="icon">💼</div>
-                            <span>Eventos Corporativos</span>
-                        </div>
-                        <div class="option-card" data-value="baby-shower">
-                            <div class="icon">👶</div>
-                            <span>Baby Shower</span>
-                        </div>
-                        <div class="option-card" data-value="reveal">
-                            <div class="icon">🎀</div>
-                            <span>Revelación de Sexo</span>
-                        </div>
-                        <div class="option-card" data-value="grados">
-                            <div class="icon">🎓</div>
-                            <span>Graduaciones</span>
-                        </div>
-                    </div>
-                </section>
 
-                <!-- GLOBOS Y DECORACIÓN -->
-                <section id="paquetes-globos" class="form-section">
-                    <div class="section-title">
-                        <div class="number">3</div>
-                        <h2>Globos y Decoración</h2>
-                    </div>
-                    <div class="globos-grid" id="globos-cliente">
-                        <!-- Se generará automáticamente desde la configuración -->
-                    </div>
-                </section>
+                    <div class="step-section" id="step-2" style="display: none;">
+                        <h2>2. Selección de Artículos</h2>
+                        
+                        <div class="tabs">
+                            <button class="tab-button active" data-tab="paquetes" onclick="switchTab('paquetes')">🎈 Globos y Paquetes</button>
+                            <button class="tab-button" data-tab="accesorios" onclick="switchTab('accesorios')">🛋️ Accesorios</button>
+                            <button class="tab-button" data-tab="manual" onclick="switchTab('manual')">✍️ Artículo Manual</button>
+                        </div>
 
-                <!-- ACCESORIOS Y MATERIALES -->
-                <section id="elementos-extra" class="form-section">
-                    <div class="section-title">
-                        <div class="number">4</div>
-                        <h2>Accesorios y Materiales</h2>
+                        <div class="tab-content active" id="tab-paquetes">
+                            <div class="options-grid" id="paquetes-container">
+                                </div>
+                        </div>
+
+                        <div class="tab-content" id="tab-accesorios" style="display: none;">
+                            <div class="options-grid" id="accesorios-container">
+                                </div>
+                        </div>
+
+                        <div class="tab-content" id="tab-manual" style="display: none;">
+                            <div class="manual-items-container" id="manual-items-container">
+                                </div>
+                            <button class="btn-secondary" onclick="agregarArticuloManual()">+ Añadir Artículo Personalizado</button>
+                        </div>
+
                     </div>
-                    
-                    <div class="elementos-grid" id="accesorios-cliente">
-                        <!-- Se generará automáticamente desde la configuración -->
+
+                    <div class="step-section" id="step-3" style="display: none;">
+                        <h2>3. Costos y Transporte</h2>
+                        <div class="form-section form-grid two-columns">
+                            <div class="form-group">
+                                <label for="costo-transporte">Costo de Transporte (RD$)</label>
+                                <input type="number" id="costo-transporte" value="0" min="0" oninput="actualizarCostoManual('transporte', this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label for="porcentaje-mano-obra">Mano de Obra (%)</label>
+                                <input type="number" id="porcentaje-mano-obra" value="30" min="0" max="100" oninput="actualizarCostoManual('manoObraPorcentaje', this.value)">
+                            </div>
+                        </div>
+                        <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 600;">* El resumen de la cotización final se muestra a la derecha.</p>
                     </div>
-                </section>
+
+                    <div class="nav-buttons">
+                        <button class="btn-secondary" onclick="prevStep()" id="prev-btn" style="display: none;">← Anterior</button>
+                        <button class="btn-primary" onclick="nextStep()" id="next-btn">Siguiente →</button>
+                    </div>
+                </div>
             </div>
 
-            <!-- PANEL DE RESUMEN MEJORADO -->
             <div class="resumen-panel">
-                <h2>📋 Resumen de Cotización</h2>
-                <div class="resumen-content">
-                    <!-- Información del Cliente -->
-                    <div class="resumen-section">
-                        <h4>👤 Cliente</h4>
-                        <div class="resumen-item">
-                            <span>Nombre:</span>
-                            <span id="resumen-cliente">-</span>
-                        </div>
-                        <div class="resumen-item">
-                            <span>Contacto:</span>
-                            <span id="resumen-contacto">-</span>
-                        </div>
-                        <div class="resumen-item">
-                            <span>Evento:</span>
-                            <span id="resumen-evento">-</span>
-                        </div>
-                        <div class="resumen-item">
-                            <span>Fecha:</span>
-                            <span id="resumen-fecha">-</span>
-                        </div>
-                        <div class="resumen-item">
-                            <span>Lugar:</span>
-                            <span id="resumen-lugar">-</span>
-                        </div>
+                <h3>Detalles de la Cotización</h3>
+                <div class="resumen-details">
+                    <div class="resumen-item">
+                        <span>Cliente:</span>
+                        <span id="resumen-cliente">-</span>
                     </div>
-
-                    <!-- Detalles de la Cotización -->
-                    <div class="resumen-section">
-                        <h4>🎯 Detalles</h4>
-                        <div class="resumen-item">
-                            <span>Globos:</span>
-                            <span id="resumen-paquetes">-</span>
-                        </div>
-                        <div class="resumen-item">
-                            <span>Accesorios:</span>
-                            <span id="resumen-accesorios">-</span>
-                        </div>
+                    <div class="resumen-item">
+                        <span>Evento:</span>
+                        <span id="resumen-evento">-</span>
                     </div>
+                    <div class="resumen-item">
+                        <span>Fecha:</span>
+                        <span id="resumen-fecha">-</span>
+                    </div>
+                    <div class="resumen-separator"></div>
+                    <div class="resumen-item">
+                        <span>Globos:</span>
+                        <span id="resumen-paquetes">-</span>
+                    </div>
+                    <div class="resumen-item">
+                        <span>Accesorios:</span>
+                        <span id="resumen-accesorios">-</span>
+                    </div>
+                </div>
 
-                    <!-- Costos -->
-                    <div class="resumen-section">
-                        <h4>💰 Costos</h4>
+                <div class="resumen-total-section">
+                    <div class="resumen-costs">
                         <div class="resumen-item">
-                            <span>Materiales:</span>
-                            <span id="resumen-materiales">$0</span>
+                            <span>Subtotal Materiales:</span>
+                            <span id="resumen-materiales">RD$0.00</span>
                         </div>
                         <div class="resumen-item">
-                            <span>Mano de obra :</span>
-                            <span id="resumen-mano-obra">$0</span>
+                            <span>🛠️ Mano de Obra (<span id="mano-obra-porcentaje">30</span>%):</span>
+                            <span id="resumen-mano-obra">RD$0.00</span>
                         </div>
+                        <div class="resumen-item">
+                            <span>🚚 Transporte:</span>
+                            <span id="resumen-transporte">RD$0.00</span>
+                        </div>
+                        <div class="resumen-separator"></div>
                         <div class="resumen-total">
                             <span>Total Cotización:</span>
-                            <span id="total-cotizacion">$0</span>
+                            <span id="total-cotizacion">RD$0.00</span>
                         </div>
                     </div>
-                </div>
-                
-                <button id="generar-cotizacion" class="btn-primary" onclick="generarCotizacionPDF()">
-                    <span>📄</span> Generar Cotización PDF
-                </button>
+                    
+                    <button id="generar-cotizacion" class="btn-primary" onclick="generarCotizacionPDF()" disabled>
+                        <span>📄</span> Generar Cotización PDF
+                    </button>
 
-                <div class="action-buttons">
-                    <button class="btn-secondary" onclick="guardarCotizacion()">
-                        <span>💾</span> Guardar Plantilla
-                    </button>
-                    <button class="btn-secondary" onclick="limpiarCampos()">
-                        <span>🔄</span> Nueva Cotización
-                    </button>
-                </div>
-                
-                <div class="info-box">
-                    <h4>✅ Esta cotización incluye:</h4>
-                    <ul>
-                        <li>Materiales de primera calidad</li>
-                        <li>Instalación profesional</li>
-                        <li>Asesoría de diseño</li>
-                        <li>Garantía de satisfacción</li>
-                        <li>Coordinación del evento</li>
-                    </ul>
+                    <div class="info-box">
+                        <h4>✅ Esta cotización incluye:</h4>
+                        <ul>
+                            <li>Materiales de primera calidad</li>
+                            <li>Instalación profesional</li>
+                            <li>Asesoría de diseño</li>
+                            <li>Garantía de satisfacción</li>
+                            <li>Coordinación del evento</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -246,7 +215,8 @@
         <span>✅</span> ¡Cotización generada con éxito!
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
 </body>
-
 </html>
