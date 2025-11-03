@@ -23,6 +23,12 @@ let configuracion = {
     manoObraPorcentaje: 30
 };
 
+// Configuración de visualización en PDF
+let configPDF = {
+    mostrarManoObra: true,
+    mostrarTransporte: true
+};
+
 // Información completa de la cotización
 let cotizacion = {
     currentStep: 1,
@@ -30,6 +36,7 @@ let cotizacion = {
         nombre: '', telefono: '', email: '', fechaEvento: '', lugarEvento: '', notas: ''
     },
     tipoEvento: '',
+    tematicaEvento: '', // NUEVO CAMPO PARA TEMÁTICA
     // Inicializar artículos de cotización como copia de la configuración base
     articulos: {
         paquetes: JSON.parse(JSON.stringify(configuracion.paquetes)),
@@ -70,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderizarArticulos('paquetes');
     renderizarConfiguracion();
     actualizarResumen();
+    actualizarConfigPDF(); // Inicializar configuración PDF
 });
 
 function cargarFechaActual() {
@@ -79,13 +87,20 @@ function cargarFechaActual() {
 
 function inicializarEventListeners() {
     // Escuchar cambios en los inputs del Paso 1 para actualizar resumen
-    ['cliente-nombre', 'fecha-evento', 'tipo-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email'].forEach(id => {
+    ['cliente-nombre', 'fecha-evento', 'tipo-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tematica-evento'].forEach(id => {
         const element = document.getElementById(id);
         if (element) element.addEventListener('input', guardarDatosPaso1);
     });
     // Escuchar cambios en los inputs del Paso 3
     document.getElementById('costo-transporte').addEventListener('input', (e) => actualizarCostoManual('transporte', e.target.value));
     document.getElementById('porcentaje-mano-obra').addEventListener('input', (e) => actualizarCostoManual('manoObraPorcentaje', e.target.value));
+}
+
+// Actualizar configuración PDF
+function actualizarConfigPDF() {
+    configPDF.mostrarManoObra = document.getElementById('mostrar-mano-obra').checked;
+    configPDF.mostrarTransporte = document.getElementById('mostrar-transporte').checked;
+    actualizarResumen(); // IMPORTANTE: Recalcular el total cuando cambia la configuración
 }
 
 // ----------------------------------------------------
@@ -181,6 +196,7 @@ function guardarDatosPaso1() {
     cotizacion.cliente.lugarEvento = document.getElementById('lugar-evento').value.trim();
     cotizacion.cliente.notas = document.getElementById('cliente-notas').value.trim();
     cotizacion.tipoEvento = document.getElementById('tipo-evento').value;
+    cotizacion.tematicaEvento = document.getElementById('tematica-evento').value.trim(); // NUEVO: Guardar temática
     
     aplicarTema(cotizacion.tipoEvento);
     actualizarResumen();
@@ -376,14 +392,26 @@ function calcularTotalCotizacion() {
         subtotalMateriales += (item.precioUnitario * item.cantidad);
     });
 
-    // 3. Calcular Mano de Obra
+    // 3. Calcular Mano de Obra (siempre se calcula internamente)
     cotizacion.costos.materiales = subtotalMateriales;
     const porcentajeManoObra = cotizacion.costos.manoObraPorcentaje / 100;
     const costoManoObra = subtotalMateriales * porcentajeManoObra;
     cotizacion.costos.manoObra = costoManoObra;
 
-    // 4. Calcular Total
-    cotizacion.costos.total = subtotalMateriales + costoManoObra + cotizacion.costos.transporte;
+    // 4. Calcular Total RESPETANDO LA CONFIGURACIÓN PDF
+    let totalCalculado = subtotalMateriales;
+    
+    // Solo sumar mano de obra si está configurada para mostrarse
+    if (configPDF.mostrarManoObra) {
+        totalCalculado += costoManoObra;
+    }
+    
+    // Solo sumar transporte si está configurado para mostrarse
+    if (configPDF.mostrarTransporte) {
+        totalCalculado += cotizacion.costos.transporte;
+    }
+    
+    cotizacion.costos.total = totalCalculado;
 }
 
 function actualizarResumen() {
@@ -405,8 +433,25 @@ function actualizarResumen() {
     // Actualizar Resumen de Costos
     document.getElementById('resumen-materiales').textContent = formatoMonedaRD(cotizacion.costos.materiales);
     document.getElementById('mano-obra-porcentaje').textContent = cotizacion.costos.manoObraPorcentaje;
-    document.getElementById('resumen-mano-obra').textContent = formatoMonedaRD(cotizacion.costos.manoObra);
-    document.getElementById('resumen-transporte').textContent = formatoMonedaRD(cotizacion.costos.transporte);
+    
+    // Mostrar u ocultar mano de obra en el resumen según configuración
+    const manoObraElement = document.getElementById('resumen-mano-obra');
+    const transporteElement = document.getElementById('resumen-transporte');
+    
+    if (configPDF.mostrarManoObra) {
+        manoObraElement.textContent = formatoMonedaRD(cotizacion.costos.manoObra);
+        manoObraElement.parentElement.style.display = 'flex';
+    } else {
+        manoObraElement.parentElement.style.display = 'none';
+    }
+    
+    if (configPDF.mostrarTransporte) {
+        transporteElement.textContent = formatoMonedaRD(cotizacion.costos.transporte);
+        transporteElement.parentElement.style.display = 'flex';
+    } else {
+        transporteElement.parentElement.style.display = 'none';
+    }
+    
     document.getElementById('total-cotizacion').textContent = formatoMonedaRD(cotizacion.costos.total);
     
     // Habilitar/Deshabilitar el botón de PDF
@@ -429,7 +474,7 @@ function generarCotizacionPDF() {
     }
 
     const doc = new jsPDF();
-    const total = cotizacion.costos.total;
+    const total = cotizacion.costos.total; // Este total ya respeta la configuración
     const itemsSeleccionados = [
         ...cotizacion.articulos.paquetes.filter(p => p.cantidad > 0),
         ...cotizacion.articulos.accesorios.filter(a => a.cantidad > 0),
@@ -452,20 +497,29 @@ function generarCotizacionPDF() {
     }
 
     // --- ENCABEZADO ELEGANTE ---
-    doc.setFillColor(138, 43, 226); // Color principal: Púrpura
-    doc.rect(0, 0, pageWidth, 35, 'F');
-    
-    doc.setFontSize(18);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(255, 255, 255);
-    doc.text("ARTE Y EVENTS", pageWidth / 2, 15, { align: "center" });
-    
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "normal");
-    doc.text("COTIZACIÓN PROFESIONAL", pageWidth / 2, 22, { align: "center" });
-    
-    yPos = 45;
+doc.setFillColor(138, 43, 226);
+doc.rect(0, 0, pageWidth, 35, 'F');
 
+// Logo con fondo transparente
+try {
+    const logoUrl = 'https://raw.githubusercontent.com/francisdominguez/cotizador-arte-events/main/logo%20arte%20y%20eventos.png';
+    doc.addImage(logoUrl, 'PNG', 20, 5, 25, 25);
+} catch (e) {
+    console.log('Logo no cargado, continuando sin logo');
+}
+
+doc.setFontSize(18);
+doc.setFont("helvetica", "bold");
+doc.setTextColor(255, 255, 255);
+doc.text("ARTE Y EVENTOS", pageWidth / 2, 13, { align: "center" });
+
+doc.setFontSize(8);
+doc.setFont("helvetica", "normal");
+doc.text("Donde los sueños toman forma y las emociones florecen", pageWidth / 2, 20, { align: "center" });
+doc.text("Creando magia para tus momentos especiales", pageWidth / 2, 26, { align: "center" });
+doc.text("Síguenos: @arteeventop", pageWidth / 2, 32, { align: "center" });
+
+yPos = 45;
     // --- INFORMACIÓN DE LA COTIZACIÓN ---
     doc.setFontSize(9);
     doc.setTextColor(100, 100, 100);
@@ -493,12 +547,20 @@ function generarCotizacionPDF() {
     doc.text(`Fecha del Evento: ${formatearFecha(cotizacion.cliente.fechaEvento) || 'N/A'}`, margin, yPos + 5);
     doc.text(`Contacto: ${cotizacion.cliente.telefono || ''} / ${cotizacion.cliente.email || ''}`, margin, yPos + 10);
   
-    // Columna derecha - Evento y Lugar alineados a la derecha
+    // Columna derecha - Evento, Lugar y Temática alineados a la derecha
     const xRight = pageWidth - margin;
     doc.text(`Evento: ${cotizacion.tipoEvento || 'N/A'}`, xRight, yPos, { align: "right" });
     doc.text(`Lugar: ${cotizacion.cliente.lugarEvento || 'N/A'}`, xRight, yPos + 5, { align: "right" });
     
-    yPos += 20;
+    // NUEVO: Mostrar Temática si existe
+    if (cotizacion.tematicaEvento) {
+        doc.text(`Temática: ${cotizacion.tematicaEvento}`, xRight, yPos + 10, { align: "right" });
+        yPos += 15;
+    } else {
+        yPos += 15;
+    }
+    
+    yPos += 10;
 
     // --- SECCIÓN: DETALLE DE ARTÍCULOS ---
     checkPageBreak(50);
@@ -552,10 +614,11 @@ function generarCotizacionPDF() {
     checkPageBreak(50);
     
     /// Línea decorativa COMPLETA
-doc.setDrawColor(138, 43, 226);
-doc.setLineWidth(0.3);
-doc.line(margin, yPos, pageWidth - margin, yPos);
-yPos += 8;
+    doc.setDrawColor(138, 43, 226);
+    doc.setLineWidth(0.3);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 8;
+    
     const xCostos = pageWidth - margin - 5;
     
     doc.setFontSize(10);
@@ -563,12 +626,20 @@ yPos += 8;
     doc.text(formatoMonedaRD(cotizacion.costos.materiales), xCostos, yPos, { align: "right" });
     yPos += 5;
 
-    doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
-    doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
-    yPos += 5;
+    // MOSTRAR U OCULTAR MANO DE OBRA
+    if (configPDF.mostrarManoObra) {
+        doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
+        doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
+        yPos += 5;
+    }
 
-    doc.text("Costo de Transporte:", pageWidth / 2, yPos, { align: "left" });
-    doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
+    // MOSTRAR U OCULTAR TRANSPORTE
+    if (configPDF.mostrarTransporte) {
+        doc.text("Costo de Transporte:", pageWidth / 2, yPos, { align: "left" });
+        doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
+        yPos += 5;
+    }
+    
     yPos += 8;
     
     // Línea doble antes del total
@@ -629,13 +700,18 @@ yPos += 8;
     mostrarNotificación('✅ ¡Cotización generada con éxito!');
 }
 
-// Función auxiliar para formatear la fecha
+// Función auxiliar para formatear la fecha 
 function formatearFecha(fechaISO) {
     if (!fechaISO) return '';
-    const fecha = new Date(fechaISO);
-    return fecha.toLocaleDateString('es-DO');
+    
+    // CORRECCIÓN: Usar la fecha exacta sin ajustes de zona horaria
+    const fecha = new Date(fechaISO + 'T00:00:00'); // Forzar medianoche en hora local
+    return fecha.toLocaleDateString('es-DO', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
-
 // Función para limpiar campos después de generar la cotización
 function limpiarCamposCotizacion() {
     // Limpiar información del cliente
@@ -645,6 +721,7 @@ function limpiarCamposCotizacion() {
     document.getElementById('lugar-evento').value = '';
     document.getElementById('cliente-notas').value = '';
     document.getElementById('tipo-evento').value = '';
+    document.getElementById('tematica-evento').value = ''; // NUEVO: Limpiar temática
     
     // Restablecer fecha a la actual
     cargarFechaActual();
@@ -657,6 +734,11 @@ function limpiarCamposCotizacion() {
     // Restablecer costos
     document.getElementById('costo-transporte').value = 0;
     document.getElementById('porcentaje-mano-obra').value = 30;
+    
+    // Restablecer checkboxes
+    document.getElementById('mostrar-mano-obra').checked = true;
+    document.getElementById('mostrar-transporte').checked = true;
+    actualizarConfigPDF();
     
     // Actualizar la UI
     renderizarArticulos('paquetes');
@@ -844,4 +926,4 @@ if ('serviceWorker' in navigator) {
       // console.log('SW registration failed: ', registrationError);
     });
   });
-} 
+}
