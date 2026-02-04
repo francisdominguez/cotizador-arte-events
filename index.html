@@ -10,7 +10,7 @@
     <link rel="manifest" href="manifest.json">
     <title>Arte y Events - Cotizador Profesional</title>
     <link rel="stylesheet" href="styles.css">
-    </head>
+</head>
 <body>
     <div class="config-toggle" onclick="toggleConfig()">⚙️</div>
 
@@ -22,17 +22,39 @@
         
         <div class="config-content">
             <div class="config-section">
+                <h3>Tipos de Evento</h3>
+                <div class="config-grid" id="config-tipos-evento"></div>
+                <button class="btn-add" onclick="agregarTipoEvento()">+ Agregar Tipo de Evento</button>
+            </div>
+          
+            <div class="config-section">
+                <h3>Temáticas de Evento</h3>
+                <div class="config-grid" id="config-tematicas-evento"></div>
+                <button class="btn-add" onclick="agregarTematicaEvento()">+ Agregar Temática</button>
+            </div>
+
+            <div class="config-section">
                 <h3>Globos por Color</h3>
-                <div class="config-grid" id="config-paquetes">
-                    </div>
+                <div class="config-grid" id="config-paquetes"></div>
                 <button class="btn-add" onclick="agregarPaquete()">+ Agregar Globo</button>
             </div>
 
             <div class="config-section">
                 <h3>Accesorios y Mobiliario</h3>
-                <div class="config-grid" id="config-accesorios">
-                    </div>
+                <div class="config-grid" id="config-accesorios"></div>
                 <button class="btn-add" onclick="agregarAccesorio()">+ Agregar Accesorio</button>
+            </div>
+            
+            <div class="config-section">
+                <h3>Flores por Unidad</h3>
+                <div class="config-grid" id="config-flores"></div>
+                <button class="btn-add" onclick="agregarFlor()">+ Agregar Flor</button>
+            </div>
+            
+            <div class="config-section">
+                <h3>Arreglos Florales</h3>
+                <div class="config-grid" id="config-arreglos"></div>
+                <button class="btn-add" onclick="agregarArreglo()">+ Agregar Arreglo</button>
             </div>
             
             <button class="btn-primary" onclick="guardarConfiguracion()">Guardar Configuración</button>
@@ -41,13 +63,18 @@
 
     <div class="container">
         <header>
-            <h1>Arte y Events</h1>
+            <div class="logo">
+                <div class="logo-icon">🎨</div>
+                <div class="logo-text">
+                    <h1>Arte y Events</h1>
+                    <p>Decoración Profesional</p>
+                </div>
+            </div>
             <p>Cotizador Profesional de Eventos</p>
         </header>
 
         <div class="app-container">
             <div class="main-panel">
-                
                 <div class="progress-bar-container">
                     <div class="progress-bar">
                         <div class="progress" id="progress"></div>
@@ -58,73 +85,108 @@
                     <div class="step-section" id="step-1">
                         <h2>1. Información del Cliente y Evento</h2>
                         <div class="form-section">
-                            <div class="form-group">
-                                <label for="cliente-nombre">Nombre del Cliente (*)</label>
-                                <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
+                            <div class="form-grid two-columns">
+                                <div class="form-group">
+                                    <label for="cliente-nombre">Nombre del Cliente (*)</label>
+                                    <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cliente-telefono">Teléfono</label>
+                                    <input type="tel" id="cliente-telefono" placeholder="Ej: 809-555-1234">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cliente-email">Email</label>
+                                    <input type="email" id="cliente-email" placeholder="Ej: correo@ejemplo.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="fecha-evento">Fecha del Evento (*)</label>
+                                    <input type="date" id="fecha-evento">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lugar-evento">Lugar/Dirección del Evento</label>
+                                    <input type="text" id="lugar-evento" placeholder="Ej: Salón de Eventos Bella Vista">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo-evento">Tipo de Evento (*)</label>
+                                    <select id="tipo-evento" onchange="aplicarTema()">
+                                        <option value="">Seleccione un tipo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="otro-evento-container" style="display: none;">
+                                    <label for="otro-evento">Especificar Evento (*)</label>
+                                    <input type="text" id="otro-evento" placeholder="Ej: Bautizo, Quinceañera, etc.">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="cliente-telefono">Teléfono</label>
-                                <input type="tel" id="cliente-telefono" placeholder="Ej: 809-555-1234">
-                            </div>
-                            <div class="form-group">
-                                <label for="cliente-email">Email</label>
-                                <input type="email" id="cliente-email" placeholder="Ej: correo@ejemplo.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="fecha-evento">Fecha del Evento (*)</label>
-                                <input type="date" id="fecha-evento">
-                            </div>
-                            <div class="form-group">
-                                <label for="lugar-evento">Lugar/Dirección del Evento</label>
-                                <input type="text" id="lugar-evento" placeholder="Ej: Salón de Eventos Bella Vista">
-                            </div>
-                            <div class="form-group">
-                                <label for="tipo-evento">Tipo de Evento (*)</label>
-                                <select id="tipo-evento" onchange="aplicarTema()">
-                                    <option value="">Seleccione un tipo</option>
-                                    <option value="Bodas">Bodas</option>
-                                    <option value="Cumple años">Cumpleaños</option>
-                                    <option value="Corporativo">Corporativo</option>
-                                    <option value="Baby Shower">Baby Shower</option>
-                                    <option value="Otro">Otro</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="tematica-evento">Temática del Evento</label>
-                                <input type="text" id="tematica-evento" placeholder="Ej: Barbie, Patrulla Canina, Superhéroes, etc.">
-                            </div>
-                            <div class="form-group">
-                                <label for="cliente-notas">Notas Adicionales</label>
-                                <textarea id="cliente-notas" rows="3" placeholder="Detalles especiales, colores, temáticas, etc."></textarea>
+                            
+                            <div class="form-grid two-columns">
+                                <div class="form-group">
+                                    <label for="tipo-servicio">Tipo de Servicio (*)</label>
+                                    <select id="tipo-servicio" onchange="cambiarTipoServicio()">
+                                        <option value="">Seleccione servicio</option>
+                                        <option value="decoracion">Decoración</option>
+                                        <option value="flores">Flores Externas</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tematica-evento">Temática del Evento</label>
+                                    <select id="tematica-evento" onchange="cambiarTematicaEvento()">
+                                        <option value="">Seleccione una temática</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="otra-tematica-container" style="display: none;">
+                                    <label for="otra-tematica">Especificar Temática</label>
+                                    <input type="text" id="otra-tematica" placeholder="Ej: Barbie, Patrulla Canina, Superhéroes, etc.">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="cliente-notas">Notas Adicionales</label>
+                                    <textarea id="cliente-notas" rows="3" placeholder="Detalles especiales, colores, temáticas, etc."></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="step-section" id="step-2" style="display: none;">
-                        <h2>2. Selección de Artículos</h2>
+                        <h2 id="titulo-paso-2">2. Selección de Artículos</h2>
                         
-                        <div class="tabs">
+                        <div class="tabs" id="tabs-container">
                             <button class="tab-button active" data-tab="paquetes" onclick="switchTab('paquetes')">🎈 Globos y Paquetes</button>
                             <button class="tab-button" data-tab="accesorios" onclick="switchTab('accesorios')">🛋️ Accesorios</button>
                             <button class="tab-button" data-tab="manual" onclick="switchTab('manual')">✍️ Artículo Manual</button>
                         </div>
 
                         <div class="tab-content active" id="tab-paquetes">
-                            <div class="options-grid" id="paquetes-container">
-                                </div>
+                            <div class="options-grid" id="paquetes-container"></div>
                         </div>
 
                         <div class="tab-content" id="tab-accesorios" style="display: none;">
-                            <div class="options-grid" id="accesorios-container">
-                                </div>
+                            <div class="options-grid" id="accesorios-container"></div>
+                        </div>
+
+                        <div class="tab-content" id="tab-flores" style="display: none;">
+                            <div class="filtros-flores">
+                                <label>Filtrar por color:</label>
+                                <select id="filtro-color-flores" onchange="filtrarFloresPorColor()">
+                                    <option value="todos">Todos los colores</option>
+                                    <option value="Rojo">Rojo</option>
+                                    <option value="Blanco">Blanco</option>
+                                    <option value="Rosa">Rosa</option>
+                                    <option value="Amarillo">Amarillo</option>
+                                    <option value="Morado">Morado</option>
+                                    <option value="Multicolor">Multicolor</option>
+                                    <option value="Mixto">Mixto</option>
+                                </select>
+                            </div>
+                            <div class="options-grid" id="flores-container"></div>
+                        </div>
+
+                        <div class="tab-content" id="tab-arreglos" style="display: none;">
+                            <div class="options-grid" id="arreglos-container"></div>
                         </div>
 
                         <div class="tab-content" id="tab-manual" style="display: none;">
-                            <div class="manual-items-container" id="manual-items-container">
-                                </div>
+                            <div class="manual-items-container" id="manual-items-container"></div>
                             <button class="btn-secondary" onclick="agregarArticuloManual()">+ Añadir Artículo Personalizado</button>
                         </div>
-
                     </div>
 
                     <div class="step-section" id="step-3" style="display: none;">
@@ -135,22 +197,81 @@
                                 <input type="number" id="costo-transporte" value="0" min="0" oninput="actualizarCostoManual('transporte', this.value)">
                             </div>
                             <div class="form-group">
-                                <label for="porcentaje-mano-obra">Mano de Obra (%)</label>
-                                <input type="number" id="porcentaje-mano-obra" value="30" min="0" max="100" oninput="actualizarCostoManual('manoObraPorcentaje', this.value)">
+                                <label>Mano de Obra</label>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <select id="tipo-mano-obra" onchange="cambiarTipoManoObra()" style="flex: 1;">
+                                        <option value="porcentaje">Porcentaje (%)</option>
+                                        <option value="manual">Monto Manual</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-section">
+                        
+                        <div class="form-section form-grid two-columns" id="mano-obra-porcentaje-container">
                             <div class="form-group">
-                                <label style="display: flex; align-items: center; gap: 8px;">
-                                    <input type="checkbox" id="mostrar-mano-obra" checked onchange="actualizarConfigPDF()">
-                                    Mostrar Mano de Obra en PDF
-                                </label>
+                                <label for="porcentaje-mano-obra">Porcentaje Mano de Obra (%)</label>
+                                <input type="number" id="porcentaje-mano-obra" value="30" min="0" max="100" 
+                                       oninput="actualizarCostoManual('manoObraPorcentaje', this.value)">
                             </div>
+                        </div>
+
+                        <div class="form-section form-grid two-columns" id="mano-obra-manual-container" style="display: none;">
                             <div class="form-group">
-                                <label style="display: flex; align-items: center; gap: 8px;">
-                                    <input type="checkbox" id="mostrar-transporte" checked onchange="actualizarConfigPDF()">
-                                    Mostrar Transporte en PDF
-                                </label>
+                                <label for="monto-mano-obra-manual">Monto Manual Mano de Obra (RD$)</label>
+                                <input type="number" id="monto-mano-obra-manual" value="0" min="0" 
+                                       oninput="actualizarCostoManual('manoObraMontoManual', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="form-section" style="border-left: 4px solid #4ecdc4; padding-left: 15px; margin: 20px 0;">
+                            <h4 style="color: #4ecdc4; margin-bottom: 15px;">📄 Configuración del PDF</h4>
+                            
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                                <h5 style="color: #8a2be2; margin-bottom: 10px;">🎯 Modo de Cotización</h5>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 8px;" title="Perfecto para enviar al cliente - Solo muestra artículos y total">
+                                        <input type="checkbox" id="mostrar-presupuesto-simple" class="pdf-config-checkbox" onchange="actualizarConfigPDF()">
+                                        <strong>📋 Modo Presupuesto Simple</strong> (Muestra solo artículos y total, sin precios individuales)
+                                    </label>
+                                </div>
+                                <p style="font-size: 0.85em; color: #666; margin-top: 5px; padding-left: 28px;">
+                                    <em>Ideal para compartir con el cliente - Oculta precios internos</em>
+                                </p>
+                            </div>
+                            
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                                <h5 style="color: #8a2be2; margin-bottom: 10px;">🔧 Opciones Detalladas</h5>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el costo de instalación profesional">
+                                        <input type="checkbox" id="mostrar-mano-obra" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
+                                        👷 Mostrar Mano de Obra (Muestra el costo de instalación)
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el costo de envío y logística">
+                                        <input type="checkbox" id="mostrar-transporte" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
+                                        🚚 Mostrar Transporte (Muestra el costo de envío/logística)
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra la lista completa de artículos seleccionados">
+                                        <input type="checkbox" id="mostrar-detalle-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
+                                        📋 Mostrar Detalle de Materiales (Lista de artículos con cantidades)
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el subtotal de todos los materiales">
+                                        <input type="checkbox" id="mostrar-costo-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
+                                        💰 Mostrar Costo de Materiales (Muestra subtotal de materiales)
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div id="pdf-preview" style="margin-top: 20px; padding: 15px; background: white; border: 2px dashed #dfe6e9; border-radius: 10px; font-size: 0.9em;">
+                                <h5 style="color: #636e72; margin-bottom: 10px;">👁️ Vista Previa del PDF:</h5>
+                                <div id="preview-content" style="color: #666;">
+                                    Cargando vista previa...
+                                </div>
                             </div>
                         </div>
                         <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 600;">* El resumen de la cotización final se muestra a la derecha.</p>
@@ -175,17 +296,25 @@
                         <span id="resumen-evento">-</span>
                     </div>
                     <div class="resumen-item">
+                        <span>Servicio:</span>
+                        <span id="resumen-servicio">-</span>
+                    </div>
+                    <div class="resumen-item">
                         <span>Fecha:</span>
                         <span id="resumen-fecha">-</span>
                     </div>
                     <div class="resumen-separator"></div>
                     <div class="resumen-item">
-                        <span>Globos:</span>
+                        <span id="resumen-titulo1">Globos:</span>
                         <span id="resumen-paquetes">-</span>
                     </div>
                     <div class="resumen-item">
-                        <span>Accesorios:</span>
+                        <span id="resumen-titulo2">Accesorios:</span>
                         <span id="resumen-accesorios">-</span>
+                    </div>
+                    <div class="resumen-item" style="font-size: 0.9em; color: #4ecdc4; margin-top: 5px;">
+                        <span>📊 Artículos totales:</span>
+                        <span id="total-articulos">0</span>
                     </div>
                 </div>
 
@@ -196,7 +325,7 @@
                             <span id="resumen-materiales">RD$0.00</span>
                         </div>
                         <div class="resumen-item">
-                            <span>🛠️ Mano de Obra (<span id="mano-obra-porcentaje">30</span>%):</span>
+                            <span>🛠️ Mano de Obra:</span>
                             <span id="resumen-mano-obra">RD$0.00</span>
                         </div>
                         <div class="resumen-item">
@@ -210,8 +339,10 @@
                         </div>
                     </div>
                     
-                    <button id="generar-cotizacion" class="btn-primary" onclick="generarCotizacionPDF()" disabled>
+                    <button id="generar-cotizacion" class="btn-primary" onclick="generarCotizacionPDF()" disabled
+                            title="Generar PDF de la cotización">
                         <span>📄</span> Generar Cotización PDF
+                        <div id="pdf-mode-indicator" style="font-size: 0.8em; margin-top: 5px; font-weight: normal;"></div>
                     </button>
 
                     <div class="info-box">
