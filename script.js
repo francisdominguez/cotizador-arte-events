@@ -144,7 +144,15 @@ function inicializarEventListeners() {
     
     inputsPaso1.forEach(id => {
         const element = document.getElementById(id);
-        if (element) element.addEventListener('input', guardarDatosPaso1);
+        if (element) {
+            element.addEventListener('input', function() {
+                guardarDatosPaso1();
+                limpiarError(this.id);
+            });
+            element.addEventListener('blur', function() {
+                validarCampo(this.id, this.value);
+            });
+        }
     });
     
     // Event listeners específicos
@@ -155,9 +163,16 @@ function inicializarEventListeners() {
         } else {
             otroEventoContainer.style.display = 'none';
             document.getElementById('otro-evento').value = '';
+            limpiarError('otro-evento');
         }
         aplicarTema();
         guardarDatosPaso1();
+        limpiarError('tipo-evento');
+        validarCampo('tipo-evento', this.value);
+    });
+    
+    document.getElementById('otro-evento').addEventListener('blur', function() {
+        validarCampo('otro-evento', this.value);
     });
     
     document.getElementById('tematica-evento').addEventListener('change', function() {
@@ -180,6 +195,14 @@ function inicializarEventListeners() {
     // Tooltip para botón de generar PDF
     document.getElementById('generar-cotizacion').addEventListener('mouseover', function() {
         actualizarTooltipPDF();
+    });
+    
+    // Permitir Enter para avanzar al siguiente paso
+    document.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && cotizacion.currentStep === 1) {
+            e.preventDefault();
+            nextStep();
+        }
     });
 }
 
@@ -243,7 +266,7 @@ function actualizarConfigPDF() {
         configPDF.mostrarPresupuestoSimple = true;
         
         // Mostrar notificación
-        mostrarNotificación('✅ Modo Presupuesto Simple activado. Solo se mostrarán artículos y total.', 'success');
+        mostrarNotificacion('✅ Modo Presupuesto Simple activado. Solo se mostrarán artículos y total.', 'success');
         
     } else {
         // Si Modo Presupuesto Simple está DESACTIVADO
@@ -260,7 +283,7 @@ function actualizarConfigPDF() {
         configPDF.mostrarPresupuestoSimple = false;
         
         // Mostrar notificación
-        mostrarNotificación('✅ Modo Detallado activado. Puedes configurar opciones individuales.', 'success');
+        mostrarNotificacion('✅ Modo Detallado activado. Puedes configurar opciones individuales.', 'success');
     }
     
     // Guardar preferencias del usuario
@@ -270,12 +293,121 @@ function actualizarConfigPDF() {
 }
 
 // ----------------------------------------------------
-// CONTROL DE PASOS Y VALIDACIÓN
+// VALIDACIÓN Y MANEJO DE ERRORES - CORREGIDO
+// ----------------------------------------------------
+
+function limpiarError(campoId) {
+    const errorElement = document.getElementById(`error-${campoId}`);
+    if (errorElement) {
+        errorElement.textContent = '';
+    }
+    const inputElement = document.getElementById(campoId);
+    if (inputElement) {
+        inputElement.classList.remove('error');
+    }
+}
+
+function mostrarError(campoId, mensaje) {
+    const errorElement = document.getElementById(`error-${campoId}`);
+    if (errorElement) {
+        errorElement.textContent = mensaje;
+    }
+    const inputElement = document.getElementById(campoId);
+    if (inputElement) {
+        inputElement.classList.add('error');
+    }
+}
+
+function validarCampo(campoId, valor) {
+    switch(campoId) {
+        case 'cliente-nombre':
+            if (!valor.trim()) {
+                mostrarError(campoId, 'El nombre del cliente es obligatorio');
+                return false;
+            }
+            limpiarError(campoId);
+            return true;
+            
+        case 'fecha-evento':
+            if (!valor) {
+                mostrarError(campoId, 'La fecha del evento es obligatoria');
+                return false;
+            }
+            
+            const fechaEvento = new Date(valor);
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+            
+            if (fechaEvento < hoy) {
+                mostrarError(campoId, 'La fecha del evento no puede ser en el pasado');
+                return false;
+            }
+            
+            limpiarError(campoId);
+            return true;
+            
+        case 'tipo-evento':
+            if (!valor) {
+                mostrarError(campoId, 'El tipo de evento es obligatorio');
+                return false;
+            }
+            
+            // Solo validar "otro" si está seleccionado
+            if (valor === 'otro') {
+                // La validación de "otro-evento" se hará en su propio campo
+                limpiarError(campoId);
+                return true;
+            }
+            
+            limpiarError(campoId);
+            return true;
+            
+        case 'otro-evento':
+            // Solo validar si "otro" está seleccionado en tipo-evento
+            const tipoEvento = document.getElementById('tipo-evento').value;
+            if (tipoEvento === 'otro' && !valor.trim()) {
+                mostrarError(campoId, 'Debe especificar el tipo de evento');
+                return false;
+            }
+            limpiarError(campoId);
+            return true;
+            
+        case 'cliente-email':
+            if (valor && !validarEmail(valor)) {
+                mostrarError(campoId, 'El formato del email no es válido');
+                return false;
+            }
+            limpiarError(campoId);
+            return true;
+            
+        case 'tipo-servicio':
+            if (!valor) {
+                mostrarError(campoId, 'El tipo de servicio es obligatorio');
+                return false;
+            }
+            limpiarError(campoId);
+            return true;
+            
+        default:
+            return true;
+    }
+}
+
+function validarEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// ----------------------------------------------------
+// CONTROL DE PASOS Y VALIDACIÓN - CORREGIDO
 // ----------------------------------------------------
 
 function nextStep() {
     if (cotizacion.currentStep === 1) {
-        if (!validarPaso1()) return;
+        if (!validarPaso1()) {
+            mostrarNotificacion('⚠️ Complete los campos obligatorios para continuar.', 'warning');
+            return;
+        }
         guardarDatosPaso1();
     } else if (cotizacion.currentStep === 2) {
         // Validación opcional para paso 2
@@ -304,6 +436,19 @@ function updateStepUI() {
     const nextBtn = document.getElementById('next-btn');
     const progress = document.getElementById('progress');
     const generarBtn = document.getElementById('generar-cotizacion');
+    
+    // Actualizar indicadores de pasos
+    const stepIndicators = document.querySelectorAll('.step-indicator');
+    stepIndicators.forEach(indicator => {
+        const stepNum = parseInt(indicator.dataset.step);
+        indicator.classList.remove('active', 'completed');
+        
+        if (stepNum < cotizacion.currentStep) {
+            indicator.classList.add('completed');
+        } else if (stepNum === cotizacion.currentStep) {
+            indicator.classList.add('active');
+        }
+    });
 
     steps.forEach((step, index) => {
         step.style.display = (index + 1 === cotizacion.currentStep) ? 'block' : 'none';
@@ -342,28 +487,97 @@ function updateStepUI() {
 }
 
 // ----------------------------------------------------
-// PASO 1: INFORMACIÓN DEL CLIENTE
+// PASO 1: INFORMACIÓN DEL CLIENTE - VALIDACIÓN CORREGIDA
 // ----------------------------------------------------
 
 function validarPaso1() {
-    const nombre = document.getElementById('cliente-nombre').value.trim();
-    const fecha = document.getElementById('fecha-evento').value.trim();
-    const tipo = document.getElementById('tipo-evento').value;
-    const servicio = document.getElementById('tipo-servicio').value;
+    let valido = true;
+    let errores = [];
     
-    if (tipo === 'otro') {
-        const otroEvento = document.getElementById('otro-evento').value.trim();
-        if (!otroEvento) {
-            mostrarNotificación('⚠️ Por favor especifique el tipo de evento.', 'warning');
-            return false;
+    // Validar nombre (obligatorio)
+    const nombre = document.getElementById('cliente-nombre').value.trim();
+    if (!nombre) {
+        mostrarError('cliente-nombre', 'El nombre del cliente es obligatorio');
+        errores.push('Nombre del cliente');
+        valido = false;
+    } else {
+        limpiarError('cliente-nombre');
+    }
+    
+    // Validar fecha (obligatorio)
+    const fecha = document.getElementById('fecha-evento').value.trim();
+    if (!fecha) {
+        mostrarError('fecha-evento', 'La fecha del evento es obligatoria');
+        errores.push('Fecha del evento');
+        valido = false;
+    } else {
+        const fechaEvento = new Date(fecha);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        
+        if (fechaEvento < hoy) {
+            mostrarError('fecha-evento', 'La fecha del evento no puede ser en el pasado');
+            errores.push('Fecha no puede ser en el pasado');
+            valido = false;
+        } else {
+            limpiarError('fecha-evento');
         }
     }
-
-    if (!nombre || !fecha || !tipo || !servicio) {
-        mostrarNotificación('⚠️ Faltan campos obligatorios: Nombre, Fecha, Tipo de Evento y Tipo de Servicio.', 'warning');
-        return false;
+    
+    // Validar tipo de evento (obligatorio)
+    const tipo = document.getElementById('tipo-evento').value;
+    if (!tipo) {
+        mostrarError('tipo-evento', 'El tipo de evento es obligatorio');
+        errores.push('Tipo de evento');
+        valido = false;
+    } else if (tipo === 'otro') {
+        // Si es "otro", validar que se haya especificado
+        const otroEvento = document.getElementById('otro-evento').value.trim();
+        if (!otroEvento) {
+            mostrarError('otro-evento', 'Debe especificar el tipo de evento');
+            errores.push('Especificación del evento');
+            valido = false;
+        } else {
+            limpiarError('tipo-evento');
+            limpiarError('otro-evento');
+        }
+    } else {
+        limpiarError('tipo-evento');
+        limpiarError('otro-evento'); // Limpiar por si acaso
     }
-    return true;
+    
+    // Validar tipo de servicio (obligatorio)
+    const servicio = document.getElementById('tipo-servicio').value;
+    if (!servicio) {
+        mostrarError('tipo-servicio', 'El tipo de servicio es obligatorio');
+        errores.push('Tipo de servicio');
+        valido = false;
+    } else {
+        limpiarError('tipo-servicio');
+    }
+    
+    // Validar email (opcional, pero si está presente debe tener formato válido)
+    const email = document.getElementById('cliente-email').value.trim();
+    if (email && !validarEmail(email)) {
+        mostrarError('cliente-email', 'El formato del email no es válido');
+        errores.push('Formato de email inválido');
+        valido = false;
+    } else {
+        limpiarError('cliente-email');
+    }
+
+    // Si hay errores, mostrar el primero en notificación
+    if (!valido && errores.length > 0) {
+        // Solo mostrar un mensaje general en lugar de todos los errores
+        mostrarNotificacion('⚠️ Complete los campos obligatorios marcados en rojo.', 'warning');
+        // Hacer scroll al primer error
+        const primerError = document.querySelector('.error');
+        if (primerError) {
+            primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+    
+    return valido;
 }
 
 function guardarDatosPaso1() {
@@ -396,31 +610,107 @@ function guardarDatosPaso1() {
     actualizarResumen();
 }
 
+// ----------------------------------------------------
+// FUNCIÓN APLICAR TEMA - REPARADA
+// ----------------------------------------------------
+
 function aplicarTema() {
     const tipoEventoSelect = document.getElementById('tipo-evento');
     const tipoSeleccionado = tipoEventoSelect ? tipoEventoSelect.value : '';
     const otroEventoContainer = document.getElementById('otro-evento-container');
     
+    // Obtener el nombre del evento para crear la clase
+    let nombreEvento = '';
+    if (tipoSeleccionado === 'otro') {
+        nombreEvento = document.getElementById('otro-evento').value.trim().toLowerCase();
+        if (otroEventoContainer) otroEventoContainer.style.display = 'block';
+    } else {
+        nombreEvento = tipoSeleccionado.toLowerCase();
+        if (otroEventoContainer) otroEventoContainer.style.display = 'none';
+    }
+    
+    // Limpiar todas las clases de tema anteriores
     const body = document.body;
-    // Limpiar clases de tema anteriores
-    const clasesTema = body.className.split(' ').filter(className => className.startsWith('theme-'));
+    const clasesTema = Array.from(body.classList).filter(className => className.startsWith('theme-'));
     clasesTema.forEach(className => body.classList.remove(className));
     
-    if (tipoSeleccionado === 'otro') {
-        if (otroEventoContainer) otroEventoContainer.style.display = 'block';
-        body.classList.add('theme-otro');
-    } else if (tipoSeleccionado) {
-        const temaClase = 'theme-' + tipoSeleccionado
+    if (nombreEvento) {
+        // Crear nombre de clase válido (solo letras, números y guiones)
+        const temaClase = 'theme-' + nombreEvento
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/-$/, '')
             .replace(/^-/, '');
         
-        if (temaClase !== 'theme-') {
+        // Si la clase no existe, usar tema genérico
+        const existeTema = configuracion.tiposEvento.some(tipo => 
+            tipo.toLowerCase().replace(/[^a-z0-9]+/g, '-') === nombreEvento.replace(/[^a-z0-9]+/g, '-')
+        );
+        
+        if (existeTema && temaClase !== 'theme-') {
             body.classList.add(temaClase);
+        } else {
+            // Usar tema por defecto para eventos personalizados
+            body.classList.add('theme-otro');
+            
+            // Crear dinámicamente un tema CSS si no existe
+            if (!document.querySelector(`style[data-tema="${temaClase}"]`)) {
+                const colorPrimario = generarColorDesdeTexto(nombreEvento);
+                const colorOscuro = oscurecerColor(colorPrimario, 20);
+                const colorAcento = aclararColor(colorPrimario, 20);
+                
+                const estilo = document.createElement('style');
+                estilo.setAttribute('data-tema', temaClase);
+                estilo.textContent = `
+                    .${temaClase} {
+                        --primary: ${colorPrimario};
+                        --primary-dark: ${colorOscuro};
+                        --accent: ${colorAcento};
+                    }
+                `;
+                document.head.appendChild(estilo);
+            }
         }
-        if (otroEventoContainer) otroEventoContainer.style.display = 'none';
     }
+}
+
+// Funciones auxiliares para generar colores dinámicos
+function generarColorDesdeTexto(texto) {
+    let hash = 0;
+    for (let i = 0; i < texto.length; i++) {
+        hash = texto.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    // Generar colores más vivos (evitar grises)
+    const hue = Math.abs(hash % 360);
+    const saturation = 70 + (Math.abs(hash) % 30); // 70-100%
+    const lightness = 50 + (Math.abs(hash >> 8) % 20); // 50-70%
+    
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+function oscurecerColor(color, porcentaje) {
+    // Implementación simple para oscurecer colores
+    if (color.startsWith('hsl')) {
+        const match = color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+        if (match) {
+            const lightness = Math.max(0, parseInt(match[3]) - porcentaje);
+            return `hsl(${match[1]}, ${match[2]}%, ${lightness}%)`;
+        }
+    }
+    return color;
+}
+
+function aclararColor(color, porcentaje) {
+    // Implementación simple para aclarar colores
+    if (color.startsWith('hsl')) {
+        const match = color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+        if (match) {
+            const lightness = Math.min(100, parseInt(match[3]) + porcentaje);
+            return `hsl(${match[1]}, ${match[2]}%, ${lightness}%)`;
+        }
+    }
+    return color;
 }
 
 function actualizarTiposEvento() {
@@ -1015,81 +1305,138 @@ function actualizarTooltipPDF() {
 }
 
 // ----------------------------------------------------
-// PDF GENERATION - CON LOS DOS MODOS
+// PDF GENERATION - CON MANEJO DE ERRORES ROBUSTO
 // ----------------------------------------------------
 
-function generarCotizacionPDF() {
+async function generarCotizacionPDF() {
     const { jsPDF } = window.jspdf;
     
     if (typeof jsPDF === 'undefined') {
-        mostrarNotificación('❌ Error: La librería jsPDF no se ha cargado correctamente.', 'error');
+        mostrarNotificacion('❌ Error: La librería jsPDF no se ha cargado correctamente.', 'error');
         return;
     }
 
-    const doc = new jsPDF();
-    const total = cotizacion.costos.total;
+    // Mostrar estado de carga
+    mostrarEstadoCargaPDF(true);
     
-    let itemsSeleccionados = [];
-    if (cotizacion.tipoServicio === 'decoracion') {
-        itemsSeleccionados = [
-            ...cotizacion.articulos.paquetes.filter(p => p.cantidad > 0),
-            ...cotizacion.articulos.accesorios.filter(a => a.cantidad > 0),
-            ...cotizacion.articulos.manuales.filter(m => m.cantidad > 0)
-        ];
-    } else if (cotizacion.tipoServicio === 'flores') {
-        itemsSeleccionados = [
-            ...cotizacion.articulos.flores.filter(p => p.cantidad > 0),
-            ...cotizacion.articulos.arreglosFlorales.filter(a => a.cantidad > 0),
-            ...cotizacion.articulos.manuales.filter(m => m.cantidad > 0)
-        ];
+    try {
+        const doc = new jsPDF();
+        const total = cotizacion.costos.total;
+        
+        let itemsSeleccionados = [];
+        if (cotizacion.tipoServicio === 'decoracion') {
+            itemsSeleccionados = [
+                ...cotizacion.articulos.paquetes.filter(p => p.cantidad > 0),
+                ...cotizacion.articulos.accesorios.filter(a => a.cantidad > 0),
+                ...cotizacion.articulos.manuales.filter(m => m.cantidad > 0)
+            ];
+        } else if (cotizacion.tipoServicio === 'flores') {
+            itemsSeleccionados = [
+                ...cotizacion.articulos.flores.filter(p => p.cantidad > 0),
+                ...cotizacion.articulos.arreglosFlorales.filter(a => a.cantidad > 0),
+                ...cotizacion.articulos.manuales.filter(m => m.cantidad > 0)
+            ];
+        }
+
+        // DETECCIÓN DEL MODO
+        if (configPDF.mostrarPresupuestoSimple) {
+            await generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total);
+        } else {
+            await generarPDFModoNormal(doc, itemsSeleccionados, total);
+        }
+
+        const nombreArchivo = `cotizacion-${cotizacion.cliente.nombre.replace(/[^a-z0-9]/gi, '_') || 'arte-events'}-${new Date().getTime()}.pdf`;
+        
+        // Guardar el PDF
+        doc.save(nombreArchivo);
+
+        mostrarNotificacion('✅ ¡Cotización generada con éxito!');
+        
+        // Ocultar estado de carga
+        mostrarEstadoCargaPDF(false);
+        
+    } catch (error) {
+        console.error('Error al generar PDF:', error);
+        mostrarNotificacion('❌ Error al generar el PDF. Por favor intente nuevamente.', 'error');
+        mostrarEstadoCargaPDF(false);
     }
-
-    // DETECCIÓN DEL MODO
-    if (configPDF.mostrarPresupuestoSimple) {
-        generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total);
-    } else {
-        generarPDFModoNormal(doc, itemsSeleccionados, total);
-    }
-
-    const nombreArchivo = `cotizacion-${cotizacion.cliente.nombre.replace(/ /g, '_') || 'arte-events'}-${new Date().getTime()}.pdf`;
-    doc.save(nombreArchivo);
-
-    limpiarCamposCotizacion();
-    mostrarNotificación('✅ ¡Cotización generada con éxito!');
 }
 
-// ====================================================
-// FUNCIONES COMPARTIDAS PARA PDF
-// ====================================================
+function mostrarEstadoCargaPDF(mostrar) {
+    const pdfIcon = document.getElementById('pdf-icon');
+    const pdfText = document.getElementById('pdf-text');
+    const pdfLoading = document.getElementById('pdf-loading');
+    const generarBtn = document.getElementById('generar-cotizacion');
+    
+    if (mostrar) {
+        pdfIcon.style.display = 'none';
+        pdfText.style.display = 'none';
+        pdfLoading.style.display = 'flex';
+        generarBtn.disabled = true;
+    } else {
+        pdfIcon.style.display = 'inline';
+        pdfText.style.display = 'inline';
+        pdfLoading.style.display = 'none';
+        generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
+    }
+}
 
-function generarEncabezadoPDF(doc) {
+async function generarEncabezadoPDF(doc) {
     const margin = 15;
     const pageWidth = doc.internal.pageSize.width;
     
+    // Fondo del encabezado
     doc.setFillColor(138, 43, 226);
     doc.rect(0, 0, pageWidth, 40, 'F');
     
+    // Efecto de degradado
     doc.setFillColor(157, 78, 221);
     doc.setGState(new doc.GState({opacity: 0.3}));
     doc.rect(0, 0, pageWidth, 20, 'F');
     doc.setGState(new doc.GState({opacity: 1}));
     
+    // Elementos decorativos
     doc.setFillColor(255, 255, 255);
     doc.setGState(new doc.GState({opacity: 0.05}));
     doc.circle(20, 20, 25, 'F');
     doc.circle(pageWidth - 20, 20, 25, 'F');
     doc.setGState(new doc.GState({opacity: 1}));
     
+    // Logo placeholder (mejorado con manejo de errores)
     doc.setFillColor(255, 255, 255);
     doc.circle(32.5, 17.5, 13, 'F');
     
     try {
+        // Intentar cargar logo desde URL con timeout
         const logoUrl = 'https://raw.githubusercontent.com/francisdominguez/cotizador-arte-events/main/logo%20arte%20y%20eventos.png';
-        doc.addImage(logoUrl, 'PNG', 20, 5, 25, 25);
-    } catch (e) {
-        console.log('Logo no cargado, continuando sin logo');
+        
+        // Crear una promesa con timeout para el logo
+        const logoPromise = new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.onload = () => resolve(img);
+            img.onerror = () => reject(new Error('Error al cargar el logo'));
+            img.src = logoUrl + '?t=' + new Date().getTime(); // Evitar cache
+        });
+        
+        // Timeout de 3 segundos para cargar el logo
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout al cargar logo')), 3000)
+        );
+        
+        const img = await Promise.race([logoPromise, timeoutPromise]);
+        doc.addImage(img, 'PNG', 20, 5, 25, 25);
+        
+    } catch (logoError) {
+        console.log('Logo no cargado, usando alternativa:', logoError.message);
+        // Alternativa: texto del logo
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(138, 43, 226);
+        doc.text('AE', 32, 21);
     }
     
+    // Texto del encabezado
     doc.setFontSize(22);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
@@ -1103,6 +1450,7 @@ function generarEncabezadoPDF(doc) {
     doc.setFont('helvetica', 'normal');
     doc.text('@arteeventop  |  Creando magia para tus momentos especiales', 55, 27);
     
+    // Información de la cotización
     doc.setFontSize(9);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
@@ -1112,6 +1460,7 @@ function generarEncabezadoPDF(doc) {
     doc.setFont('helvetica', 'normal');
     doc.text(`Fecha: ${new Date().toLocaleDateString('es-DO')}`, pageWidth - margin, 20, {align: 'right'});
     
+    // Línea decorativa
     doc.setDrawColor(255, 215, 0);
     doc.setLineWidth(2);
     doc.line(margin, 42, pageWidth - margin, 42);
@@ -1122,6 +1471,7 @@ function generarEncabezadoPDF(doc) {
     doc.line(margin, 44, pageWidth - margin, 44);
     doc.setGState(new doc.GState({opacity: 1}));
     
+    // Sombra sutil
     doc.setFillColor(0, 0, 0);
     doc.setGState(new doc.GState({opacity: 0.08}));
     doc.rect(0, 40, pageWidth, 5, 'F');
@@ -1170,7 +1520,7 @@ function generarInformacionClientePDF(doc, yPos) {
 // MODO PRESUPUESTO SIMPLE
 // ====================================================
 
-function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
+async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     const margin = 15;
     let yPos = margin + 5;
     const pageWidth = doc.internal.pageSize.width;
@@ -1185,7 +1535,7 @@ function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     }
 
     // ENCABEZADO
-    generarEncabezadoPDF(doc);
+    await generarEncabezadoPDF(doc);
     yPos = 55;
 
     // INFORMACIÓN DE LA COTIZACIÓN
@@ -1297,7 +1647,7 @@ function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
 // MODO NORMAL
 // ====================================================
 
-function generarPDFModoNormal(doc, itemsSeleccionados, total) {
+async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     const margin = 15;
     let yPos = margin + 5;
     const pageWidth = doc.internal.pageSize.width;
@@ -1312,7 +1662,7 @@ function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     }
 
     // ENCABEZADO
-    generarEncabezadoPDF(doc);
+    await generarEncabezadoPDF(doc);
     yPos = 55;
 
     // INFORMACIÓN DE LA COTIZACIÓN
@@ -1491,7 +1841,23 @@ function formatearFecha(fechaISO) {
     });
 }
 
+// ----------------------------------------------------
+// LIMPIEZA DE COTIZACIÓN CON CONFIRMACIÓN
+// ----------------------------------------------------
+
+function confirmarLimpiarCotizacion() {
+    document.getElementById('confirmModal').style.display = 'flex';
+}
+
+function cerrarConfirmacion() {
+    document.getElementById('confirmModal').style.display = 'none';
+}
+
 function limpiarCamposCotizacion() {
+    // Cerrar modal de confirmación
+    cerrarConfirmacion();
+    
+    // Limpiar campos del formulario
     document.getElementById('cliente-nombre').value = '';
     document.getElementById('cliente-telefono').value = '';
     document.getElementById('cliente-email').value = '';
@@ -1505,14 +1871,28 @@ function limpiarCamposCotizacion() {
     document.getElementById('otra-tematica-container').style.display = 'none';
     document.getElementById('tipo-servicio').value = '';
     
+    // Limpiar errores de validación
+    const errorElements = document.querySelectorAll('.validation-error');
+    errorElements.forEach(el => el.textContent = '');
+    
+    const errorInputs = document.querySelectorAll('.error');
+    errorInputs.forEach(el => el.classList.remove('error'));
+    
+    // Cargar fecha actual
     cargarFechaActual();
     
+    // Reiniciar contadores
+    manualItemIdCounter = 1;
+    configIdCounter = 1000;
+    
+    // Limpiar artículos
     cotizacion.articulos.paquetes.forEach(p => p.cantidad = 0);
     cotizacion.articulos.accesorios.forEach(a => a.cantidad = 0);
     cotizacion.articulos.flores.forEach(f => f.cantidad = 0);
     cotizacion.articulos.arreglosFlorales.forEach(af => af.cantidad = 0);
     cotizacion.articulos.manuales = [];
     
+    // Limpiar costos
     document.getElementById('costo-transporte').value = 0;
     document.getElementById('porcentaje-mano-obra').value = 30;
     document.getElementById('tipo-mano-obra').value = 'porcentaje';
@@ -1520,6 +1900,8 @@ function limpiarCamposCotizacion() {
     
     cotizacion.tipoManoObra = 'porcentaje';
     cotizacion.montoManoObraManual = 0;
+    cotizacion.costos.transporte = 0;
+    cotizacion.costos.manoObraPorcentaje = 30;
     
     // Reset checkboxes (todos)
     document.getElementById('mostrar-mano-obra').checked = true;
@@ -1536,6 +1918,7 @@ function limpiarCamposCotizacion() {
     
     actualizarConfigPDF();
     
+    // Actualizar UI
     renderizarArticulos('paquetes');
     renderizarArticulos('accesorios');
     renderizarArticulos('flores');
@@ -1543,22 +1926,53 @@ function limpiarCamposCotizacion() {
     renderizarArticulosManuales();
     actualizarResumen();
     
+    // Resetear pasos
     cotizacion.currentStep = 1;
     updateStepUI();
+    
+    // Aplicar tema por defecto
+    const body = document.body;
+    const clasesTema = Array.from(body.classList).filter(className => className.startsWith('theme-'));
+    clasesTema.forEach(className => body.classList.remove(className));
+    
+    // Mostrar notificación
+    mostrarNotificacion('✅ Cotización limpiada correctamente. Puede comenzar una nueva.', 'success');
+}
+
+// ----------------------------------------------------
+// NOTIFICACIONES MEJORADAS
+// ----------------------------------------------------
+
+function mostrarNotificacion(mensaje, tipo = 'success') {
+    const notification = document.getElementById('notification');
+    const messageElement = document.getElementById('notification-message');
+    
+    if (!notification || !messageElement) return;
+    
+    // Actualizar mensaje y tipo
+    messageElement.textContent = mensaje;
+    
+    // Actualizar icono según tipo
+    let icon = '✅';
+    if (tipo === 'warning') icon = '⚠️';
+    if (tipo === 'error') icon = '❌';
+    
+    notification.querySelector('span:first-child').textContent = icon;
+    
+    // Actualizar clase de tipo
+    notification.className = 'notification show';
+    if (tipo === 'warning') notification.classList.add('warning');
+    if (tipo === 'error') notification.classList.add('error');
+    
+    // Ocultar después de 3 segundos
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
 }
 
 // ----------------------------------------------------
 // UTILIDADES Y PANEL DE CONFIGURACIÓN
 // ----------------------------------------------------
-
-function mostrarNotificación(mensaje, tipo = 'success') {
-    const notification = document.getElementById('notification');
-    notification.textContent = mensaje;
-    notification.className = `notification show ${tipo === 'warning' ? 'warning' : ''} ${tipo === 'error' ? 'error' : ''}`;
-    setTimeout(() => {
-        notification.classList.remove('show');
-    }, 3000);
-}
 
 function toggleConfig() {
     document.getElementById('configPanel').classList.toggle('active');
@@ -1586,7 +2000,7 @@ function cargarConfiguracion() {
             
         } catch (e) {
             console.error('Error al cargar configuración:', e);
-            mostrarNotificación('❌ Error al cargar configuración guardada', 'error');
+            mostrarNotificacion('❌ Error al cargar configuración guardada', 'error');
         }
     }
     
@@ -1609,7 +2023,7 @@ function guardarConfiguracion() {
     };
     
     localStorage.setItem('arteyevents_config', JSON.stringify(configToSave));
-    mostrarNotificación('✅ Configuración guardada con éxito.');
+    mostrarNotificacion('✅ Configuración guardada con éxito.');
     toggleConfig();
     
     cargarConfiguracion();
@@ -1717,7 +2131,7 @@ function agregarTipoEvento() {
     configuracion.tiposEvento.push("");
     renderizarConfiguracion();
     actualizarTiposEvento();
-    mostrarNotificación('✅ Nueva casilla para tipo de evento agregada');
+    mostrarNotificacion('✅ Nueva casilla para tipo de evento agregada');
     
     setTimeout(() => {
         const configItems = document.querySelectorAll('#config-tipos-evento .config-item');
@@ -1736,7 +2150,7 @@ function agregarTematicaEvento() {
     configuracion.tematicasEvento.push("");
     renderizarConfiguracion();
     actualizarTematicasEvento();
-    mostrarNotificación('✅ Nueva casilla para temática de evento agregada');
+    mostrarNotificacion('✅ Nueva casilla para temática de evento agregada');
     
     setTimeout(() => {
         const configItems = document.querySelectorAll('#config-tematicas-evento .config-item');
