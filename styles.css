@@ -37,24 +37,6 @@
     --accent: #81c784;
 }
 
-.theme-graduaciones {
-    --primary: #9c27b0;
-    --primary-dark: #7b1fa2;
-    --accent: #ba68c8;
-}
-
-.theme-aniversarios {
-    --primary: #ff5722;
-    --primary-dark: #e64a19;
-    --accent: #ff8a65;
-}
-
-.theme-flores {
-    --primary: #e91e63;
-    --primary-dark: #c2185b;
-    --accent: #ff4081;
-}
-
 .theme-otro {
     --primary: #607d8b;
     --primary-dark: #455a64;
@@ -98,33 +80,16 @@ header {
     border-top-right-radius: 20px;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-}
-
-.logo-icon {
-    font-size: 3em;
-    margin-right: 15px;
-    line-height: 1;
-}
-
-.logo-text h1 {
-    font-size: 1.8em;
+header h1 {
+    font-size: 2.2em;
     margin: 0;
     font-weight: 700;
 }
 
-.logo-text p {
-    font-size: 0.8em;
-    margin: 0;
-    opacity: 0.8;
-}
-
-header > p {
-    font-size: 0.9em;
+header p {
+    font-size: 1em;
     opacity: 0.9;
-    text-align: right;
+    margin: 0;
 }
 
 /* ESTRUCTURA DE LA APLICACIÓN (FORMULARIO + RESUMEN) */
@@ -136,44 +101,42 @@ header > p {
     align-items: start;
 }
 
-.form-sections {
-    background: white;
-    padding-right: 20px;
+/* PANEL PRINCIPAL (IZQUIERDA) - CORRECCIÓN CRÍTICA */
+.main-panel {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
-/* SECCIONES DEL FORMULARIO */
-.form-section {
-    padding: 25px 0;
-    border-top: 1px solid var(--light-gray);
-}
-.form-section:first-child {
-    border-top: none;
+/* CONTENEDOR DE PASOS - CORRECCIÓN CRÍTICA */
+.steps-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
-.section-title {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.section-title .number {
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    margin-right: 15px;
-    font-size: 1.1em;
-}
-
-.section-title h2 {
-    font-size: 1.5em;
-    color: var(--primary-dark);
+/* SECCIÓN DE CADA PASO - CORRECCIÓN CRÍTICA */
+.step-section {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
     margin: 0;
+    overflow: hidden;
+}
+
+.step-section h2 {
+    font-size: 1.6em;
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--light-gray);
+}
+
+/* SECCIÓN DEL FORMULARIO */
+.form-section {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px 0;
 }
 
 /* GRID DE FORMULARIOS */
@@ -181,18 +144,24 @@ header > p {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
+    width: 100%;
+}
+
+.form-grid.two-columns {
+    grid-template-columns: 1fr 1fr;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .form-group label {
     font-weight: 600;
     margin-bottom: 5px;
     color: var(--dark);
-    font-size: 0.9em;
+    font-size: 0.95em;
 }
 
 .form-group input[type="text"],
@@ -202,12 +171,13 @@ header > p {
 .form-group input[type="number"],
 .form-group select,
 .form-group textarea {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid var(--light-gray);
     border-radius: 8px;
     font-size: 1em;
     transition: border-color 0.3s;
     background: var(--light);
+    width: 100%;
 }
 
 .form-group input:focus,
@@ -218,36 +188,34 @@ header > p {
     box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
 }
 
-.form-group.full-width {
-    grid-column: 1 / -1;
-}
-
 textarea {
     resize: vertical;
     min-height: 100px;
 }
 
-/* TABS */
+/* TABS - CORRECCIÓN COMPLETA */
 .tabs {
     display: flex;
     margin-bottom: 20px;
     border-bottom: 2px solid var(--light-gray);
-    padding-bottom: 5px;
+    padding-bottom: 0;
+    width: 100%;
     overflow-x: auto;
+    gap: 5px;
 }
 
 .tab-button {
     flex-shrink: 0;
     background: none;
     border: none;
-    padding: 10px 15px;
+    padding: 12px 20px;
     cursor: pointer;
     font-size: 1em;
     font-weight: 600;
     color: var(--gray);
     border-bottom: 3px solid transparent;
     transition: all 0.3s ease;
-    margin-right: 15px;
+    white-space: nowrap;
 }
 
 .tab-button:hover {
@@ -257,36 +225,15 @@ textarea {
 .tab-button.active {
     color: var(--primary);
     border-bottom-color: var(--primary);
+    background-color: rgba(138, 43, 226, 0.05);
 }
 
-/* FILTROS DE FLORES */
-.filtros-flores {
-    margin-bottom: 15px;
-    padding: 10px;
-    background: var(--light);
-    border-radius: 10px;
-    border-left: 4px solid var(--success);
-}
-
-.filtros-flores label {
-    font-weight: 600;
-    margin-right: 10px;
-    color: var(--dark);
-}
-
-.filtros-flores select {
-    padding: 8px 12px;
-    border: 1px solid var(--light-gray);
-    border-radius: 6px;
-    background: white;
-    color: var(--dark);
-    font-size: 0.9em;
-}
-
-.filtros-flores select:focus {
-    border-color: var(--primary);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 200, 100, 0.1);
+/* CONTENIDO DE TABS - CORRECCIÓN CRÍTICA */
+.tab-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 /* OPCIONES DE EVENTO/ARTÍCULOS */
@@ -295,6 +242,7 @@ textarea {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
     margin-top: 15px;
+    width: 100%;
 }
 
 .item-card {
@@ -308,6 +256,7 @@ textarea {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 100%;
 }
 
 .item-card:hover {
@@ -351,6 +300,7 @@ textarea {
     margin-top: 10px;
     padding-top: 10px;
     border-top: 1px dashed var(--light-gray);
+    width: 100%;
 }
 
 .item-footer .price {
@@ -368,6 +318,7 @@ textarea {
     border-radius: 20px;
     border: 1px solid var(--light-gray);
     overflow: hidden;
+    width: 100%;
 }
 
 .item-card.selected .quantity-control {
@@ -379,11 +330,12 @@ textarea {
     background: transparent;
     border: none;
     color: var(--primary-dark);
-    padding: 5px 10px;
+    padding: 5px 12px;
     cursor: pointer;
     font-size: 1.2em;
     transition: background 0.2s;
     line-height: 1;
+    min-width: 40px;
 }
 
 .item-card.selected .quantity-control button {
@@ -393,13 +345,13 @@ textarea {
 .quantity-control button:hover {
     background: var(--light-gray);
 }
+
 .item-card.selected .quantity-control button:hover {
     background: var(--primary-light);
 }
 
 .quantity-control input {
-    width: 35px;
-    height: 100%;
+    width: 40px;
     text-align: center;
     border: none;
     padding: 5px 0;
@@ -408,6 +360,7 @@ textarea {
     background: transparent;
     color: var(--dark);
 }
+
 .item-card.selected .quantity-control input {
     color: white;
 }
@@ -420,7 +373,7 @@ textarea {
 
 /* ESTILOS DE BOTONES GENERALES */
 .btn-primary, .btn-secondary, .btn-add, .btn-remove {
-    padding: 10px 20px;
+    padding: 12px 24px;
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
@@ -430,12 +383,13 @@ textarea {
     justify-content: center;
     gap: 8px;
     text-align: center;
+    border: none;
+    font-size: 1em;
 }
 
 .btn-primary {
     background: var(--primary);
     color: white;
-    border: none;
     box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
     width: 100%;
     margin-top: 20px;
@@ -461,11 +415,9 @@ textarea {
 .btn-add {
     background: var(--success);
     color: white;
-    border: none;
     margin-top: 15px;
     width: auto;
-    padding: 12px 20px;
-    font-size: 1em;
+    padding: 12px 24px;
 }
 
 .btn-add:hover {
@@ -475,13 +427,15 @@ textarea {
 .btn-remove {
     background: var(--secondary);
     color: white;
-    border: none;
-    padding: 6px 10px;
+    padding: 6px 12px;
     font-size: 1.1em;
     line-height: 1;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-remove:hover {
@@ -492,7 +446,7 @@ textarea {
 .resumen-panel {
     background: var(--light);
     border-radius: 15px;
-    padding: 30px;
+    padding: 25px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 30px;
@@ -509,18 +463,20 @@ textarea {
 
 .resumen-details {
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .resumen-item {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
+    padding: 8px 0;
     font-size: 0.95em;
     color: var(--gray);
+    width: 100%;
 }
 
 .resumen-item span:first-child {
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .resumen-item span:last-child {
@@ -531,21 +487,24 @@ textarea {
 .resumen-separator {
     height: 1px;
     background: var(--light-gray);
-    margin: 10px 0;
+    margin: 12px 0;
+    width: 100%;
 }
 
 .resumen-costs {
     margin-top: 20px;
+    width: 100%;
 }
 
 .resumen-total {
     display: flex;
     justify-content: space-between;
     padding-top: 15px;
-    margin-top: 10px;
+    margin-top: 15px;
     border-top: 2px solid var(--primary-light);
     font-size: 1.4em;
     color: var(--primary-dark) !important;
+    width: 100%;
 }
 
 .resumen-total span:last-child {
@@ -629,6 +588,7 @@ textarea {
     margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--light-gray);
+    width: 100%;
 }
 
 .config-section h3 {
@@ -641,31 +601,18 @@ textarea {
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-/* Config item específico para flores (4 columnas) */
-.config-item[data-tipo="flor"],
-.config-item[data-tipo="flores"] {
-    grid-template-columns: 2fr 1fr 1fr 40px !important;
-}
-
-/* Config item específico para tipos-evento (2 columnas) */
-.config-item[data-tipo="tipo-evento"] {
-    grid-template-columns: 2fr 40px !important;
-}
-
-/* Config item normal (3 columnas) */
-.config-item:not([data-tipo="flor"]):not([data-tipo="flores"]):not([data-tipo="tipo-evento"]) {
-    grid-template-columns: 2fr 1fr 40px !important;
+    width: 100%;
 }
 
 .config-item {
     display: grid;
+    grid-template-columns: 2fr 1fr 40px;
     gap: 10px;
     align-items: center;
-    padding: 8px;
+    padding: 10px;
     background: var(--light-gray);
     border-radius: 8px;
+    width: 100%;
 }
 
 .config-item input[type="text"],
@@ -673,7 +620,7 @@ textarea {
     padding: 8px;
     border-radius: 6px;
     border: 1px solid var(--gray);
-    font-size: 0.9em;
+    font-size: 0.95em;
     width: 100%;
 }
 
@@ -699,26 +646,18 @@ textarea {
     transform: translateX(-50%) translateY(0);
 }
 
-.notification.warning {
-    background: var(--warning);
-    color: var(--dark);
-}
-
-.notification.error {
-    background: var(--secondary);
-}
-
 /* BARRA DE PROGRESO */
 .progress-bar-container {
     margin-bottom: 25px;
+    width: 100%;
 }
 
 .progress-bar {
-    height: 5px;
+    height: 6px;
     background: var(--light-gray);
     width: 100%;
     margin: 0;
-    border-radius: 2px;
+    border-radius: 3px;
     overflow: hidden;
 }
 
@@ -730,11 +669,12 @@ textarea {
 }
 
 .info-box {
-    margin-top: 30px;
+    margin-top: 25px;
     padding: 20px;
     background: var(--light);
     border-radius: 12px;
     border-left: 4px solid var(--accent);
+    width: 100%;
 }
 
 .info-box h4 {
@@ -745,46 +685,47 @@ textarea {
 
 .info-box ul {
     padding-left: 20px;
+    margin: 0;
 }
 
 .info-box li {
     margin-bottom: 8px;
     color: var(--gray);
+    font-size: 0.95em;
 }
 
-/* NUEVOS ESTILOS PARA ARTÍCULOS MANUALES */
+/* ARTÍCULOS MANUALES */
 .manual-items-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 12px;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .manual-item {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 40px;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
-    padding: 10px;
+    padding: 12px;
     background: var(--light);
     border-radius: 8px;
     border: 1px solid var(--light-gray);
+    width: 100%;
 }
+
 .manual-item input {
-    padding: 6px 8px;
+    padding: 8px 10px;
     border: 1px solid var(--light-gray);
-    border-radius: 4px;
-    font-size: 0.9em;
+    border-radius: 6px;
+    font-size: 0.95em;
+    width: 100%;
 }
+
 .manual-item input:focus {
     border-color: var(--primary);
     outline: none;
-}
-.manual-item input[type="text"] {
-    grid-column: 1 / 2;
-}
-.manual-item input[type="number"] {
-    text-align: right;
 }
 
 /* NAVEGACIÓN DE PASO */
@@ -794,64 +735,40 @@ textarea {
     margin-top: 25px;
     padding-top: 20px;
     border-top: 1px solid var(--light-gray);
+    width: 100%;
 }
+
 .nav-buttons button {
     width: 48%;
-}
-
-/* ESTRUCTURA DE PASOS */
-.steps-container {
-    position: relative;
-    padding: 20px;
-}
-
-.step-section {
-    display: none;
-    animation: fadeIn 0.5s ease;
-}
-
-.step-section.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Corrección para los contenedores de tabs */
-.tab-content {
-    min-height: 300px;
-}
-
-/* Estilos para los botones de navegación */
-.nav-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid var(--light-gray);
-}
-
-.nav-buttons button {
-    padding: 12px 24px;
+    padding: 12px;
     font-size: 1em;
 }
 
-/* Estados de carga y deshabilitado */
+/* CORRECCIÓN ESPECÍFICA PARA CONTAINERS */
+#paquetes-container,
+#accesorios-container,
+#manual-items-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* ESTADOS DE BOTONES */
 .btn-primary:disabled {
     background: var(--gray);
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+    opacity: 0.6;
 }
 
 .btn-primary:disabled:hover {
     transform: none;
     box-shadow: none;
+    background: var(--gray);
 }
 
-/* Efectos de foco para accesibilidad */
+/* EFECTOS DE FOCO */
 button:focus,
 input:focus,
 select:focus,
@@ -860,46 +777,105 @@ textarea:focus {
     outline-offset: 2px;
 }
 
-/* Responsive */
+/* RESPONSIVE */
 @media (max-width: 1200px) {
     .app-container {
         grid-template-columns: 1fr;
+        gap: 20px;
     }
     
     .resumen-panel {
         position: static;
-        top: 0;
+        width: 100%;
     }
     
     .config-panel {
         width: 100%;
         right: -100%;
     }
+    
+    .form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
-@media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        align-items: flex-start;
+@media (max-width: 992px) {
+    .app-container {
         padding: 20px;
     }
     
-    header > p {
-        margin-top: 5px;
-        text-align: left;
+    header {
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
     
-    .form-section {
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    .form-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
     }
     
     .form-grid.two-columns {
         grid-template-columns: 1fr;
     }
     
+    .options-grid {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        border-radius: 15px;
+    }
+    
+    header {
+        padding: 15px;
+    }
+    
+    .app-container {
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .step-section h2 {
+        font-size: 1.4em;
+    }
+    
+    .tabs {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    .tab-button {
+        padding: 10px 15px;
+        font-size: 0.95em;
+    }
+    
+    .options-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
     .manual-item {
-        grid-template-columns: 1fr 80px 80px 30px;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .nav-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .nav-buttons button {
+        width: 100%;
     }
     
     .config-panel {
@@ -907,81 +883,36 @@ textarea:focus {
         right: -100%;
     }
     
-    .app-container {
-        padding: 15px;
-    }
-    
-    .options-grid {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
-
-    .nav-buttons button {
-        padding: 10px;
-        font-size: 0.9em;
-    }
-    
-    .config-item[data-tipo="flor"],
-    .config-item[data-tipo="flores"] {
-        grid-template-columns: 1fr 1fr !important;
-    }
-    
-    .config-item:not([data-tipo="flor"]):not([data-tipo="flores"]):not([data-tipo="tipo-evento"]) {
-        grid-template-columns: 1fr 1fr !important;
-    }
-    
-    .config-item[data-tipo="tipo-evento"] {
-        grid-template-columns: 1fr !important;
-    }
-    
-    .config-item .btn-remove {
-        grid-column: span 2;
-        width: 100%;
-        border-radius: 6px;
-        margin-top: 5px;
+    .config-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
     }
 }
 
 @media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-    
     .options-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .item-card {
+        padding: 12px;
     }
     
     .resumen-panel {
         padding: 20px;
     }
     
-    .manual-item {
-        grid-template-columns: 1fr;
-        gap: 5px;
-    }
-    .manual-item input[type="text"],
-    .manual-item input[type="number"] {
-        width: 100%;
-    }
-    .manual-item button {
-        width: 100%;
-        border-radius: 8px;
+    .step-section h2 {
+        font-size: 1.3em;
     }
     
-    .filtros-flores {
-        flex-direction: column;
-        align-items: flex-start;
+    .tab-button {
+        padding: 8px 12px;
+        font-size: 0.9em;
     }
     
-    .filtros-flores select {
-        width: 100%;
-        margin-top: 5px;
-    }
-    
-    .config-item {
-        grid-template-columns: 1fr !important;
-    }
-    
-    .config-item input {
-        width: 100%;
+    .btn-primary, .btn-secondary, .btn-add {
+        padding: 10px 15px;
+        font-size: 0.95em;
     }
 }
