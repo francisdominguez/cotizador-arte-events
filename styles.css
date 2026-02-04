@@ -37,6 +37,24 @@
     --accent: #81c784;
 }
 
+.theme-graduaciones {
+    --primary: #9c27b0;
+    --primary-dark: #7b1fa2;
+    --accent: #ba68c8;
+}
+
+.theme-aniversarios {
+    --primary: #ff5722;
+    --primary-dark: #e64a19;
+    --accent: #ff8a65;
+}
+
+.theme-flores {
+    --primary: #e91e63;
+    --primary-dark: #c2185b;
+    --accent: #ff4081;
+}
+
 .theme-otro {
     --primary: #607d8b;
     --primary-dark: #455a64;
@@ -112,7 +130,7 @@ header > p {
 /* ESTRUCTURA DE LA APLICACIÓN (FORMULARIO + RESUMEN) */
 .app-container {
     display: grid;
-    grid-template-columns: 3fr 1fr; /* Formulario más grande, Resumen más pequeño */
+    grid-template-columns: 3fr 1fr;
     gap: 30px;
     padding: 30px;
     align-items: start;
@@ -120,7 +138,7 @@ header > p {
 
 .form-sections {
     background: white;
-    padding-right: 20px; /* Espacio entre la sección y el resumen */
+    padding-right: 20px;
 }
 
 /* SECCIONES DEL FORMULARIO */
@@ -239,6 +257,36 @@ textarea {
 .tab-button.active {
     color: var(--primary);
     border-bottom-color: var(--primary);
+}
+
+/* FILTROS DE FLORES */
+.filtros-flores {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: var(--light);
+    border-radius: 10px;
+    border-left: 4px solid var(--success);
+}
+
+.filtros-flores label {
+    font-weight: 600;
+    margin-right: 10px;
+    color: var(--dark);
+}
+
+.filtros-flores select {
+    padding: 8px 12px;
+    border: 1px solid var(--light-gray);
+    border-radius: 6px;
+    background: white;
+    color: var(--dark);
+    font-size: 0.9em;
+}
+
+.filtros-flores select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 200, 100, 0.1);
 }
 
 /* OPCIONES DE EVENTO/ARTÍCULOS */
@@ -370,7 +418,6 @@ textarea {
     margin: 0;
 }
 
-
 /* ESTILOS DE BOTONES GENERALES */
 .btn-primary, .btn-secondary, .btn-add, .btn-remove {
     padding: 10px 20px;
@@ -390,7 +437,7 @@ textarea {
     color: white;
     border: none;
     box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
-    width: 100%; /* Botón grande de PDF */
+    width: 100%;
     margin-top: 20px;
 }
 
@@ -596,9 +643,24 @@ textarea {
     gap: 10px;
 }
 
+/* Config item específico para flores (4 columnas) */
+.config-item[data-tipo="flor"],
+.config-item[data-tipo="flores"] {
+    grid-template-columns: 2fr 1fr 1fr 40px !important;
+}
+
+/* Config item específico para tipos-evento (2 columnas) */
+.config-item[data-tipo="tipo-evento"] {
+    grid-template-columns: 2fr 40px !important;
+}
+
+/* Config item normal (3 columnas) */
+.config-item:not([data-tipo="flor"]):not([data-tipo="flores"]):not([data-tipo="tipo-evento"]) {
+    grid-template-columns: 2fr 1fr 40px !important;
+}
+
 .config-item {
     display: grid;
-    grid-template-columns: 2fr 1fr 40px;
     gap: 10px;
     align-items: center;
     padding: 8px;
@@ -612,6 +674,7 @@ textarea {
     border-radius: 6px;
     border: 1px solid var(--gray);
     font-size: 0.9em;
+    width: 100%;
 }
 
 /* NOTIFICACIÓN */
@@ -636,6 +699,15 @@ textarea {
     transform: translateX(-50%) translateY(0);
 }
 
+.notification.warning {
+    background: var(--warning);
+    color: var(--dark);
+}
+
+.notification.error {
+    background: var(--secondary);
+}
+
 /* BARRA DE PROGRESO */
 .progress-bar-container {
     margin-bottom: 25px;
@@ -653,7 +725,7 @@ textarea {
 .progress {
     height: 100%;
     background: linear-gradient(90deg, var(--primary), var(--accent));
-    width: 0%; /* Empezar en 0 */
+    width: 0%;
     transition: width 0.5s ease;
 }
 
@@ -727,6 +799,67 @@ textarea {
     width: 48%;
 }
 
+/* ESTRUCTURA DE PASOS */
+.steps-container {
+    position: relative;
+    padding: 20px;
+}
+
+.step-section {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.step-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Corrección para los contenedores de tabs */
+.tab-content {
+    min-height: 300px;
+}
+
+/* Estilos para los botones de navegación */
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--light-gray);
+}
+
+.nav-buttons button {
+    padding: 12px 24px;
+    font-size: 1em;
+}
+
+/* Estados de carga y deshabilitado */
+.btn-primary:disabled {
+    background: var(--gray);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-primary:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Efectos de foco para accesibilidad */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
     .app-container {
@@ -786,6 +919,26 @@ textarea {
         padding: 10px;
         font-size: 0.9em;
     }
+    
+    .config-item[data-tipo="flor"],
+    .config-item[data-tipo="flores"] {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    
+    .config-item:not([data-tipo="flor"]):not([data-tipo="flores"]):not([data-tipo="tipo-evento"]) {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    
+    .config-item[data-tipo="tipo-evento"] {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .config-item .btn-remove {
+        grid-column: span 2;
+        width: 100%;
+        border-radius: 6px;
+        margin-top: 5px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -813,26 +966,22 @@ textarea {
         width: 100%;
         border-radius: 8px;
     }
-}
-
-/* Estados de carga y deshabilitado */
-.btn-primary:disabled {
-    background: var(--gray);
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.btn-primary:disabled:hover {
-    transform: none;
-    box-shadow: none;
-}
-
-/* Efectos de foco para accesibilidad */
-button:focus,
-input:focus,
-select:focus,
-textarea:focus {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
+    
+    .filtros-flores {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .filtros-flores select {
+        width: 100%;
+        margin-top: 5px;
+    }
+    
+    .config-item {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .config-item input {
+        width: 100%;
+    }
 }
