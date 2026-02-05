@@ -96,7 +96,7 @@ function formatoMonedaRD(monto) {
 document.addEventListener('DOMContentLoaded', function() {
     cargarConfiguracion();
     inicializarEventListeners();
-    cargarFechaActual();
+    inicializarFechaEvento(); // CORREGIDO: usar función mejorada
     actualizarTiposEvento();
     actualizarTematicasEvento();
     updateStepUI();
@@ -115,11 +115,31 @@ document.addEventListener('DOMContentLoaded', function() {
     actualizarVistaPreviaPDF();
 });
 
-function cargarFechaActual() {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('fecha-evento').value = today;
-    cotizacion.cliente.fechaEvento = today;
-    guardarDatosPaso1();
+// FUNCIÓN MEJORADA PARA INICIALIZAR FECHA
+function inicializarFechaEvento() {
+    const fechaInput = document.getElementById('fecha-evento');
+    if (!fechaInput) return;
+    
+    // Obtener fecha actual en formato YYYY-MM-DD
+    const hoy = new Date();
+    const year = hoy.getFullYear();
+    const month = String(hoy.getMonth() + 1).padStart(2, '0');
+    const day = String(hoy.getDate()).padStart(2, '0');
+    const fechaHoy = `${year}-${month}-${day}`;
+    
+    // Establecer atributos del input
+    fechaInput.min = fechaHoy;
+    fechaInput.value = fechaHoy;
+    
+    // Actualizar objeto cotización
+    cotizacion.cliente.fechaEvento = fechaHoy;
+    
+    // Forzar validación después de un breve delay
+    setTimeout(() => {
+        validarCampo('fecha-evento', fechaHoy);
+        guardarDatosPaso1();
+        actualizarResumen();
+    }, 200);
 }
 
 function cambiarTematicaEvento() {
@@ -334,7 +354,8 @@ function validarCampo(campoId, valor) {
                 return false;
             }
             
-            const fechaEvento = new Date(valor);
+            // Crear fechas para comparación (ignorando hora)
+            const fechaEvento = new Date(valor + 'T00:00:00');
             const hoy = new Date();
             hoy.setHours(0, 0, 0, 0);
             
@@ -504,16 +525,17 @@ function validarPaso1() {
         limpiarError('cliente-nombre');
     }
     
-    // Validar fecha (obligatorio)
+    // Validar fecha (obligatorio) - CORREGIDO
     const fecha = document.getElementById('fecha-evento').value.trim();
     if (!fecha) {
         mostrarError('fecha-evento', 'La fecha del evento es obligatoria');
         errores.push('Fecha del evento');
         valido = false;
     } else {
-        const fechaEvento = new Date(fecha);
+        // Crear fecha sin considerar hora para comparación
+        const fechaEvento = new Date(fecha + 'T00:00:00'); // Forzar medianoche
         const hoy = new Date();
-        hoy.setHours(0, 0, 0, 0);
+        hoy.setHours(0, 0, 0, 0); // Establecer a medianoche
         
         if (fechaEvento < hoy) {
             mostrarError('fecha-evento', 'La fecha del evento no puede ser en el pasado');
@@ -1230,11 +1252,20 @@ function actualizarResumen() {
     const transporteElement = document.getElementById('resumen-transporte');
     
     if (cotizacion.tipoServicio === 'decoracion') {
-        manoObraElement.textContent = formatoMonedaRD(cotizacion.costos.manoObra);
-        manoObraElement.parentElement.style.display = 'flex';
+        // CORRECCIÓN: Solo mostrar en resumen si está marcado en configPDF
+        if (configPDF.mostrarManoObra) {
+            manoObraElement.textContent = formatoMonedaRD(cotizacion.costos.manoObra);
+            manoObraElement.parentElement.style.display = 'flex';
+        } else {
+            manoObraElement.parentElement.style.display = 'none';
+        }
         
-        transporteElement.textContent = formatoMonedaRD(cotizacion.costos.transporte);
-        transporteElement.parentElement.style.display = 'flex';
+        if (configPDF.mostrarTransporte) {
+            transporteElement.textContent = formatoMonedaRD(cotizacion.costos.transporte);
+            transporteElement.parentElement.style.display = 'flex';
+        } else {
+            transporteElement.parentElement.style.display = 'none';
+        }
     } else {
         manoObraElement.parentElement.style.display = 'none';
         transporteElement.parentElement.style.display = 'none';
@@ -1644,7 +1675,7 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
 }
 
 // ====================================================
-// MODO NORMAL
+// MODO NORMAL - CORREGIDO
 // ====================================================
 
 async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
@@ -1748,39 +1779,21 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
             yPos += 5;
         }
 
-        if (cotizacion.costos.manoObra > 0 || cotizacion.costos.transporte > 0) {
-            if (configPDF.mostrarManoObra && configPDF.mostrarTransporte) {
-                if (cotizacion.costos.manoObra > 0) {
-                    doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
-                    doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
-                    yPos += 5;
-                }
-                
-                if (cotizacion.costos.transporte > 0) {
-                    doc.text("Transporte:", pageWidth / 2, yPos, { align: "left" });
-                    doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
-                    yPos += 5;
-                }
-            } else if (configPDF.mostrarManoObra || configPDF.mostrarTransporte) {
-                if (configPDF.mostrarManoObra && cotizacion.costos.manoObra > 0) {
-                    doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
-                    doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
-                    yPos += 5;
-                }
-                if (configPDF.mostrarTransporte && cotizacion.costos.transporte > 0) {
-                    doc.text("Transporte:", pageWidth / 2, yPos, { align: "left" });
-                    doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
-                    yPos += 5;
-                }
-            } else {
-                const totalInstalacionLogistica = cotizacion.costos.manoObra + cotizacion.costos.transporte;
-                if (totalInstalacionLogistica > 0) {
-                    doc.text("Instalación y Logística:", pageWidth / 2, yPos, { align: "left" });
-                    doc.text(formatoMonedaRD(totalInstalacionLogistica), xCostos, yPos, { align: "right" });
-                    yPos += 5;
-                }
-            }
+        // CORRECCIÓN: Solo mostrar si está marcado en configPDF
+        if (configPDF.mostrarManoObra && cotizacion.costos.manoObra > 0) {
+            doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
+            doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
+            yPos += 5;
         }
+        
+        if (configPDF.mostrarTransporte && cotizacion.costos.transporte > 0) {
+            doc.text("Transporte:", pageWidth / 2, yPos, { align: "left" });
+            doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
+            yPos += 5;
+        }
+        
+        // NOTA: Se ha eliminado la opción de "Instalación y Logística" combinada
+        // porque confunde al usuario. Ahora solo muestra lo que esté explícitamente marcado.
     }
     
     yPos += 8;
@@ -1829,7 +1842,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     
     doc.text("Arte y Events - Decoración Profesional", pageWidth / 2, pageHeight - 10, { align: "center" });
 }
-
 function formatearFecha(fechaISO) {
     if (!fechaISO) return '';
     
@@ -1878,8 +1890,8 @@ function limpiarCamposCotizacion() {
     const errorInputs = document.querySelectorAll('.error');
     errorInputs.forEach(el => el.classList.remove('error'));
     
-    // Cargar fecha actual
-    cargarFechaActual();
+    // Inicializar fecha actual
+    inicializarFechaEvento();
     
     // Reiniciar contadores
     manualItemIdCounter = 1;
