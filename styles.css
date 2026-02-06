@@ -1828,3 +1828,255 @@ textarea:focus {
     border-color: #3498db;
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
+
+/* ---------------------------------------------------- */
+/* ESTILOS PARA MEJORAS UX (Botones flotantes, etc.) */
+/* ---------------------------------------------------- */
+
+/* BOTÓN FLOTANTE PDF */
+.floating-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    animation: floatAnimation 3s ease-in-out infinite;
+}
+
+.floating-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.floating-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.floating-button.active {
+    background: linear-gradient(135deg, var(--success), var(--accent));
+}
+
+.floating-button.hidden {
+    display: none;
+}
+
+.floating-icon {
+    font-size: 20px;
+}
+
+.floating-text {
+    font-size: 14px;
+    text-align: left;
+}
+
+.floating-text small {
+    display: block;
+    font-size: 11px;
+    opacity: 0.9;
+    font-weight: normal;
+}
+
+/* BOTÓN VOLVER ARRIBA */
+.floating-button.back-to-top {
+    bottom: 80px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    justify-content: center;
+    font-size: 24px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.floating-button.back-to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* INDICADOR DE PASO ACTUAL */
+.step-indicator-badge {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--primary);
+    border-radius: 25px;
+    padding: 10px 20px;
+    z-index: 998;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    animation: slideInDown 0.3s ease;
+}
+
+.step-indicator-badge .step-number {
+    background: var(--primary);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.step-indicator-badge .step-name {
+    white-space: nowrap;
+}
+
+/* VISUALIZACIÓN DEL TOTAL MEJORADA */
+.total-display {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-align: center;
+    min-width: 150px;
+}
+
+.total-display.visible {
+    opacity: 1;
+}
+
+.total-display .total-amount {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.total-display .total-items {
+    font-size: 11px;
+    opacity: 0.9;
+    font-weight: normal;
+}
+
+/* ANIMACIONES */
+@keyframes floatAnimation {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* RESPONSIVE PARA MÓVIL */
+@media (max-width: 768px) {
+    .floating-button {
+        bottom: 15px;
+        right: 15px;
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    .floating-button.back-to-top {
+        bottom: 70px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+    
+    .floating-text {
+        display: none; /* Ocultar texto en móvil muy pequeño */
+    }
+    
+    .floating-button .floating-icon {
+        margin-right: 0;
+        font-size: 18px;
+    }
+    
+    .step-indicator-badge {
+        top: 80px;
+        font-size: 12px;
+        padding: 8px 15px;
+    }
+    
+    .total-display {
+        top: -35px;
+        font-size: 12px;
+        min-width: 130px;
+        padding: 6px 12px;
+    }
+    
+    .total-display .total-amount {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-button {
+        bottom: 10px;
+        right: 10px;
+        padding: 10px 15px;
+    }
+    
+    .floating-button.back-to-top {
+        bottom: 60px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .step-indicator-badge {
+        top: 70px;
+        font-size: 11px;
+        padding: 6px 12px;
+    }
+    
+    .step-indicator-badge .step-number {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+    
+    .total-display {
+        top: -30px;
+        font-size: 11px;
+        min-width: 120px;
+    }
+    
+    .total-display .total-amount {
+        font-size: 14px;
+    }
+}
