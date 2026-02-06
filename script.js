@@ -7,7 +7,7 @@ const { jsPDF } = window.jspdf;
 
 let configuracion = {
     tiposEvento: ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower', 'Graduaciones', 'Aniversarios', 'Flores'],
-    tematicasEvento: ['Clásica', 'Moderno', 'Vintage', 'Rústico', 'Minimalista', 'Bohemio', 'Elegante', 'Divertido'],
+    tematicasEvento: ['Clásica', 'Moderno', 'Vintage', 'Rústica', 'Minimalista', 'Bohemia', 'Elegante', 'Divertida'],
     paquetes: [
         { id: 1, nombre: "Globo Azul", precio: 1200, emoji: '💙', cantidad: 0, tipo: 'decoracion' },
         { id: 2, nombre: "Globo Dorado", precio: 1500, emoji: '✨', cantidad: 0, tipo: 'decoracion' },
@@ -79,7 +79,213 @@ let cotizacion = {
 let manualItemIdCounter = 1;
 let configIdCounter = 1000;
 
+// ----------------------------------------------------
+// FUNCIONES DE SCROLL AUTOMÁTICO - AGREGADAS
+// ----------------------------------------------------
+
+function scrollToStepTop() {
+    // Obtener el elemento del paso actual
+    const currentStepElement = document.getElementById(`step-${cotizacion.currentStep}`);
+    
+    if (currentStepElement) {
+        // Para todos los dispositivos: scroll al inicio del paso actual
+        currentStepElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+        
+        // Para móviles: scroll adicional al top de la página
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }, 300);
+        }
+    }
+}
+
+function scrollToTabs() {
+    // Solo en móviles, hacer scroll a las tabs
+    if (window.innerWidth <= 768) {
+        const tabsContainer = document.getElementById('tabs-container');
+        if (tabsContainer) {
+            setTimeout(() => {
+                tabsContainer.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 100);
+        }
+    }
+}
+
+function scrollToErrorField(fieldId) {
+    const fieldElement = document.getElementById(fieldId);
+    if (fieldElement) {
+        setTimeout(() => {
+            fieldElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            
+            // Enfocar el campo con error
+            fieldElement.focus();
+        }, 300);
+    }
+}
+
+// ----------------------------------------------------
+// NUEVAS FUNCIONES DE MEJORA UX
+// ----------------------------------------------------
+
+function crearBotonFlotantePDF() {
+    // Crear botón flotante para PDF
+    const floatingBtn = document.createElement('button');
+    floatingBtn.id = 'floating-pdf-btn';
+    floatingBtn.className = 'floating-button';
+    floatingBtn.innerHTML = `
+        <span class="floating-icon">📄</span>
+        <span class="floating-text">Generar PDF</span>
+    `;
+    floatingBtn.title = 'Generar PDF';
+    floatingBtn.onclick = generarCotizacionPDF;
+    
+    document.body.appendChild(floatingBtn);
+    
+    // Crear botón "Volver arriba"
+    const backToTopBtn = document.createElement('button');
+    backToTopBtn.id = 'back-to-top-btn';
+    backToTopBtn.className = 'floating-button back-to-top';
+    backToTopBtn.innerHTML = '↑';
+    backToTopBtn.title = 'Volver arriba';
+    backToTopBtn.onclick = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    
+    document.body.appendChild(backToTopBtn);
+    
+    // Mostrar/ocultar botón "Volver arriba" según scroll
+    window.addEventListener('scroll', function() {
+        const backToTopBtn = document.getElementById('back-to-top-btn');
+        const floatingPdfBtn = document.getElementById('floating-pdf-btn');
+        
+        if (backToTopBtn) {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+                // Ocultar botón flotante PDF en móviles al hacer scroll
+                if (window.innerWidth <= 768 && floatingPdfBtn) {
+                    floatingPdfBtn.classList.add('hidden');
+                }
+            } else {
+                backToTopBtn.classList.remove('visible');
+                // Mostrar botón flotante PDF en móviles
+                if (window.innerWidth <= 768 && floatingPdfBtn) {
+                    floatingPdfBtn.classList.remove('hidden');
+                }
+            }
+        }
+    });
+}
+
+function actualizarBotonFlotantePDF() {
+    const floatingBtn = document.getElementById('floating-pdf-btn');
+    if (!floatingBtn) return;
+    
+    const total = cotizacion.costos.total;
+    const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
+    const modo = configPDF.mostrarPresupuestoSimple ? 'Simple' : 'Detallado';
+    
+    // Actualizar estado del botón
+    floatingBtn.disabled = cotizacion.currentStep !== 3 || total === 0;
+    
+    // Actualizar tooltip
+    floatingBtn.title = `Generar PDF\nModo: ${modo}\nArtículos: ${totalArticulos}\nTotal: ${formatoMonedaRD(total)}`;
+    
+    // Actualizar texto del botón con el total
+    const textSpan = floatingBtn.querySelector('.floating-text');
+    if (textSpan) {
+        if (total > 0) {
+            textSpan.innerHTML = `Generar PDF<br><small>${formatoMonedaRD(total)}</small>`;
+        } else {
+            textSpan.textContent = 'Generar PDF';
+        }
+    }
+    
+    // Mostrar/ocultar según el paso
+    if (cotizacion.currentStep === 3 && total > 0) {
+        floatingBtn.classList.add('active');
+    } else {
+        floatingBtn.classList.remove('active');
+    }
+}
+
+function crearIndicadorPasoActual() {
+    // Crear indicador visual del paso actual
+    const indicator = document.createElement('div');
+    indicator.id = 'current-step-indicator';
+    indicator.className = 'step-indicator-badge';
+    
+    document.body.appendChild(indicator);
+    actualizarIndicadorPasoActual();
+}
+
+function actualizarIndicadorPasoActual() {
+    const indicator = document.getElementById('current-step-indicator');
+    if (!indicator) return;
+    
+    const stepNames = ['Información', 'Artículos', 'Resumen'];
+    const currentStepName = stepNames[cotizacion.currentStep - 1] || '';
+    
+    indicator.innerHTML = `
+        <span class="step-number">Paso ${cotizacion.currentStep}/3</span>
+        <span class="step-name">${currentStepName}</span>
+    `;
+    
+    // Posicionar el indicador cerca del progreso
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) {
+        const rect = progressBar.getBoundingClientRect();
+        indicator.style.top = (rect.bottom + 10) + 'px';
+        indicator.style.left = (rect.left + rect.width/2 - indicator.offsetWidth/2) + 'px';
+    }
+}
+
+function mejorarVisualizacionTotal() {
+    // Crear o actualizar visualización del total en la barra de progreso
+    let totalDisplay = document.getElementById('total-display');
+    
+    if (!totalDisplay) {
+        totalDisplay = document.createElement('div');
+        totalDisplay.id = 'total-display';
+        totalDisplay.className = 'total-display';
+        
+        const progressContainer = document.querySelector('.progress-container');
+        if (progressContainer) {
+            progressContainer.appendChild(totalDisplay);
+        }
+    }
+    
+    // Actualizar contenido
+    const total = cotizacion.costos.total;
+    const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
+    
+    if (total > 0) {
+        totalDisplay.innerHTML = `
+            <div class="total-amount">${formatoMonedaRD(total)}</div>
+            <div class="total-items">${totalArticulos} artículo${totalArticulos !== 1 ? 's' : ''}</div>
+        `;
+        totalDisplay.classList.add('visible');
+    } else {
+        totalDisplay.classList.remove('visible');
+    }
+}
+
+// ----------------------------------------------------
 // FUNCIÓN PARA FORMATEAR MONEDA DOMINICANA
+// ----------------------------------------------------
+
 function formatoMonedaRD(monto) {
     if (isNaN(monto) || monto === null) monto = 0;
     const numero = parseFloat(monto);
@@ -96,7 +302,7 @@ function formatoMonedaRD(monto) {
 document.addEventListener('DOMContentLoaded', function() {
     cargarConfiguracion();
     inicializarEventListeners();
-    inicializarFechaEvento(); // CORREGIDO: usar función mejorada
+    inicializarFechaEvento();
     actualizarTiposEvento();
     actualizarTematicasEvento();
     updateStepUI();
@@ -105,6 +311,8 @@ document.addEventListener('DOMContentLoaded', function() {
     actualizarResumen();
     actualizarConfigPDF();
     cargarPreferenciasUsuario();
+    
+    // Ocultar tabs de flores inicialmente
     document.getElementById('tab-flores').style.display = 'none';
     document.getElementById('tab-arreglos').style.display = 'none';
     
@@ -113,7 +321,56 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Inicializar vista previa
     actualizarVistaPreviaPDF();
+    
+    // INICIALIZAR MEJORAS UX
+    crearBotonFlotantePDF();
+    crearIndicadorPasoActual();
+    mejorarVisualizacionTotal();
 });
+
+// ----------------------------------------------------
+// FUNCIÓN DE SINCRONIZACIÓN EVENTO-SERVICIO - AGREGADA
+// ----------------------------------------------------
+
+function sincronizarEventoServicio() {
+    const tipoEvento = document.getElementById('tipo-evento').value;
+    const tipoServicioSelect = document.getElementById('tipo-servicio');
+    
+    if (tipoEvento === 'Flores') {
+        // Si el evento es Flores, forzar servicio a flores
+        tipoServicioSelect.value = 'flores';
+        mostrarNotificacion('💡 El servicio se ha ajustado a "Flores Externas" para coincidir con el tipo de evento.', 'info');
+    } else if (tipoEvento !== '' && tipoEvento !== 'Flores') {
+        // Si el evento NO es Flores, forzar servicio a decoración
+        tipoServicioSelect.value = 'decoracion';
+        mostrarNotificacion('💡 El servicio se ha ajustado a "Decoración" para coincidir con el tipo de evento.', 'info');
+    }
+    
+    // Actualizar UI si estamos en paso 2
+    if (cotizacion.currentStep === 2) {
+        actualizarUIporTipoServicio();
+    }
+    
+    guardarDatosPaso1();
+    limpiarError('tipo-servicio');
+    limpiarError('tipo-evento');
+}
+
+function validarConsistenciaEventoServicio() {
+    const tipoEvento = document.getElementById('tipo-evento').value;
+    const tipoServicio = document.getElementById('tipo-servicio').value;
+    
+    if (tipoEvento === 'Flores' && tipoServicio !== 'flores') {
+        mostrarError('tipo-servicio', 'Para eventos tipo "Flores", el servicio debe ser "Flores Externas"');
+        return false;
+    } else if (tipoEvento !== 'Flores' && tipoEvento !== '' && tipoServicio === 'flores') {
+        mostrarError('tipo-servicio', 'El servicio "Flores Externas" solo está disponible para eventos tipo "Flores"');
+        return false;
+    }
+    
+    limpiarError('tipo-servicio');
+    return true;
+}
 
 // FUNCIÓN MEJORADA PARA INICIALIZAR FECHA
 function inicializarFechaEvento() {
@@ -189,6 +446,9 @@ function inicializarEventListeners() {
         guardarDatosPaso1();
         limpiarError('tipo-evento');
         validarCampo('tipo-evento', this.value);
+        
+        // AGREGADO: Sincronizar evento y servicio
+        sincronizarEventoServicio();
     });
     
     document.getElementById('otro-evento').addEventListener('blur', function() {
@@ -197,6 +457,13 @@ function inicializarEventListeners() {
     
     document.getElementById('tematica-evento').addEventListener('change', function() {
         cambiarTematicaEvento();
+    });
+    
+    // Event listener para tipo de servicio con validación de consistencia
+    document.getElementById('tipo-servicio').addEventListener('change', function() {
+        if (validarConsistenciaEventoServicio()) {
+            cambiarTipoServicio();
+        }
     });
     
     // Event listeners para costos
@@ -217,12 +484,9 @@ function inicializarEventListeners() {
         actualizarTooltipPDF();
     });
     
-    // Permitir Enter para avanzar al siguiente paso
-    document.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && cotizacion.currentStep === 1) {
-            e.preventDefault();
-            nextStep();
-        }
+    // Escuchar cambios en inputs para actualizar botón flotante
+    document.addEventListener('input', function() {
+        setTimeout(actualizarBotonFlotantePDF, 100);
     });
 }
 
@@ -310,6 +574,7 @@ function actualizarConfigPDF() {
     guardarPreferenciasUsuario();
     
     actualizarResumen();
+    actualizarBotonFlotantePDF();
 }
 
 // ----------------------------------------------------
@@ -336,6 +601,9 @@ function mostrarError(campoId, mensaje) {
     if (inputElement) {
         inputElement.classList.add('error');
     }
+    
+    // AGREGADO: Scroll automático al campo con error
+    scrollToErrorField(campoId);
 }
 
 function validarCampo(campoId, valor) {
@@ -406,6 +674,12 @@ function validarCampo(campoId, valor) {
                 mostrarError(campoId, 'El tipo de servicio es obligatorio');
                 return false;
             }
+            
+            // Validar consistencia con tipo de evento
+            if (!validarConsistenciaEventoServicio()) {
+                return false;
+            }
+            
             limpiarError(campoId);
             return true;
             
@@ -437,6 +711,9 @@ function nextStep() {
     if (cotizacion.currentStep < 3) {
         cotizacion.currentStep++;
         updateStepUI();
+        
+        // AGREGADO: Scroll automático al cambiar de paso
+        setTimeout(scrollToStepTop, 100);
     }
 }
 
@@ -444,6 +721,9 @@ function prevStep() {
     if (cotizacion.currentStep > 1) {
         cotizacion.currentStep--;
         updateStepUI();
+        
+        // AGREGADO: Scroll automático al cambiar de paso
+        setTimeout(scrollToStepTop, 100);
     }
 }
 
@@ -504,7 +784,11 @@ function updateStepUI() {
         actualizarVistaPreviaPDF();
         actualizarTooltipPDF();
     }
+    
     actualizarResumen();
+    actualizarIndicadorPasoActual();
+    actualizarBotonFlotantePDF();
+    mejorarVisualizacionTotal();
 }
 
 // ----------------------------------------------------
@@ -568,11 +852,14 @@ function validarPaso1() {
         limpiarError('otro-evento'); // Limpiar por si acaso
     }
     
-    // Validar tipo de servicio (obligatorio)
+    // Validar tipo de servicio (obligatorio) con validación de consistencia
     const servicio = document.getElementById('tipo-servicio').value;
     if (!servicio) {
         mostrarError('tipo-servicio', 'El tipo de servicio es obligatorio');
         errores.push('Tipo de servicio');
+        valido = false;
+    } else if (!validarConsistenciaEventoServicio()) {
+        errores.push('Inconsistencia entre evento y servicio');
         valido = false;
     } else {
         limpiarError('tipo-servicio');
@@ -592,11 +879,6 @@ function validarPaso1() {
     if (!valido && errores.length > 0) {
         // Solo mostrar un mensaje general en lugar de todos los errores
         mostrarNotificacion('⚠️ Complete los campos obligatorios marcados en rojo.', 'warning');
-        // Hacer scroll al primer error
-        const primerError = document.querySelector('.error');
-        if (primerError) {
-            primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
     }
     
     return valido;
@@ -878,6 +1160,9 @@ function switchTab(tabName) {
     } else if (tabName === 'manual') {
         renderizarArticulosManuales();
     }
+    
+    // AGREGADO: Scroll a las tabs en móviles
+    scrollToTabs();
 }
 
 function renderizarArticulos(tipo) {
@@ -1053,38 +1338,209 @@ function updateCantidadInput(tipo, id, valor) {
     }
 }
 
+// ----------------------------------------------------
+// FUNCIONES MEJORADAS PARA ARTÍCULO MANUAL
+// ----------------------------------------------------
+
 function agregarArticuloManual() {
     const newId = manualItemIdCounter++;
+    
+    // Determinar el tipo de servicio actual para usar emoji correspondiente
+    let emoji = '📦';
+    if (cotizacion.tipoServicio === 'flores') {
+        emoji = '🌹';
+    } else if (cotizacion.tipoServicio === 'decoracion') {
+        emoji = '✨';
+    }
+    
     cotizacion.articulos.manuales.push({
         id: newId,
-        nombre: `Artículo Personalizado ${newId}`,
+        nombre: 'Nuevo artículo personalizado',
+        descripcion: '',
         precioUnitario: 0,
         cantidad: 1,
-        tipo: 'manual'
+        tipo: 'manual',
+        emoji: emoji,
+        categoria: cotizacion.tipoServicio === 'flores' ? 'Flor Personalizada' : 'Accesorio Personalizado'
     });
+    
     renderizarArticulosManuales();
     actualizarResumen();
+    
+    // Enfocar el primer campo del nuevo artículo
+    setTimeout(() => {
+        const nuevoArticulo = document.querySelector(`[data-id="${newId}"]`);
+        if (nuevoArticulo) {
+            const primerInput = nuevoArticulo.querySelector('input[placeholder="Nombre del artículo"]');
+            if (primerInput) {
+                primerInput.focus();
+                primerInput.select();
+            }
+        }
+    }, 100);
 }
 
 function renderizarArticulosManuales() {
     const container = document.getElementById('manual-items-container');
     if (!container) return;
+    
+    // Actualizar título basado en el servicio
+    const tituloManual = document.getElementById('titulo-manual');
+    if (tituloManual) {
+        if (cotizacion.tipoServicio === 'flores') {
+            tituloManual.innerHTML = `
+                <h3 style="margin-bottom: 15px; color: #2c3e50;">
+                    <span style="background: linear-gradient(135deg, #e74c3c, #c0392b); padding: 8px 16px; border-radius: 8px; color: white; display: inline-flex; align-items: center; gap: 8px;">
+                        🌸 Flores Personalizadas
+                    </span>
+                </h3>
+                <p style="color: #666; margin-bottom: 20px; font-size: 14px;">
+                    Agrega flores o arreglos que no encuentres en nuestra lista predefinida
+                </p>
+            `;
+        } else {
+            tituloManual.innerHTML = `
+                <h3 style="margin-bottom: 15px; color: #2c3e50;">
+                    <span style="background: linear-gradient(135deg, #3498db, #2980b9); padding: 8px 16px; border-radius: 8px; color: white; display: inline-flex; align-items: center; gap: 8px;">
+                        🛠️ Artículos Personalizados
+                    </span>
+                </h3>
+                <p style="color: #666; margin-bottom: 20px; font-size: 14px;">
+                    Agrega artículos especiales o servicios adicionales
+                </p>
+            `;
+        }
+    }
+    
+    if (cotizacion.articulos.manuales.length === 0) {
+        container.innerHTML = `
+            <div class="manual-empty-state">
+                <div class="empty-icon">${cotizacion.tipoServicio === 'flores' ? '🌸' : '📦'}</div>
+                <h4>No hay artículos personalizados</h4>
+                <p>${cotizacion.tipoServicio === 'flores' 
+                    ? 'Agrega flores especiales o arreglos personalizados aquí' 
+                    : 'Agrega artículos especiales o servicios adicionales aquí'}</p>
+                <button class="btn-agregar-manual" onclick="agregarArticuloManual()">
+                    <span class="btn-icon">+</span> Agregar primer artículo
+                </button>
+            </div>
+        `;
+        return;
+    }
+    
     container.innerHTML = '';
     
-    cotizacion.articulos.manuales.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'manual-item';
-        div.innerHTML = `
-            <input type="text" placeholder="Nombre del Artículo" value="${item.nombre}" 
-                    oninput="actualizarArticuloManual(${item.id}, 'nombre', this.value)">
-            <input type="number" placeholder="Precio Unitario" value="${item.precioUnitario}" min="0"
-                    oninput="actualizarArticuloManual(${item.id}, 'precioUnitario', this.value)">
-            <input type="number" placeholder="Cantidad" value="${item.cantidad}" min="1"
-                    oninput="actualizarArticuloManual(${item.id}, 'cantidad', this.value)">
-            <button class="btn-remove" onclick="eliminarArticuloManual(${item.id})">×</button>
+    // Agregar botón de añadir al principio
+    const addButtonContainer = document.createElement('div');
+    addButtonContainer.className = 'manual-add-button-container';
+    addButtonContainer.innerHTML = `
+        <button class="btn-agregar-nuevo" onclick="agregarArticuloManual()">
+            <span class="btn-icon">+</span> Agregar otro artículo
+        </button>
+    `;
+    container.appendChild(addButtonContainer);
+    
+    // Crear contenedor de grid para artículos
+    const gridContainer = document.createElement('div');
+    gridContainer.className = 'manual-grid-container';
+    
+    cotizacion.articulos.manuales.forEach((item, index) => {
+        const itemCard = document.createElement('div');
+        itemCard.className = 'manual-item-card';
+        itemCard.dataset.id = item.id;
+        
+        const subtotal = item.precioUnitario * item.cantidad;
+        const colorFondo = cotizacion.tipoServicio === 'flores' ? '#fff5f5' : '#f0f7ff';
+        const colorBorde = cotizacion.tipoServicio === 'flores' ? '#ffcccc' : '#cce0ff';
+        
+        itemCard.innerHTML = `
+            <div class="manual-item-header">
+                <div class="manual-item-number">
+                    <span class="item-number">${index + 1}</span>
+                    <span class="item-emoji">${item.emoji || '📦'}</span>
+                </div>
+                <button class="btn-remove-item" onclick="eliminarArticuloManual(${item.id})" title="Eliminar artículo">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="manual-item-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre del artículo</label>
+                    <input type="text" 
+                           class="form-input" 
+                           placeholder="Ej: ${cotizacion.tipoServicio === 'flores' ? 'Ramo de orquídeas premium' : 'Iluminación especial LED'}" 
+                           value="${item.nombre}" 
+                           oninput="actualizarArticuloManual(${item.id}, 'nombre', this.value)"
+                           style="font-weight: 500;">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Descripción (opcional)</label>
+                    <textarea class="form-textarea" 
+                              placeholder="Agrega detalles adicionales..."
+                              oninput="actualizarArticuloManual(${item.id}, 'descripcion', this.value)"
+                              rows="2">${item.descripcion || ''}</textarea>
+                </div>
+                
+                <div class="manual-item-grid">
+                    <div class="form-group">
+                        <label class="form-label">Precio unitario</label>
+                        <div class="price-input-group">
+                            <span class="currency-prefix">RD$</span>
+                            <input type="number" 
+                                   class="form-input price-input" 
+                                   placeholder="0.00" 
+                                   value="${item.precioUnitario}" 
+                                   min="0" 
+                                   step="10"
+                                   oninput="actualizarArticuloManual(${item.id}, 'precioUnitario', this.value)">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Cantidad</label>
+                        <div class="quantity-control manual">
+                            <button class="qty-btn" onclick="actualizarCantidadManual(${item.id}, -1)">-</button>
+                            <input type="number" 
+                                   class="qty-input" 
+                                   value="${item.cantidad}" 
+                                   min="1"
+                                   oninput="actualizarArticuloManual(${item.id}, 'cantidad', this.value)">
+                            <button class="qty-btn" onclick="actualizarCantidadManual(${item.id}, 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="manual-item-subtotal">
+                    <span class="subtotal-label">Subtotal:</span>
+                    <span class="subtotal-value">${formatoMonedaRD(subtotal)}</span>
+                </div>
+                
+                ${item.descripcion ? `
+                <div class="manual-item-desc-preview">
+                    <small>${item.descripcion}</small>
+                </div>
+                ` : ''}
+            </div>
         `;
-        container.appendChild(div);
+        
+        gridContainer.appendChild(itemCard);
     });
+    
+    container.appendChild(gridContainer);
+    
+    // Agregar botón de añadir al final también
+    const addButtonContainerBottom = document.createElement('div');
+    addButtonContainerBottom.className = 'manual-add-button-container';
+    addButtonContainerBottom.innerHTML = `
+        <button class="btn-agregar-nuevo" onclick="agregarArticuloManual()">
+            <span class="btn-icon">+</span> Agregar otro artículo
+        </button>
+    `;
+    container.appendChild(addButtonContainerBottom);
 }
 
 function actualizarArticuloManual(id, campo, valor) {
@@ -1092,19 +1548,67 @@ function actualizarArticuloManual(id, campo, valor) {
     if (item) {
         if (campo === 'nombre') {
             item.nombre = valor;
-        } else {
-            item[campo] = campo === 'cantidad' ? Math.max(1, parseInt(valor) || 1) : parseFloat(valor) || 0;
+        } else if (campo === 'descripcion') {
+            item.descripcion = valor;
+        } else if (campo === 'cantidad') {
+            item.cantidad = Math.max(1, parseInt(valor) || 1);
+        } else if (campo === 'precioUnitario') {
+            item.precioUnitario = parseFloat(valor) || 0;
         }
+        
+        // Si se actualiza el nombre y está vacío, agregar placeholder
+        if (campo === 'nombre' && !valor.trim()) {
+            item.nombre = 'Artículo personalizado';
+        }
+        
         actualizarResumen();
+        
+        // Actualizar visualmente solo el subtotal del artículo específico
+        setTimeout(() => {
+            const itemElement = document.querySelector(`[data-id="${id}"]`);
+            if (itemElement) {
+                const subtotal = item.precioUnitario * item.cantidad;
+                const subtotalElement = itemElement.querySelector('.subtotal-value');
+                if (subtotalElement) {
+                    subtotalElement.textContent = formatoMonedaRD(subtotal);
+                }
+                
+                // Actualizar descripción preview si existe
+                const descElement = itemElement.querySelector('.manual-item-desc-preview');
+                if (descElement) {
+                    if (item.descripcion) {
+                        descElement.innerHTML = `<small>${item.descripcion}</small>`;
+                        descElement.style.display = 'block';
+                    } else {
+                        descElement.style.display = 'none';
+                    }
+                }
+            }
+        }, 10);
+    }
+}
+
+function actualizarCantidadManual(id, cambio) {
+    const item = cotizacion.articulos.manuales.find(a => a.id === id);
+    if (item) {
+        const nuevaCantidad = Math.max(1, item.cantidad + cambio);
+        actualizarArticuloManual(id, 'cantidad', nuevaCantidad);
     }
 }
 
 function eliminarArticuloManual(id) {
+    // Mostrar confirmación
+    if (!confirm('¿Estás seguro de que deseas eliminar este artículo personalizado?')) {
+        return;
+    }
+    
     cotizacion.articulos.manuales = cotizacion.articulos.manuales.filter(a => a.id !== id);
     renderizarArticulosManuales();
     actualizarResumen();
+    
+    // Mostrar notificación
+    mostrarNotificacion('🗑️ Artículo eliminado correctamente', 'info');
 }
-
 // ----------------------------------------------------
 // PASO 3: CÁLCULOS Y RESUMEN
 // ----------------------------------------------------
@@ -1251,8 +1755,16 @@ function actualizarResumen() {
     const manoObraElement = document.getElementById('resumen-mano-obra');
     const transporteElement = document.getElementById('resumen-transporte');
     
+    // Diferencia entre Flores Externas y Decoración en el resumen
     if (cotizacion.tipoServicio === 'decoracion') {
-        // CORRECCIÓN: Solo mostrar en resumen si está marcado en configPDF
+        // Para Decoración: Mostrar desglose si está activado en configPDF
+        if (configPDF.mostrarCostoMateriales) {
+            document.getElementById('resumen-materiales').textContent = formatoMonedaRD(cotizacion.costos.materiales);
+            document.getElementById('resumen-materiales').parentElement.style.display = 'flex';
+        } else {
+            document.getElementById('resumen-materiales').parentElement.style.display = 'none';
+        }
+        
         if (configPDF.mostrarManoObra) {
             manoObraElement.textContent = formatoMonedaRD(cotizacion.costos.manoObra);
             manoObraElement.parentElement.style.display = 'flex';
@@ -1266,7 +1778,10 @@ function actualizarResumen() {
         } else {
             transporteElement.parentElement.style.display = 'none';
         }
-    } else {
+        
+    } else if (cotizacion.tipoServicio === 'flores') {
+        // Para Flores Externas: OCULTAR COMPLETAMENTE el desglose
+        document.getElementById('resumen-materiales').parentElement.style.display = 'none';
         manoObraElement.parentElement.style.display = 'none';
         transporteElement.parentElement.style.display = 'none';
     }
@@ -1282,6 +1797,10 @@ function actualizarResumen() {
     if (cotizacion.currentStep === 3) {
         actualizarVistaPreviaPDF();
     }
+    
+    // Actualizar mejoras UX
+    actualizarBotonFlotantePDF();
+    mejorarVisualizacionTotal();
 }
 
 function actualizarVistaPreviaPDF() {
@@ -1322,7 +1841,7 @@ function actualizarVistaPreviaPDF() {
 function actualizarTooltipPDF() {
     const btn = document.getElementById('generar-cotizacion');
     const modo = configPDF.mostrarPresupuestoSimple ? 'Modo Presupuesto Simple' : 'Modo Detallado';
-    const totalArticulos = parseInt(document.getElementById('total-articulos').textContent) || 0;
+    const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
     const total = document.getElementById('total-cotizacion').textContent;
     
     btn.title = `Generar PDF en ${modo}\n📊 Artículos: ${totalArticulos}\n💰 Total: ${total}`;
@@ -1398,17 +1917,20 @@ function mostrarEstadoCargaPDF(mostrar) {
     const pdfText = document.getElementById('pdf-text');
     const pdfLoading = document.getElementById('pdf-loading');
     const generarBtn = document.getElementById('generar-cotizacion');
+    const floatingPdfBtn = document.getElementById('floating-pdf-btn');
     
     if (mostrar) {
         pdfIcon.style.display = 'none';
         pdfText.style.display = 'none';
         pdfLoading.style.display = 'flex';
         generarBtn.disabled = true;
+        if (floatingPdfBtn) floatingPdfBtn.disabled = true;
     } else {
         pdfIcon.style.display = 'inline';
         pdfText.style.display = 'inline';
         pdfLoading.style.display = 'none';
         generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
+        if (floatingPdfBtn) floatingPdfBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
     }
 }
 
@@ -1548,7 +2070,7 @@ function generarInformacionClientePDF(doc, yPos) {
 }
 
 // ====================================================
-// MODO PRESUPUESTO SIMPLE
+// MODO PRESUPUESTO SIMPLE - FLORES CON VIÑETAS, DECORACIÓN NORMAL
 // ====================================================
 
 async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
@@ -1578,7 +2100,7 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     // INFORMACIÓN DEL CLIENTE
     yPos = generarInformacionClientePDF(doc, yPos);
 
-    // SECCIÓN: DETALLE DE ARTÍCULOS (SOLO NOMBRES Y CANTIDADES)
+    // SECCIÓN: DETALLE DE ARTÍCULOS - FORMATO DIFERENCIADO
     if (itemsSeleccionados.length > 0) {
         checkPageBreak(50);
 
@@ -1588,29 +2110,62 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
         doc.text("Detalle de Artículos y Servicios", margin, yPos);
         yPos += 7;
 
-        doc.setFillColor(245, 245, 245);
-        doc.rect(margin, yPos, pageWidth - 2 * margin, 7, 'F');
-        
-        doc.setFontSize(9);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(80, 80, 80);
-        doc.text("Descripción", margin + 2, yPos + 5);
-        doc.text("Cantidad", pageWidth - margin - 5, yPos + 5, { align: "right" });
-        
-        yPos += 7;
+        // ================================================================
+        // SOLO FLORES: Formato de lista con viñetas (•)
+        // ================================================================
+        if (cotizacion.tipoServicio === 'flores') {
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(50, 50, 50);
+            doc.setFontSize(9);
 
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(50, 50, 50);
-
-        itemsSeleccionados.forEach(item => {
-            checkPageBreak(5);
-            const nombre = item.nombre;
-            const cantidad = item.cantidad || 1;
+            itemsSeleccionados.forEach(item => {
+                checkPageBreak(6);
+                
+                const nombre = item.nombre;
+                const cantidad = item.cantidad || 1;
+                const esManual = item.tipo === 'manual';
+                
+                // Texto del artículo con viñeta
+                let textoItem = `• ${nombre} - ${cantidad} unidad${cantidad !== 1 ? 'es' : ''}`;
+                
+                // Agregar indicador si es manual
+                if (esManual) {
+                    textoItem += ' [Artículo manual]';
+                }
+                
+                doc.text(textoItem, margin + 2, yPos + 4);
+                yPos += 6;
+            });
             
-            doc.text(nombre, margin + 2, yPos + 4);
-            doc.text(cantidad.toString(), pageWidth - margin - 5, yPos + 4, { align: "right" });
-            yPos += 6;
-        });
+        } 
+        // ================================================================
+        // DECORACIÓN: Mantener formato ORIGINAL (sin viñetas)
+        // ================================================================
+        else if (cotizacion.tipoServicio === 'decoracion') {
+            doc.setFillColor(245, 245, 245);
+            doc.rect(margin, yPos, pageWidth - 2 * margin, 7, 'F');
+            
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(80, 80, 80);
+            doc.text("Descripción", margin + 2, yPos + 5);
+            doc.text("Cantidad", pageWidth - margin - 5, yPos + 5, { align: "right" });
+            
+            yPos += 7;
+
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(50, 50, 50);
+
+            itemsSeleccionados.forEach(item => {
+                checkPageBreak(5);
+                const nombre = item.nombre;
+                const cantidad = item.cantidad || 1;
+                
+               doc.text(`• ${nombre}`, margin + 2, yPos + 4);
+                doc.text(cantidad.toString(), pageWidth - margin - 5, yPos + 4, { align: "right" });
+                yPos += 6;
+            });
+        }
 
         yPos += 10;
     }
@@ -1675,7 +2230,7 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
 }
 
 // ====================================================
-// MODO NORMAL - CORREGIDO
+// MODO NORMAL - FLORES CON VIÑETAS, DECORACIÓN NORMAL
 // ====================================================
 
 async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
@@ -1705,7 +2260,7 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     // INFORMACIÓN DEL CLIENTE
     yPos = generarInformacionClientePDF(doc, yPos);
 
-    // SECCIÓN: DETALLE DE ARTÍCULOS (SOLO SI ESTÁ ACTIVADO)
+    // SECCIÓN: DETALLE DE ARTÍCULOS - FORMATO DIFERENCIADO
     if (configPDF.mostrarDetalleMateriales && itemsSeleccionados.length > 0) {
         checkPageBreak(50);
 
@@ -1715,40 +2270,91 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
         doc.text("Detalle de Artículos y Servicios", margin, yPos);
         yPos += 7;
 
-        doc.setFillColor(245, 245, 245);
-        doc.rect(margin, yPos, pageWidth - 2 * margin, 7, 'F');
-        
-        doc.setFontSize(9);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(80, 80, 80);
-        doc.text("Descripción", margin + 2, yPos + 5);
-        doc.text("Cant.", pageWidth - margin - 35, yPos + 5);
-        doc.text("Precio Total", pageWidth - margin - 5, yPos + 5, { align: "right" });
-        
-        yPos += 7;
+        // ================================================================
+        // SOLO FLORES: Formato de lista con viñetas (•)
+        // ================================================================
+        if (cotizacion.tipoServicio === 'flores') {
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(50, 50, 50);
+            doc.setFontSize(9);
 
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(50, 50, 50);
+            itemsSeleccionados.forEach(item => {
+                checkPageBreak(6);
+                
+                const nombre = item.nombre;
+                const cantidad = item.cantidad || 1;
+                const esManual = item.tipo === 'manual';
+                
+                let precioUnitario;
+                if (esManual) {
+                    precioUnitario = item.precioUnitario;
+                } else {
+                    precioUnitario = item.precio;
+                }
 
-        itemsSeleccionados.forEach(item => {
-            checkPageBreak(5);
-            const nombre = item.nombre;
-            const cantidad = item.cantidad || 1;
+                const precioTotalItem = precioUnitario * cantidad;
+                
+                // Texto del artículo con viñeta
+                let textoItem = `• ${nombre} - ${cantidad} unidad${cantidad !== 1 ? 'es' : ''}`;
+                
+                // Agregar indicador si es manual
+                if (esManual) {
+                    textoItem += ' [Artículo manual]';
+                }
+                
+                // Mostrar precios individuales solo si está activado
+                if (configPDF.mostrarCostoMateriales) {
+                    textoItem += ` (${formatoMonedaRD(precioTotalItem)})`;
+                }
+                
+                doc.text(textoItem, margin + 2, yPos + 4);
+                yPos += 6;
+            });
             
-            let precioUnitario;
-            if (item.tipo === 'manual') {
-                precioUnitario = item.precioUnitario;
-            } else {
-                precioUnitario = item.precio;
-            }
+        } 
+        // ================================================================
+        // DECORACIÓN: Mantener formato ORIGINAL (sin viñetas, con tabla)
+        // ================================================================
+        else if (cotizacion.tipoServicio === 'decoracion') {
+            doc.setFillColor(245, 245, 245);
+            doc.rect(margin, yPos, pageWidth - 2 * margin, 7, 'F');
+            
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(80, 80, 80);
+            doc.text("Descripción", margin + 2, yPos + 5);
+            doc.text("Cant.", pageWidth - margin - 35, yPos + 5);
+            doc.text("Precio Total", pageWidth - margin - 5, yPos + 5, { align: "right" });
+            
+            yPos += 7;
 
-            const precioTotalItem = precioUnitario * cantidad;
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(50, 50, 50);
 
-            doc.text(nombre, margin + 2, yPos + 4);
-            doc.text(cantidad.toString(), pageWidth - margin - 35, yPos + 4, { align: "right" });
-            doc.text(formatoMonedaRD(precioTotalItem), pageWidth - margin - 5, yPos + 4, { align: "right" });
-            yPos += 6;
-        });
+            itemsSeleccionados.forEach(item => {
+                checkPageBreak(5);
+                const nombre = item.nombre;
+                const cantidad = item.cantidad || 1;
+                
+                let precioUnitario;
+                if (item.tipo === 'manual') {
+                    precioUnitario = item.precioUnitario;
+                } else {
+                    precioUnitario = item.precio;
+                }
+
+                const precioTotalItem = precioUnitario * cantidad;
+
+                doc.text(`• ${nombre}`, margin + 2, yPos + 4);
+                doc.text(cantidad.toString(), pageWidth - margin - 35, yPos + 4, { align: "right" });
+                
+                // Mostrar precios solo si está activado
+                if (configPDF.mostrarCostoMateriales) {
+                    doc.text(formatoMonedaRD(precioTotalItem), pageWidth - margin - 5, yPos + 4, { align: "right" });
+                }
+                yPos += 6;
+            });
+        }
 
         yPos += 10;
     }
@@ -1765,21 +2371,19 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     
     doc.setFontSize(10);
     
+    // DIFERENCIAR ENTRE TIPOS DE SERVICIO
     if (cotizacion.tipoServicio === 'flores') {
-        if (configPDF.mostrarCostoMateriales) {
-            doc.text("Costo de Materiales:", pageWidth / 2, yPos, { align: "left" });
-            doc.text(formatoMonedaRD(cotizacion.costos.materiales), xCostos, yPos, { align: "right" });
-            yPos += 5;
-        }
+        // PARA FLORES EXTERNAS: NO MOSTRAR NINGÚN DESGLOSE
+        // Ir directamente al total
         
     } else if (cotizacion.tipoServicio === 'decoracion') {
+        // PARA DECORACIÓN: Mostrar desglose normal
         if (configPDF.mostrarCostoMateriales) {
             doc.text("Costo de Materiales:", pageWidth / 2, yPos, { align: "left" });
             doc.text(formatoMonedaRD(cotizacion.costos.materiales), xCostos, yPos, { align: "right" });
             yPos += 5;
         }
 
-        // CORRECCIÓN: Solo mostrar si está marcado en configPDF
         if (configPDF.mostrarManoObra && cotizacion.costos.manoObra > 0) {
             doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
             doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
@@ -1791,9 +2395,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
             doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
             yPos += 5;
         }
-        
-        // NOTA: Se ha eliminado la opción de "Instalación y Logística" combinada
-        // porque confunde al usuario. Ahora solo muestra lo que esté explícitamente marcado.
     }
     
     yPos += 8;
@@ -1842,6 +2443,7 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     
     doc.text("Arte y Events - Decoración Profesional", pageWidth / 2, pageHeight - 10, { align: "center" });
 }
+
 function formatearFecha(fechaISO) {
     if (!fechaISO) return '';
     
@@ -1947,6 +2549,11 @@ function limpiarCamposCotizacion() {
     const clasesTema = Array.from(body.classList).filter(className => className.startsWith('theme-'));
     clasesTema.forEach(className => body.classList.remove(className));
     
+    // Actualizar mejoras UX
+    actualizarBotonFlotantePDF();
+    actualizarIndicadorPasoActual();
+    mejorarVisualizacionTotal();
+    
     // Mostrar notificación
     mostrarNotificacion('✅ Cotización limpiada correctamente. Puede comenzar una nueva.', 'success');
 }
@@ -1968,6 +2575,7 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     let icon = '✅';
     if (tipo === 'warning') icon = '⚠️';
     if (tipo === 'error') icon = '❌';
+    if (tipo === 'info') icon = '💡';
     
     notification.querySelector('span:first-child').textContent = icon;
     
@@ -1975,6 +2583,7 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     notification.className = 'notification show';
     if (tipo === 'warning') notification.classList.add('warning');
     if (tipo === 'error') notification.classList.add('error');
+    if (tipo === 'info') notification.classList.add('info');
     
     // Ocultar después de 3 segundos
     setTimeout(() => {
