@@ -80,7 +80,7 @@ let manualItemIdCounter = 1;
 let configIdCounter = 1000;
 
 // ----------------------------------------------------
-// FUNCIONES DE SCROLL AUTOMÁTICO - AGREGADAS
+// FUNCIONES DE SCROLL AUTOMÁTICO
 // ----------------------------------------------------
 
 function scrollToStepTop() {
@@ -137,10 +137,15 @@ function scrollToErrorField(fieldId) {
 }
 
 // ----------------------------------------------------
-// NUEVAS FUNCIONES DE MEJORA UX
+// FUNCIONES DE MEJORA UX CORREGIDAS
 // ----------------------------------------------------
 
 function crearBotonFlotantePDF() {
+    // Verificar si ya existen los botones flotantes
+    if (document.getElementById('floating-pdf-btn')) {
+        return; // Ya existen, no crear duplicados
+    }
+    
     // Crear botón flotante para PDF
     const floatingBtn = document.createElement('button');
     floatingBtn.id = 'floating-pdf-btn';
@@ -149,7 +154,7 @@ function crearBotonFlotantePDF() {
         <span class="floating-icon">📄</span>
         <span class="floating-text">Generar PDF</span>
     `;
-    floatingBtn.title = 'Generar PDF';
+    floatingBtn.title = 'Generar PDF - Haga clic para descargar la cotización';
     floatingBtn.onclick = generarCotizacionPDF;
     
     document.body.appendChild(floatingBtn);
@@ -159,69 +164,65 @@ function crearBotonFlotantePDF() {
     backToTopBtn.id = 'back-to-top-btn';
     backToTopBtn.className = 'floating-button back-to-top';
     backToTopBtn.innerHTML = '↑';
-    backToTopBtn.title = 'Volver arriba';
+    backToTopBtn.title = 'Volver al inicio de la página';
     backToTopBtn.onclick = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     
     document.body.appendChild(backToTopBtn);
     
-    // Mostrar/ocultar botón "Volver arriba" según scroll
-    window.addEventListener('scroll', function() {
-        const backToTopBtn = document.getElementById('back-to-top-btn');
-        const floatingPdfBtn = document.getElementById('floating-pdf-btn');
-        
-        if (backToTopBtn) {
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.add('visible');
-                // Ocultar botón flotante PDF en móviles al hacer scroll
-                if (window.innerWidth <= 768 && floatingPdfBtn) {
-                    floatingPdfBtn.classList.add('hidden');
-                }
-            } else {
-                backToTopBtn.classList.remove('visible');
-                // Mostrar botón flotante PDF en móviles
-                if (window.innerWidth <= 768 && floatingPdfBtn) {
-                    floatingPdfBtn.classList.remove('hidden');
-                }
-            }
-        }
-    });
+    console.log('Botones flotantes creados correctamente');
 }
 
-function actualizarBotonFlotantePDF() {
-    const floatingBtn = document.getElementById('floating-pdf-btn');
-    if (!floatingBtn) return;
+function actualizarVisibilidadBotonesFlotantes() {
+    const floatingPdfBtn = document.getElementById('floating-pdf-btn');
+    const backToTopBtn = document.getElementById('back-to-top-btn');
     
-    const total = cotizacion.costos.total;
-    const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
-    const modo = configPDF.mostrarPresupuestoSimple ? 'Simple' : 'Detallado';
-    
-    // Actualizar estado del botón
-    floatingBtn.disabled = cotizacion.currentStep !== 3 || total === 0;
-    
-    // Actualizar tooltip
-    floatingBtn.title = `Generar PDF\nModo: ${modo}\nArtículos: ${totalArticulos}\nTotal: ${formatoMonedaRD(total)}`;
-    
-    // Actualizar texto del botón con el total
-    const textSpan = floatingBtn.querySelector('.floating-text');
-    if (textSpan) {
-        if (total > 0) {
-            textSpan.innerHTML = `Generar PDF<br><small>${formatoMonedaRD(total)}</small>`;
-        } else {
-            textSpan.textContent = 'Generar PDF';
-        }
+    if (!floatingPdfBtn || !backToTopBtn) {
+        console.warn('Botones flotantes no encontrados');
+        return;
     }
     
-    // Mostrar/ocultar según el paso
-    if (cotizacion.currentStep === 3 && total > 0) {
-        floatingBtn.classList.add('active');
+    // Mostrar solo en paso 3
+    if (cotizacion.currentStep === 3) {
+        // Botón Generar PDF
+        floatingPdfBtn.classList.add('visible');
+        
+        // Verificar si hay artículos seleccionados
+        const total = cotizacion.costos.total || 0;
+        const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
+        
+        if (total > 0 && totalArticulos > 0) {
+            floatingPdfBtn.disabled = false;
+            floatingPdfBtn.style.cursor = 'pointer';
+            floatingPdfBtn.style.opacity = '1';
+            floatingPdfBtn.title = `Generar PDF\nTotal: ${formatoMonedaRD(total)}\nArtículos: ${totalArticulos}`;
+        } else {
+            floatingPdfBtn.disabled = true;
+            floatingPdfBtn.style.cursor = 'not-allowed';
+            floatingPdfBtn.style.opacity = '0.6';
+            floatingPdfBtn.title = 'No hay artículos seleccionados para generar PDF';
+        }
+        
+        // Botón Volver arriba
+        if (window.scrollY > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
     } else {
-        floatingBtn.classList.remove('active');
+        // Ocultar en otros pasos
+        floatingPdfBtn.classList.remove('visible');
+        backToTopBtn.classList.remove('visible');
     }
 }
 
 function crearIndicadorPasoActual() {
+    // Verificar si ya existe
+    if (document.getElementById('current-step-indicator')) {
+        return;
+    }
+    
     // Crear indicador visual del paso actual
     const indicator = document.createElement('div');
     indicator.id = 'current-step-indicator';
@@ -235,21 +236,16 @@ function actualizarIndicadorPasoActual() {
     const indicator = document.getElementById('current-step-indicator');
     if (!indicator) return;
     
-    const stepNames = ['Información', 'Artículos', 'Resumen'];
+    const stepNames = ['Información del Cliente', 'Selección de Artículos', 'Resumen y PDF'];
     const currentStepName = stepNames[cotizacion.currentStep - 1] || '';
     
     indicator.innerHTML = `
-        <span class="step-number">Paso ${cotizacion.currentStep}/3</span>
+        <span class="step-number">${cotizacion.currentStep}</span>
         <span class="step-name">${currentStepName}</span>
     `;
     
-    // Posicionar el indicador cerca del progreso
-    const progressBar = document.querySelector('.progress-bar');
-    if (progressBar) {
-        const rect = progressBar.getBoundingClientRect();
-        indicator.style.top = (rect.bottom + 10) + 'px';
-        indicator.style.left = (rect.left + rect.width/2 - indicator.offsetWidth/2) + 'px';
-    }
+    // Establecer atributo data-step para colores diferentes
+    indicator.setAttribute('data-step', cotizacion.currentStep);
 }
 
 function mejorarVisualizacionTotal() {
@@ -322,14 +318,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar vista previa
     actualizarVistaPreviaPDF();
     
-    // INICIALIZAR MEJORAS UX
+    // INICIALIZAR MEJORAS UX CORREGIDAS
     crearBotonFlotantePDF();
     crearIndicadorPasoActual();
     mejorarVisualizacionTotal();
+    
+    // Inicializar visibilidad de botones flotantes
+    setTimeout(actualizarVisibilidadBotonesFlotantes, 200);
+    
+    // Escuchar scroll para botón "volver arriba"
+    window.addEventListener('scroll', function() {
+        actualizarVisibilidadBotonesFlotantes();
+    });
+    
+    console.log('Aplicación inicializada correctamente');
 });
 
 // ----------------------------------------------------
-// FUNCIÓN DE SINCRONIZACIÓN EVENTO-SERVICIO - AGREGADA
+// FUNCIÓN DE SINCRONIZACIÓN EVENTO-SERVICIO
 // ----------------------------------------------------
 
 function sincronizarEventoServicio() {
@@ -447,7 +453,7 @@ function inicializarEventListeners() {
         limpiarError('tipo-evento');
         validarCampo('tipo-evento', this.value);
         
-        // AGREGADO: Sincronizar evento y servicio
+        // Sincronizar evento y servicio
         sincronizarEventoServicio();
     });
     
@@ -578,7 +584,7 @@ function actualizarConfigPDF() {
 }
 
 // ----------------------------------------------------
-// VALIDACIÓN Y MANEJO DE ERRORES - CORREGIDO
+// VALIDACIÓN Y MANEJO DE ERRORES
 // ----------------------------------------------------
 
 function limpiarError(campoId) {
@@ -602,8 +608,7 @@ function mostrarError(campoId, mensaje) {
         inputElement.classList.add('error');
     }
     
-    // AGREGADO: Scroll automático al campo con error
-    scrollToErrorField(campoId);
+   
 }
 
 function validarCampo(campoId, valor) {
@@ -694,25 +699,28 @@ function validarEmail(email) {
 }
 
 // ----------------------------------------------------
-// CONTROL DE PASOS Y VALIDACIÓN - CORREGIDO
+// CONTROL DE PASOS Y VALIDACIÓN
 // ----------------------------------------------------
 
 function nextStep() {
     if (cotizacion.currentStep === 1) {
+        // VALIDAR SIN HACER SCROLL INMEDIATO
         if (!validarPaso1()) {
-            mostrarNotificacion('⚠️ Complete los campos obligatorios para continuar.', 'warning');
-            return;
+            // Mostrar notificación sin hacer scroll automático
+            mostrarNotificacion('⚠️ Complete los campos obligatorios antes de continuar', 'warning');
+            return; // Detener aquí sin cambiar de paso ni hacer scroll
         }
         guardarDatosPaso1();
     } else if (cotizacion.currentStep === 2) {
         // Validación opcional para paso 2
     }
     
+    // SOLO hacer scroll si la validación fue exitosa
     if (cotizacion.currentStep < 3) {
         cotizacion.currentStep++;
         updateStepUI();
         
-        // AGREGADO: Scroll automático al cambiar de paso
+        // Scroll automático solo cuando TODO está correcto
         setTimeout(scrollToStepTop, 100);
     }
 }
@@ -722,7 +730,7 @@ function prevStep() {
         cotizacion.currentStep--;
         updateStepUI();
         
-        // AGREGADO: Scroll automático al cambiar de paso
+        // Scroll automático al cambiar de paso
         setTimeout(scrollToStepTop, 100);
     }
 }
@@ -789,6 +797,12 @@ function updateStepUI() {
     actualizarIndicadorPasoActual();
     actualizarBotonFlotantePDF();
     mejorarVisualizacionTotal();
+    
+    // ACTUALIZAR VISIBILIDAD DE BOTONES FLOTANTES
+    setTimeout(actualizarVisibilidadBotonesFlotantes, 100);
+    
+    // Scroll al top del paso
+    setTimeout(scrollToStepTop, 150);
 }
 
 // ----------------------------------------------------
@@ -797,33 +811,29 @@ function updateStepUI() {
 
 function validarPaso1() {
     let valido = true;
-    let errores = [];
     
     // Validar nombre (obligatorio)
     const nombre = document.getElementById('cliente-nombre').value.trim();
     if (!nombre) {
         mostrarError('cliente-nombre', 'El nombre del cliente es obligatorio');
-        errores.push('Nombre del cliente');
         valido = false;
     } else {
         limpiarError('cliente-nombre');
     }
     
-    // Validar fecha (obligatorio) - CORREGIDO
+    // Validar fecha (obligatorio)
     const fecha = document.getElementById('fecha-evento').value.trim();
     if (!fecha) {
         mostrarError('fecha-evento', 'La fecha del evento es obligatoria');
-        errores.push('Fecha del evento');
         valido = false;
     } else {
         // Crear fecha sin considerar hora para comparación
-        const fechaEvento = new Date(fecha + 'T00:00:00'); // Forzar medianoche
+        const fechaEvento = new Date(fecha + 'T00:00:00');
         const hoy = new Date();
-        hoy.setHours(0, 0, 0, 0); // Establecer a medianoche
+        hoy.setHours(0, 0, 0, 0);
         
         if (fechaEvento < hoy) {
             mostrarError('fecha-evento', 'La fecha del evento no puede ser en el pasado');
-            errores.push('Fecha no puede ser en el pasado');
             valido = false;
         } else {
             limpiarError('fecha-evento');
@@ -834,14 +844,12 @@ function validarPaso1() {
     const tipo = document.getElementById('tipo-evento').value;
     if (!tipo) {
         mostrarError('tipo-evento', 'El tipo de evento es obligatorio');
-        errores.push('Tipo de evento');
         valido = false;
     } else if (tipo === 'otro') {
         // Si es "otro", validar que se haya especificado
         const otroEvento = document.getElementById('otro-evento').value.trim();
         if (!otroEvento) {
             mostrarError('otro-evento', 'Debe especificar el tipo de evento');
-            errores.push('Especificación del evento');
             valido = false;
         } else {
             limpiarError('tipo-evento');
@@ -856,10 +864,8 @@ function validarPaso1() {
     const servicio = document.getElementById('tipo-servicio').value;
     if (!servicio) {
         mostrarError('tipo-servicio', 'El tipo de servicio es obligatorio');
-        errores.push('Tipo de servicio');
         valido = false;
     } else if (!validarConsistenciaEventoServicio()) {
-        errores.push('Inconsistencia entre evento y servicio');
         valido = false;
     } else {
         limpiarError('tipo-servicio');
@@ -869,18 +875,11 @@ function validarPaso1() {
     const email = document.getElementById('cliente-email').value.trim();
     if (email && !validarEmail(email)) {
         mostrarError('cliente-email', 'El formato del email no es válido');
-        errores.push('Formato de email inválido');
         valido = false;
     } else {
         limpiarError('cliente-email');
     }
 
-    // Si hay errores, mostrar el primero en notificación
-    if (!valido && errores.length > 0) {
-        // Solo mostrar un mensaje general en lugar de todos los errores
-        mostrarNotificacion('⚠️ Complete los campos obligatorios marcados en rojo.', 'warning');
-    }
-    
     return valido;
 }
 
@@ -1161,7 +1160,7 @@ function switchTab(tabName) {
         renderizarArticulosManuales();
     }
     
-    // AGREGADO: Scroll a las tabs en móviles
+    // Scroll a las tabs en móviles
     scrollToTabs();
 }
 
@@ -1338,209 +1337,38 @@ function updateCantidadInput(tipo, id, valor) {
     }
 }
 
-// ----------------------------------------------------
-// FUNCIONES MEJORADAS PARA ARTÍCULO MANUAL
-// ----------------------------------------------------
-
 function agregarArticuloManual() {
     const newId = manualItemIdCounter++;
-    
-    // Determinar el tipo de servicio actual para usar emoji correspondiente
-    let emoji = '📦';
-    if (cotizacion.tipoServicio === 'flores') {
-        emoji = '🌹';
-    } else if (cotizacion.tipoServicio === 'decoracion') {
-        emoji = '✨';
-    }
-    
     cotizacion.articulos.manuales.push({
         id: newId,
-        nombre: 'Nuevo artículo personalizado',
-        descripcion: '',
+        nombre: `Artículo Personalizado ${newId}`,
         precioUnitario: 0,
         cantidad: 1,
-        tipo: 'manual',
-        emoji: emoji,
-        categoria: cotizacion.tipoServicio === 'flores' ? 'Flor Personalizada' : 'Accesorio Personalizado'
+        tipo: 'manual'
     });
-    
     renderizarArticulosManuales();
     actualizarResumen();
-    
-    // Enfocar el primer campo del nuevo artículo
-    setTimeout(() => {
-        const nuevoArticulo = document.querySelector(`[data-id="${newId}"]`);
-        if (nuevoArticulo) {
-            const primerInput = nuevoArticulo.querySelector('input[placeholder="Nombre del artículo"]');
-            if (primerInput) {
-                primerInput.focus();
-                primerInput.select();
-            }
-        }
-    }, 100);
 }
 
 function renderizarArticulosManuales() {
     const container = document.getElementById('manual-items-container');
     if (!container) return;
-    
-    // Actualizar título basado en el servicio
-    const tituloManual = document.getElementById('titulo-manual');
-    if (tituloManual) {
-        if (cotizacion.tipoServicio === 'flores') {
-            tituloManual.innerHTML = `
-                <h3 style="margin-bottom: 15px; color: #2c3e50;">
-                    <span style="background: linear-gradient(135deg, #e74c3c, #c0392b); padding: 8px 16px; border-radius: 8px; color: white; display: inline-flex; align-items: center; gap: 8px;">
-                        🌸 Flores Personalizadas
-                    </span>
-                </h3>
-                <p style="color: #666; margin-bottom: 20px; font-size: 14px;">
-                    Agrega flores o arreglos que no encuentres en nuestra lista predefinida
-                </p>
-            `;
-        } else {
-            tituloManual.innerHTML = `
-                <h3 style="margin-bottom: 15px; color: #2c3e50;">
-                    <span style="background: linear-gradient(135deg, #3498db, #2980b9); padding: 8px 16px; border-radius: 8px; color: white; display: inline-flex; align-items: center; gap: 8px;">
-                        🛠️ Artículos Personalizados
-                    </span>
-                </h3>
-                <p style="color: #666; margin-bottom: 20px; font-size: 14px;">
-                    Agrega artículos especiales o servicios adicionales
-                </p>
-            `;
-        }
-    }
-    
-    if (cotizacion.articulos.manuales.length === 0) {
-        container.innerHTML = `
-            <div class="manual-empty-state">
-                <div class="empty-icon">${cotizacion.tipoServicio === 'flores' ? '🌸' : '📦'}</div>
-                <h4>No hay artículos personalizados</h4>
-                <p>${cotizacion.tipoServicio === 'flores' 
-                    ? 'Agrega flores especiales o arreglos personalizados aquí' 
-                    : 'Agrega artículos especiales o servicios adicionales aquí'}</p>
-                <button class="btn-agregar-manual" onclick="agregarArticuloManual()">
-                    <span class="btn-icon">+</span> Agregar primer artículo
-                </button>
-            </div>
-        `;
-        return;
-    }
-    
     container.innerHTML = '';
     
-    // Agregar botón de añadir al principio
-    const addButtonContainer = document.createElement('div');
-    addButtonContainer.className = 'manual-add-button-container';
-    addButtonContainer.innerHTML = `
-        <button class="btn-agregar-nuevo" onclick="agregarArticuloManual()">
-            <span class="btn-icon">+</span> Agregar otro artículo
-        </button>
-    `;
-    container.appendChild(addButtonContainer);
-    
-    // Crear contenedor de grid para artículos
-    const gridContainer = document.createElement('div');
-    gridContainer.className = 'manual-grid-container';
-    
-    cotizacion.articulos.manuales.forEach((item, index) => {
-        const itemCard = document.createElement('div');
-        itemCard.className = 'manual-item-card';
-        itemCard.dataset.id = item.id;
-        
-        const subtotal = item.precioUnitario * item.cantidad;
-        const colorFondo = cotizacion.tipoServicio === 'flores' ? '#fff5f5' : '#f0f7ff';
-        const colorBorde = cotizacion.tipoServicio === 'flores' ? '#ffcccc' : '#cce0ff';
-        
-        itemCard.innerHTML = `
-            <div class="manual-item-header">
-                <div class="manual-item-number">
-                    <span class="item-number">${index + 1}</span>
-                    <span class="item-emoji">${item.emoji || '📦'}</span>
-                </div>
-                <button class="btn-remove-item" onclick="eliminarArticuloManual(${item.id})" title="Eliminar artículo">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 6L6 18M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-            
-            <div class="manual-item-body">
-                <div class="form-group">
-                    <label class="form-label">Nombre del artículo</label>
-                    <input type="text" 
-                           class="form-input" 
-                           placeholder="Ej: ${cotizacion.tipoServicio === 'flores' ? 'Ramo de orquídeas premium' : 'Iluminación especial LED'}" 
-                           value="${item.nombre}" 
-                           oninput="actualizarArticuloManual(${item.id}, 'nombre', this.value)"
-                           style="font-weight: 500;">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Descripción (opcional)</label>
-                    <textarea class="form-textarea" 
-                              placeholder="Agrega detalles adicionales..."
-                              oninput="actualizarArticuloManual(${item.id}, 'descripcion', this.value)"
-                              rows="2">${item.descripcion || ''}</textarea>
-                </div>
-                
-                <div class="manual-item-grid">
-                    <div class="form-group">
-                        <label class="form-label">Precio unitario</label>
-                        <div class="price-input-group">
-                            <span class="currency-prefix">RD$</span>
-                            <input type="number" 
-                                   class="form-input price-input" 
-                                   placeholder="0.00" 
-                                   value="${item.precioUnitario}" 
-                                   min="0" 
-                                   step="10"
-                                   oninput="actualizarArticuloManual(${item.id}, 'precioUnitario', this.value)">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Cantidad</label>
-                        <div class="quantity-control manual">
-                            <button class="qty-btn" onclick="actualizarCantidadManual(${item.id}, -1)">-</button>
-                            <input type="number" 
-                                   class="qty-input" 
-                                   value="${item.cantidad}" 
-                                   min="1"
-                                   oninput="actualizarArticuloManual(${item.id}, 'cantidad', this.value)">
-                            <button class="qty-btn" onclick="actualizarCantidadManual(${item.id}, 1)">+</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="manual-item-subtotal">
-                    <span class="subtotal-label">Subtotal:</span>
-                    <span class="subtotal-value">${formatoMonedaRD(subtotal)}</span>
-                </div>
-                
-                ${item.descripcion ? `
-                <div class="manual-item-desc-preview">
-                    <small>${item.descripcion}</small>
-                </div>
-                ` : ''}
-            </div>
+    cotizacion.articulos.manuales.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'manual-item';
+        div.innerHTML = `
+            <input type="text" placeholder="Nombre del Artículo" value="${item.nombre}" 
+                    oninput="actualizarArticuloManual(${item.id}, 'nombre', this.value)">
+            <input type="number" placeholder="Precio Unitario" value="${item.precioUnitario}" min="0"
+                    oninput="actualizarArticuloManual(${item.id}, 'precioUnitario', this.value)">
+            <input type="number" placeholder="Cantidad" value="${item.cantidad}" min="1"
+                    oninput="actualizarArticuloManual(${item.id}, 'cantidad', this.value)">
+            <button class="btn-remove" onclick="eliminarArticuloManual(${item.id})">×</button>
         `;
-        
-        gridContainer.appendChild(itemCard);
+        container.appendChild(div);
     });
-    
-    container.appendChild(gridContainer);
-    
-    // Agregar botón de añadir al final también
-    const addButtonContainerBottom = document.createElement('div');
-    addButtonContainerBottom.className = 'manual-add-button-container';
-    addButtonContainerBottom.innerHTML = `
-        <button class="btn-agregar-nuevo" onclick="agregarArticuloManual()">
-            <span class="btn-icon">+</span> Agregar otro artículo
-        </button>
-    `;
-    container.appendChild(addButtonContainerBottom);
 }
 
 function actualizarArticuloManual(id, campo, valor) {
@@ -1548,67 +1376,19 @@ function actualizarArticuloManual(id, campo, valor) {
     if (item) {
         if (campo === 'nombre') {
             item.nombre = valor;
-        } else if (campo === 'descripcion') {
-            item.descripcion = valor;
-        } else if (campo === 'cantidad') {
-            item.cantidad = Math.max(1, parseInt(valor) || 1);
-        } else if (campo === 'precioUnitario') {
-            item.precioUnitario = parseFloat(valor) || 0;
+        } else {
+            item[campo] = campo === 'cantidad' ? Math.max(1, parseInt(valor) || 1) : parseFloat(valor) || 0;
         }
-        
-        // Si se actualiza el nombre y está vacío, agregar placeholder
-        if (campo === 'nombre' && !valor.trim()) {
-            item.nombre = 'Artículo personalizado';
-        }
-        
         actualizarResumen();
-        
-        // Actualizar visualmente solo el subtotal del artículo específico
-        setTimeout(() => {
-            const itemElement = document.querySelector(`[data-id="${id}"]`);
-            if (itemElement) {
-                const subtotal = item.precioUnitario * item.cantidad;
-                const subtotalElement = itemElement.querySelector('.subtotal-value');
-                if (subtotalElement) {
-                    subtotalElement.textContent = formatoMonedaRD(subtotal);
-                }
-                
-                // Actualizar descripción preview si existe
-                const descElement = itemElement.querySelector('.manual-item-desc-preview');
-                if (descElement) {
-                    if (item.descripcion) {
-                        descElement.innerHTML = `<small>${item.descripcion}</small>`;
-                        descElement.style.display = 'block';
-                    } else {
-                        descElement.style.display = 'none';
-                    }
-                }
-            }
-        }, 10);
-    }
-}
-
-function actualizarCantidadManual(id, cambio) {
-    const item = cotizacion.articulos.manuales.find(a => a.id === id);
-    if (item) {
-        const nuevaCantidad = Math.max(1, item.cantidad + cambio);
-        actualizarArticuloManual(id, 'cantidad', nuevaCantidad);
     }
 }
 
 function eliminarArticuloManual(id) {
-    // Mostrar confirmación
-    if (!confirm('¿Estás seguro de que deseas eliminar este artículo personalizado?')) {
-        return;
-    }
-    
     cotizacion.articulos.manuales = cotizacion.articulos.manuales.filter(a => a.id !== id);
     renderizarArticulosManuales();
     actualizarResumen();
-    
-    // Mostrar notificación
-    mostrarNotificacion('🗑️ Artículo eliminado correctamente', 'info');
 }
+
 // ----------------------------------------------------
 // PASO 3: CÁLCULOS Y RESUMEN
 // ----------------------------------------------------
@@ -1855,14 +1635,43 @@ function actualizarTooltipPDF() {
 }
 
 // ----------------------------------------------------
-// PDF GENERATION - CON MANEJO DE ERRORES ROBUSTO
+// PDF GENERATION - CON MANEJO DE ERRORES ROBUSTO CORREGIDO
 // ----------------------------------------------------
 
 async function generarCotizacionPDF() {
+    // Verificar que jsPDF esté cargado
+    if (!window.jspdf) {
+        mostrarNotificacion('❌ Error: La librería jsPDF no se ha cargado correctamente. Recargue la página.', 'error');
+        console.error('jsPDF no está disponible:', { jsPDF: typeof jsPDF, jspdf: window.jspdf });
+        mostrarEstadoCargaPDF(false);
+        return;
+    }
+
     const { jsPDF } = window.jspdf;
     
-    if (typeof jsPDF === 'undefined') {
-        mostrarNotificacion('❌ Error: La librería jsPDF no se ha cargado correctamente.', 'error');
+    // Verificar que haya datos para generar el PDF
+    const total = cotizacion.costos.total || 0;
+    if (total === 0) {
+        mostrarNotificacion('❌ Error: No hay artículos seleccionados para generar el PDF.', 'error');
+        mostrarEstadoCargaPDF(false);
+        return;
+    }
+
+    // Verificar que haya al menos un artículo seleccionado
+    let totalArticulos = 0;
+    if (cotizacion.tipoServicio === 'decoracion') {
+        totalArticulos = cotizacion.articulos.paquetes.filter(p => p.cantidad > 0).length +
+                        cotizacion.articulos.accesorios.filter(a => a.cantidad > 0).length +
+                        cotizacion.articulos.manuales.filter(m => m.cantidad > 0).length;
+    } else if (cotizacion.tipoServicio === 'flores') {
+        totalArticulos = cotizacion.articulos.flores.filter(p => p.cantidad > 0).length +
+                        cotizacion.articulos.arreglosFlorales.filter(a => a.cantidad > 0).length +
+                        cotizacion.articulos.manuales.filter(m => m.cantidad > 0).length;
+    }
+    
+    if (totalArticulos === 0) {
+        mostrarNotificacion('❌ Error: No hay artículos seleccionados para generar el PDF.', 'error');
+        mostrarEstadoCargaPDF(false);
         return;
     }
 
@@ -1871,7 +1680,11 @@ async function generarCotizacionPDF() {
     
     try {
         const doc = new jsPDF();
-        const total = cotizacion.costos.total;
+        
+        // Verificar que doc se creó correctamente
+        if (!doc || typeof doc.addPage !== 'function') {
+            throw new Error('Error al crear documento PDF');
+        }
         
         let itemsSeleccionados = [];
         if (cotizacion.tipoServicio === 'decoracion') {
@@ -1887,6 +1700,19 @@ async function generarCotizacionPDF() {
                 ...cotizacion.articulos.manuales.filter(m => m.cantidad > 0)
             ];
         }
+
+        // Verificar que hay artículos seleccionados
+        if (itemsSeleccionados.length === 0) {
+            throw new Error('No hay artículos seleccionados');
+        }
+
+        console.log('Generando PDF con:', { 
+            itemsSeleccionados, 
+            total, 
+            configPDF,
+            tipoServicio: cotizacion.tipoServicio,
+            totalArticulos
+        });
 
         // DETECCIÓN DEL MODO
         if (configPDF.mostrarPresupuestoSimple) {
@@ -1907,7 +1733,7 @@ async function generarCotizacionPDF() {
         
     } catch (error) {
         console.error('Error al generar PDF:', error);
-        mostrarNotificacion('❌ Error al generar el PDF. Por favor intente nuevamente.', 'error');
+        mostrarNotificacion(`❌ Error al generar el PDF: ${error.message}`, 'error');
         mostrarEstadoCargaPDF(false);
     }
 }
@@ -2161,7 +1987,7 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
                 const nombre = item.nombre;
                 const cantidad = item.cantidad || 1;
                 
-               doc.text(`• ${nombre}`, margin + 2, yPos + 4);
+                doc.text(`• ${nombre}`, margin + 2, yPos + 4);
                 doc.text(cantidad.toString(), pageWidth - margin - 5, yPos + 4, { align: "right" });
                 yPos += 6;
             });
@@ -2456,7 +2282,7 @@ function formatearFecha(fechaISO) {
 }
 
 // ----------------------------------------------------
-// LIMPIEZA DE COTIZACIÓN CON CONFIRMACIÓN
+// LIMPIEZA DE COTIZACIÓN CON CONFIRMACIÓN CORREGIDA
 // ----------------------------------------------------
 
 function confirmarLimpiarCotizacion() {
@@ -2553,6 +2379,7 @@ function limpiarCamposCotizacion() {
     actualizarBotonFlotantePDF();
     actualizarIndicadorPasoActual();
     mejorarVisualizacionTotal();
+    actualizarVisibilidadBotonesFlotantes();
     
     // Mostrar notificación
     mostrarNotificacion('✅ Cotización limpiada correctamente. Puede comenzar una nueva.', 'success');
@@ -2888,6 +2715,35 @@ function eliminarConfigItem(tipo, id) {
             break;
     }
     renderizarConfiguracion();
+}
+
+// =============================================
+// FUNCIÓN PARA ACTUALIZAR BOTÓN FLOTANTE PDF
+// =============================================
+
+function actualizarBotonFlotantePDF() {
+    const floatingBtn = document.getElementById('floating-pdf-btn');
+    if (!floatingBtn) return;
+    
+    const total = cotizacion.costos.total;
+    const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
+    const modo = configPDF.mostrarPresupuestoSimple ? 'Simple' : 'Detallado';
+    
+    // Actualizar texto del botón con el total
+    const textSpan = floatingBtn.querySelector('.floating-text');
+    if (textSpan) {
+        if (total > 0) {
+            textSpan.innerHTML = `PDF: ${formatoMonedaRD(total)}`;
+        } else {
+            textSpan.textContent = 'Generar PDF';
+        }
+    }
+    
+    // Actualizar tooltip
+    floatingBtn.title = `Generar PDF (Modo ${modo})\nArtículos: ${totalArticulos}\nTotal: ${formatoMonedaRD(total)}`;
+    
+    // Llamar a actualizar visibilidad
+    actualizarVisibilidadBotonesFlotantes();
 }
 
 // PWA Support
