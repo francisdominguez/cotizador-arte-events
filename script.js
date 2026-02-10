@@ -9,35 +9,35 @@ let configuracion = {
     tiposEvento: ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower', 'Graduaciones', 'Aniversarios', 'Flores'],
     tematicasEvento: ['Clásica', 'Moderno', 'Vintage', 'Rústica', 'Minimalista', 'Bohemia', 'Elegante', 'Divertida'],
     paquetes: [
-        { id: 1, nombre: "Globo Azul", precio: 1200, emoji: '💙', cantidad: 0, tipo: 'decoracion' },
-        { id: 2, nombre: "Globo Dorado", precio: 1500, emoji: '✨', cantidad: 0, tipo: 'decoracion' },
-        { id: 3, nombre: "Globo Blanco", precio: 1000, emoji: '☁️', cantidad: 0, tipo: 'decoracion' },
-        { id: 4, nombre: "Globo Rosa", precio: 1300, emoji: '💖', cantidad: 0, tipo: 'decoracion' }
+        { id: 1, nombre: "Globo Azul", precio: 1200, costo: 400, emoji: '💙', cantidad: 0, tipo: 'decoracion' },
+        { id: 2, nombre: "Globo Dorado", precio: 1500, costo: 500, emoji: '✨', cantidad: 0, tipo: 'decoracion' },
+        { id: 3, nombre: "Globo Blanco", precio: 1000, costo: 300, emoji: '☁️', cantidad: 0, tipo: 'decoracion' },
+        { id: 4, nombre: "Globo Rosa", precio: 1300, costo: 450, emoji: '💖', cantidad: 0, tipo: 'decoracion' }
     ],
     accesorios: [
-        { id: 1, nombre: "Mampara Circular", precio: 800, emoji: '🖼️', cantidad: 0, tipo: 'decoracion' },
-        { id: 2, nombre: "Cilindro Decorativo", precio: 400, emoji: '🏺', cantidad: 0, tipo: 'decoracion' },
-        { id: 3, nombre: "Mesa Principal", precio: 300, emoji: '🪑', cantidad: 0, tipo: 'decoracion' },
-        { id: 4, nombre: "Sillas Tiffany (x10)", precio: 1500, emoji: '🪑', cantidad: 0, tipo: 'decoracion' },
-        { id: 5, nombre: "Alfombra Roja", precio: 600, emoji: '🟥', cantidad: 0, tipo: 'decoracion' }
+        { id: 1, nombre: "Mampara Circular", precio: 800, costo: 300, emoji: '🖼️', cantidad: 0, tipo: 'decoracion' },
+        { id: 2, nombre: "Cilindro Decorativo", precio: 400, costo: 150, emoji: '🏺', cantidad: 0, tipo: 'decoracion' },
+        { id: 3, nombre: "Mesa Principal", precio: 300, costo: 100, emoji: '🪑', cantidad: 0, tipo: 'decoracion' },
+        { id: 4, nombre: "Sillas Tiffany (x10)", precio: 1500, costo: 600, emoji: '🪑', cantidad: 0, tipo: 'decoracion' },
+        { id: 5, nombre: "Alfombra Roja", precio: 600, costo: 200, emoji: '🟥', cantidad: 0, tipo: 'decoracion' }
     ],
     flores: [
-        { id: 100, nombre: "Rosas Rojas", precio: 250, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rojo' },
-        { id: 101, nombre: "Rosas Blancas", precio: 250, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Blanco' },
-        { id: 102, nombre: "Rosas Rosadas", precio: 250, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rosa' },
-        { id: 103, nombre: "Girasoles", precio: 300, emoji: '🌻', cantidad: 0, tipo: 'flores', color: 'Amarillo' },
-        { id: 104, nombre: "Lirios Blancos", precio: 350, emoji: '⚜️', cantidad: 0, tipo: 'flores', color: 'Blanco' },
-        { id: 105, nombre: "Orquídeas", precio: 500, emoji: '💮', cantidad: 0, tipo: 'flores', color: 'Morado' },
-        { id: 106, nombre: "Tulipanes", precio: 400, emoji: '🌷', cantidad: 0, tipo: 'flores', color: 'Multicolor' },
-        { id: 107, nombre: "Flores Silvestres", precio: 200, emoji: '🌸', cantidad: 0, tipo: 'flores', color: 'Mixto' }
+        { id: 100, nombre: "Rosas Rojas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rojo' },
+        { id: 101, nombre: "Rosas Blancas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Blanco' },
+        { id: 102, nombre: "Rosas Rosadas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rosa' },
+        { id: 103, nombre: "Girasoles", precio: 300, costo: 100, emoji: '🌻', cantidad: 0, tipo: 'flores', color: 'Amarillo' },
+        { id: 104, nombre: "Lirios Blancos", precio: 350, costo: 120, emoji: '⚜️', cantidad: 0, tipo: 'flores', color: 'Blanco' },
+        { id: 105, nombre: "Orquídeas", precio: 500, costo: 200, emoji: '💮', cantidad: 0, tipo: 'flores', color: 'Morado' },
+        { id: 106, nombre: "Tulipanes", precio: 400, costo: 150, emoji: '🌷', cantidad: 0, tipo: 'flores', color: 'Multicolor' },
+        { id: 107, nombre: "Flores Silvestres", precio: 200, costo: 60, emoji: '🌸', cantidad: 0, tipo: 'flores', color: 'Mixto' }
     ],
     arreglosFlorales: [
-        { id: 200, nombre: "Ramo Pequeño (12 flores)", precio: 3000, emoji: '💐', cantidad: 0, tipo: 'flores' },
-        { id: 201, nombre: "Ramo Mediano (24 flores)", precio: 5500, emoji: '💐', cantidad: 0, tipo: 'flores' },
-        { id: 202, nombre: "Ramo Grande (36 flores)", precio: 8000, emoji: '💐', cantidad: 0, tipo: 'flores' },
-        { id: 203, nombre: "Centro de Mesa", precio: 4500, emoji: '🏺', cantidad: 0, tipo: 'flores' },
-        { id: 204, nombre: "Arco Floral", precio: 12000, emoji: '🎀', cantidad: 0, tipo: 'flores' },
-        { id: 205, nombre: "Guirnalda Floral", precio: 7500, emoji: '🌿', cantidad: 0, tipo: 'flores' }
+        { id: 200, nombre: "Ramo Pequeño (12 flores)", precio: 3000, costo: 1200, emoji: '💐', cantidad: 0, tipo: 'flores' },
+        { id: 201, nombre: "Ramo Mediano (24 flores)", precio: 5500, costo: 2200, emoji: '💐', cantidad: 0, tipo: 'flores' },
+        { id: 202, nombre: "Ramo Grande (36 flores)", precio: 8000, costo: 3200, emoji: '💐', cantidad: 0, tipo: 'flores' },
+        { id: 203, nombre: "Centro de Mesa", precio: 4500, costo: 1800, emoji: '🏺', cantidad: 0, tipo: 'flores' },
+        { id: 204, nombre: "Arco Floral", precio: 12000, costo: 5000, emoji: '🎀', cantidad: 0, tipo: 'flores' },
+        { id: 205, nombre: "Guirnalda Floral", precio: 7500, costo: 3000, emoji: '🌿', cantidad: 0, tipo: 'flores' }
     ],
     manoObraPorcentaje: 30
 };
@@ -69,6 +69,7 @@ let cotizacion = {
     },
     costos: {
         materiales: 0,
+        costoRealMateriales: 0,
         transporte: 0,
         manoObra: 0,
         manoObraPorcentaje: configuracion.manoObraPorcentaje,
@@ -84,38 +85,23 @@ let configIdCounter = 1000;
 // ----------------------------------------------------
 
 function scrollToStepTop() {
-    // Obtener el elemento del paso actual
     const currentStepElement = document.getElementById(`step-${cotizacion.currentStep}`);
-    
     if (currentStepElement) {
-        // Para todos los dispositivos: scroll al inicio del paso actual
-        currentStepElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-        });
-        
-        // Para móviles: scroll adicional al top de la página
+        currentStepElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (window.innerWidth <= 768) {
             setTimeout(() => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 300);
         }
     }
 }
 
 function scrollToTabs() {
-    // Solo en móviles, hacer scroll a las tabs
     if (window.innerWidth <= 768) {
         const tabsContainer = document.getElementById('tabs-container');
         if (tabsContainer) {
             setTimeout(() => {
-                tabsContainer.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
+                tabsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
         }
     }
@@ -125,70 +111,44 @@ function scrollToErrorField(fieldId) {
     const fieldElement = document.getElementById(fieldId);
     if (fieldElement) {
         setTimeout(() => {
-            fieldElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-            
-            // Enfocar el campo con error
+            fieldElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
             fieldElement.focus();
         }, 300);
     }
 }
 
 // ----------------------------------------------------
-// FUNCIONES DE MEJORA UX CORREGIDAS
+// FUNCIONES DE MEJORA UX
 // ----------------------------------------------------
 
 function crearBotonFlotantePDF() {
-    // Verificar si ya existen los botones flotantes
-    if (document.getElementById('floating-pdf-btn')) {
-        return; // Ya existen, no crear duplicados
-    }
+    if (document.getElementById('floating-pdf-btn')) return;
     
-    // Crear botón flotante para PDF
     const floatingBtn = document.createElement('button');
     floatingBtn.id = 'floating-pdf-btn';
     floatingBtn.className = 'floating-button';
-    floatingBtn.innerHTML = `
-        <span class="floating-icon">📄</span>
-        <span class="floating-text">Generar PDF</span>
-    `;
+    floatingBtn.innerHTML = `<span class="floating-icon">📄</span><span class="floating-text">Generar PDF</span>`;
     floatingBtn.title = 'Generar PDF - Haga clic para descargar la cotización';
     floatingBtn.onclick = generarCotizacionPDF;
-    
     document.body.appendChild(floatingBtn);
     
-    // Crear botón "Volver arriba"
     const backToTopBtn = document.createElement('button');
     backToTopBtn.id = 'back-to-top-btn';
     backToTopBtn.className = 'floating-button back-to-top';
     backToTopBtn.innerHTML = '↑';
     backToTopBtn.title = 'Volver al inicio de la página';
-    backToTopBtn.onclick = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-    
+    backToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
     document.body.appendChild(backToTopBtn);
-    
-    console.log('Botones flotantes creados correctamente');
 }
 
 function actualizarVisibilidadBotonesFlotantes() {
     const floatingPdfBtn = document.getElementById('floating-pdf-btn');
     const backToTopBtn = document.getElementById('back-to-top-btn');
     
-    if (!floatingPdfBtn || !backToTopBtn) {
-        console.warn('Botones flotantes no encontrados');
-        return;
-    }
+    if (!floatingPdfBtn || !backToTopBtn) return;
     
-    // Mostrar solo en paso 3
     if (cotizacion.currentStep === 3) {
-        // Botón Generar PDF
         floatingPdfBtn.classList.add('visible');
-        
-        // Verificar si hay artículos seleccionados
         const total = cotizacion.costos.total || 0;
         const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
         
@@ -204,30 +164,23 @@ function actualizarVisibilidadBotonesFlotantes() {
             floatingPdfBtn.title = 'No hay artículos seleccionados para generar PDF';
         }
         
-        // Botón Volver arriba
         if (window.scrollY > 300) {
             backToTopBtn.classList.add('visible');
         } else {
             backToTopBtn.classList.remove('visible');
         }
     } else {
-        // Ocultar en otros pasos
         floatingPdfBtn.classList.remove('visible');
         backToTopBtn.classList.remove('visible');
     }
 }
 
 function crearIndicadorPasoActual() {
-    // Verificar si ya existe
-    if (document.getElementById('current-step-indicator')) {
-        return;
-    }
+    if (document.getElementById('current-step-indicator')) return;
     
-    // Crear indicador visual del paso actual
     const indicator = document.createElement('div');
     indicator.id = 'current-step-indicator';
     indicator.className = 'step-indicator-badge';
-    
     document.body.appendChild(indicator);
     actualizarIndicadorPasoActual();
 }
@@ -239,31 +192,20 @@ function actualizarIndicadorPasoActual() {
     const stepNames = ['Información del Cliente', 'Selección de Artículos', 'Resumen y PDF'];
     const currentStepName = stepNames[cotizacion.currentStep - 1] || '';
     
-    indicator.innerHTML = `
-        <span class="step-number">${cotizacion.currentStep}</span>
-        <span class="step-name">${currentStepName}</span>
-    `;
-    
-    // Establecer atributo data-step para colores diferentes
+    indicator.innerHTML = `<span class="step-number">${cotizacion.currentStep}</span><span class="step-name">${currentStepName}</span>`;
     indicator.setAttribute('data-step', cotizacion.currentStep);
 }
 
 function mejorarVisualizacionTotal() {
-    // Crear o actualizar visualización del total en la barra de progreso
     let totalDisplay = document.getElementById('total-display');
-    
     if (!totalDisplay) {
         totalDisplay = document.createElement('div');
         totalDisplay.id = 'total-display';
         totalDisplay.className = 'total-display';
-        
         const progressContainer = document.querySelector('.progress-container');
-        if (progressContainer) {
-            progressContainer.appendChild(totalDisplay);
-        }
+        if (progressContainer) progressContainer.appendChild(totalDisplay);
     }
     
-    // Actualizar contenido
     const total = cotizacion.costos.total;
     const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
     
@@ -285,10 +227,7 @@ function mejorarVisualizacionTotal() {
 function formatoMonedaRD(monto) {
     if (isNaN(monto) || monto === null) monto = 0;
     const numero = parseFloat(monto);
-    return `RD$${numero.toLocaleString('es-DO', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    })}`;
+    return `RD$${numero.toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 // ----------------------------------------------------
@@ -308,30 +247,19 @@ document.addEventListener('DOMContentLoaded', function() {
     actualizarConfigPDF();
     cargarPreferenciasUsuario();
     
-    // Ocultar tabs de flores inicialmente
     document.getElementById('tab-flores').style.display = 'none';
     document.getElementById('tab-arreglos').style.display = 'none';
-    
-    // Aplicar tema inicial
     aplicarTema();
-    
-    // Inicializar vista previa
     actualizarVistaPreviaPDF();
     
-    // INICIALIZAR MEJORAS UX CORREGIDAS
     crearBotonFlotantePDF();
     crearIndicadorPasoActual();
     mejorarVisualizacionTotal();
     
-    // Inicializar visibilidad de botones flotantes
     setTimeout(actualizarVisibilidadBotonesFlotantes, 200);
-    
-    // Escuchar scroll para botón "volver arriba"
     window.addEventListener('scroll', function() {
         actualizarVisibilidadBotonesFlotantes();
     });
-    
-    console.log('Aplicación inicializada correctamente');
 });
 
 // ----------------------------------------------------
@@ -343,20 +271,14 @@ function sincronizarEventoServicio() {
     const tipoServicioSelect = document.getElementById('tipo-servicio');
     
     if (tipoEvento === 'Flores') {
-        // Si el evento es Flores, forzar servicio a flores
         tipoServicioSelect.value = 'flores';
         mostrarNotificacion('💡 El servicio se ha ajustado a "Flores Externas" para coincidir con el tipo de evento.', 'info');
     } else if (tipoEvento !== '' && tipoEvento !== 'Flores') {
-        // Si el evento NO es Flores, forzar servicio a decoración
         tipoServicioSelect.value = 'decoracion';
         mostrarNotificacion('💡 El servicio se ha ajustado a "Decoración" para coincidir con el tipo de evento.', 'info');
     }
     
-    // Actualizar UI si estamos en paso 2
-    if (cotizacion.currentStep === 2) {
-        actualizarUIporTipoServicio();
-    }
-    
+    if (cotizacion.currentStep === 2) actualizarUIporTipoServicio();
     guardarDatosPaso1();
     limpiarError('tipo-servicio');
     limpiarError('tipo-evento');
@@ -378,26 +300,20 @@ function validarConsistenciaEventoServicio() {
     return true;
 }
 
-// FUNCIÓN MEJORADA PARA INICIALIZAR FECHA
 function inicializarFechaEvento() {
     const fechaInput = document.getElementById('fecha-evento');
     if (!fechaInput) return;
     
-    // Obtener fecha actual en formato YYYY-MM-DD
     const hoy = new Date();
     const year = hoy.getFullYear();
     const month = String(hoy.getMonth() + 1).padStart(2, '0');
     const day = String(hoy.getDate()).padStart(2, '0');
     const fechaHoy = `${year}-${month}-${day}`;
     
-    // Establecer atributos del input
     fechaInput.min = fechaHoy;
     fechaInput.value = fechaHoy;
-    
-    // Actualizar objeto cotización
     cotizacion.cliente.fechaEvento = fechaHoy;
     
-    // Forzar validación después de un breve delay
     setTimeout(() => {
         validarCampo('fecha-evento', fechaHoy);
         guardarDatosPaso1();
@@ -417,12 +333,234 @@ function cambiarTematicaEvento() {
             document.getElementById('otra-tematica').value = '';
         }
     }
-    
     guardarDatosPaso1();
 }
 
+// ----------------------------------------------------
+// FUNCIONES PARA CALCULAR COSTOS AUTOMÁTICAMENTE
+// ----------------------------------------------------
+
+function calcularTotalesAutomaticos() {
+    let precioVentaTotal = 0;
+    let costoRealTotal = 0;
+    let costoRealMateriales = 0;
+
+    if (cotizacion.tipoServicio === 'decoracion') {
+        const articulosDecoracion = [
+            ...cotizacion.articulos.paquetes,
+            ...cotizacion.articulos.accesorios
+        ];
+        articulosDecoracion.forEach(item => {
+            precioVentaTotal += item.precio * item.cantidad;
+            costoRealTotal += (item.costo || 0) * item.cantidad;
+        });
+    } else if (cotizacion.tipoServicio === 'flores') {
+        const articulosFlores = [
+            ...cotizacion.articulos.flores,
+            ...cotizacion.articulos.arreglosFlorales
+        ];
+        articulosFlores.forEach(item => {
+            precioVentaTotal += item.precio * item.cantidad;
+            costoRealTotal += (item.costo || 0) * item.cantidad;
+        });
+    }
+
+    // Sumar artículos manuales
+    cotizacion.articulos.manuales.forEach(item => {
+        precioVentaTotal += (item.precioUnitario * item.cantidad);
+        // Para artículos manuales, asumimos que el costo es 70% del precio de venta
+        costoRealTotal += (item.precioUnitario * 0.7 || 0) * item.cantidad;
+    });
+
+    cotizacion.costos.materiales = precioVentaTotal;
+    cotizacion.costos.costoRealMateriales = costoRealTotal;
+    
+    const inputCostoMateriales = document.getElementById('costo-materiales');
+    if (inputCostoMateriales) {
+        inputCostoMateriales.value = Math.round(costoRealTotal);
+    }
+    
+    return { 
+        precioVentaTotal, 
+        costoRealTotal,
+        diferenciaMateriales: precioVentaTotal - costoRealTotal 
+    };
+}
+
+function calcularTotalCotizacion() {
+    const { precioVentaTotal, costoRealTotal, diferenciaMateriales } = calcularTotalesAutomaticos();
+    
+    const inputCostoMateriales = document.getElementById('costo-materiales');
+    let costoRealMateriales = inputCostoMateriales ? parseFloat(inputCostoMateriales.value) || 0 : 0;
+    
+    // Si el costo de materiales está vacío o es 0, usar el costo real calculado
+    if (costoRealMateriales === 0 && costoRealTotal > 0) {
+        costoRealMateriales = costoRealTotal;
+        if (inputCostoMateriales) inputCostoMateriales.value = Math.round(costoRealTotal);
+    }
+    
+    const inputPorcentajeManoObra = document.getElementById('porcentaje-mano-obra');
+    const porcentajeManoObra = inputPorcentajeManoObra ? parseFloat(inputPorcentajeManoObra.value) || 30 : 30;
+    
+      
+    let manoObra = 0;
+    // SOLO calcular mano de obra si es decoración
+    if (cotizacion.tipoServicio === 'decoracion') {
+        if (cotizacion.tipoManoObra === 'porcentaje') {
+            manoObra = costoRealMateriales * (porcentajeManoObra / 100);
+        } else if (cotizacion.tipoManoObra === 'manual') {
+            manoObra = cotizacion.montoManoObraManual;
+        }
+    }
+    cotizacion.costos.manoObra = manoObra;
+    cotizacion.costos.manoObra = manoObra;
+    
+    const transporte = cotizacion.costos.transporte || 0;
+    
+    // Total final = Precio de venta total + mano de obra + transporte
+    let totalFinal = precioVentaTotal + manoObra + transporte;
+    cotizacion.costos.total = totalFinal;
+    
+    // Calcular ganancia total
+    const gananciaTotal = manoObra + diferenciaMateriales + transporte;
+    const porcentajeGananciaTotal = costoRealMateriales > 0 ? (gananciaTotal / costoRealMateriales * 100) : 0;
+    
+    actualizarDisplayResumen(
+        costoRealMateriales, 
+        precioVentaTotal, 
+        manoObra, 
+        diferenciaMateriales, 
+        transporte, 
+        totalFinal, 
+        gananciaTotal, 
+        porcentajeGananciaTotal
+    );
+}
+
+function actualizarDisplayResumen(costoReal, precioVenta, manoObra, diferenciaMateriales, 
+                                 transporte, totalFinal, gananciaTotal, porcentajeGanancia) {
+    
+    // ¡NUEVOS ELEMENTOS!
+    const displayCostoReal = document.getElementById('display-costo-real');
+    const displayPrecioVenta = document.getElementById('display-precio-venta');
+    const displayGanancia = document.getElementById('display-ganancia');
+    const displayPorcentajeGanancia = document.getElementById('display-porcentaje-ganancia');
+    const displayManoObra = document.getElementById('display-mano-obra');
+    const displayPorcentajeManoObra = document.getElementById('display-porcentaje-mano-obra');
+    const displayTransporte = document.getElementById('display-transporte');
+    const displayTotalFinal = document.getElementById('display-total-final');
+    
+    // ¡ACTUALIZAR TODOS LOS DISPLAYS!
+    if (displayCostoReal) displayCostoReal.textContent = formatoMonedaRD(costoReal);
+    if (displayPrecioVenta) displayPrecioVenta.textContent = formatoMonedaRD(precioVenta);
+    if (displayGanancia) displayGanancia.textContent = formatoMonedaRD(gananciaTotal);
+    if (displayPorcentajeGanancia) {
+        displayPorcentajeGanancia.textContent = `${Math.round(porcentajeGanancia)}%`;
+        // Color según ganancia
+        if (porcentajeGanancia >= 100) {
+            displayPorcentajeGanancia.style.color = '#4caf50';
+        } else if (porcentajeGanancia >= 50) {
+            displayPorcentajeGanancia.style.color = '#ff9800';
+        } else {
+            displayPorcentajeGanancia.style.color = '#f44336';
+        }
+    }
+    
+    if (displayManoObra) displayManoObra.textContent = formatoMonedaRD(manoObra);
+    if (displayPorcentajeManoObra) {
+        const porcentajeManoObra = document.getElementById('porcentaje-mano-obra').value || 30;
+        displayPorcentajeManoObra.textContent = porcentajeManoObra;
+    }
+    if (displayTransporte) displayTransporte.textContent = formatoMonedaRD(transporte);
+    if (displayTotalFinal) displayTotalFinal.textContent = formatoMonedaRD(totalFinal);
+    
+    // El campo de porcentaje de ganancia
+    const inputPorcentajeGanancia = document.getElementById('porcentaje-ganancia');
+    if (inputPorcentajeGanancia) inputPorcentajeGanancia.value = Math.round(porcentajeGanancia);
+    
+    // Mostrar desglose detallado
+    mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMateriales, 
+                           transporte, totalFinal, gananciaTotal, porcentajeGanancia);
+}
+
+function mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMateriales, 
+                                transporte, totalFinal, gananciaTotal, porcentajeGanancia) {
+    
+    const container = document.querySelector('.form-group.full-width');
+    if (!container || costoReal <= 0) return;
+  
+    
+    // Eliminar desglose anterior si existe
+    const existingDesglose = container.querySelector('#desglose-ganancia');
+    if (existingDesglose) existingDesglose.remove();
+    
+    // Determinar si es servicio de decoración o flores
+    const esDecoracion = cotizacion.tipoServicio === 'decoracion';
+    const porcentajeManoObra = document.getElementById('porcentaje-mano-obra').value || 30;
+    
+    let desgloseHTML = `
+        <div id="desglose-ganancia" style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; border-left: 4px solid var(--success);">
+            <div style="font-weight: 700; color: var(--success); margin-bottom: 10px; font-size: 1.1em; display: flex; align-items: center; gap: 8px;">💰 DESGLOSE DE GANANCIA (${esDecoracion ? 'DECORACIÓN' : 'FLORES EXTERNAS'})</div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                <div style="font-size: 0.9em; color: #666;">Costo Real Materiales:</div>
+                <div style="text-align: right; font-weight: 600;">${formatoMonedaRD(costoReal)}</div>
+                
+                <div style="font-size: 0.9em; color: #666;">Precio Venta Materiales:</div>
+                <div style="text-align: right; font-weight: 600; color: var(--primary);">${formatoMonedaRD(precioVenta)}</div>
+                
+                <div style="font-size: 0.9em; color: #666; border-top: 1px dashed #ddd; padding-top: 5px;"><span style="color: var(--success);">+</span> Diferencia Materiales:</div>
+                <div style="text-align: right; font-weight: 600; color: var(--success); border-top: 1px dashed #ddd; padding-top: 5px;">${formatoMonedaRD(diferenciaMateriales)}</div>`;
+    
+    // Solo mostrar mano de obra si es decoración
+    if (esDecoracion && manoObra > 0) {
+        desgloseHTML += `
+                <div style="font-size: 0.9em; color: #666;"><span style="color: #ff9800;">+</span> Mano de Obra (${porcentajeManoObra}%):</div>
+                <div style="text-align: right; font-weight: 600; color: #ff9800;">${formatoMonedaRD(manoObra)}</div>`;
+    }
+    
+    // Mostrar transporte si existe
+    if (transporte > 0) {
+        desgloseHTML += `
+                <div style="font-size: 0.9em; color: #666;"><span style="color: #2196f3;">+</span> Transporte:</div>
+                <div style="text-align: right; font-weight: 600; color: #2196f3;">${formatoMonedaRD(transporte)}</div>`;
+    }
+    
+    // Calcular ganancia según tipo de servicio
+    let gananciaCalculada = diferenciaMateriales;
+    let formulaTexto = "Ganancia = Diferencia en Materiales";
+    
+    if (esDecoracion) {
+        gananciaCalculada += manoObra;
+        formulaTexto = "Ganancia = Diferencia en Materiales + Mano de Obra";
+    }
+    
+    if (transporte > 0) {
+        gananciaCalculada += transporte;
+        formulaTexto += " + Transporte";
+    }
+    
+    desgloseHTML += `
+                <div style="font-size: 0.9em; color: #666; border-top: 2px solid var(--primary-dark); padding-top: 8px; font-weight: 700;">GANANCIA TOTAL${esDecoracion ? ' (DECORACIÓN)' : ' (FLORES)'}:</div>
+                <div style="text-align: right; font-weight: 900; color: var(--primary-dark); border-top: 2px solid var(--primary-dark); padding-top: 8px;">${formatoMonedaRD(gananciaCalculada)}</div>
+                
+                <div style="font-size: 0.85em; color: #666; grid-column: 1 / -1; text-align: center; margin-top: 5px; padding: 5px; background: rgba(0, 184, 148, 0.1); border-radius: 5px;">
+                    <span style="font-weight: 700; color: var(--success);">${Math.round(porcentajeGanancia)}%</span> de ganancia sobre costo real
+                </div>
+            </div>
+            
+            <div style="font-size: 0.8em; color: #666; font-style: italic; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">💡 <strong>${formulaTexto}</strong></div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', desgloseHTML);
+}
+
+// ----------------------------------------------------
+// EVENT LISTENERS PARA COSTOS
+// ----------------------------------------------------
+
 function inicializarEventListeners() {
-    // Event listeners para inputs del paso 1
     const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'tipo-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tipo-servicio', 'otro-evento', 'otra-tematica'];
     
     inputsPaso1.forEach(id => {
@@ -438,7 +576,6 @@ function inicializarEventListeners() {
         }
     });
     
-    // Event listeners específicos
     document.getElementById('tipo-evento').addEventListener('change', function() {
         const otroEventoContainer = document.getElementById('otro-evento-container');
         if (this.value === 'otro') {
@@ -452,8 +589,6 @@ function inicializarEventListeners() {
         guardarDatosPaso1();
         limpiarError('tipo-evento');
         validarCampo('tipo-evento', this.value);
-        
-        // Sincronizar evento y servicio
         sincronizarEventoServicio();
     });
     
@@ -465,19 +600,34 @@ function inicializarEventListeners() {
         cambiarTematicaEvento();
     });
     
-    // Event listener para tipo de servicio con validación de consistencia
     document.getElementById('tipo-servicio').addEventListener('change', function() {
-        if (validarConsistenciaEventoServicio()) {
-            cambiarTipoServicio();
-        }
+        if (validarConsistenciaEventoServicio()) cambiarTipoServicio();
     });
     
     // Event listeners para costos
-    document.getElementById('costo-transporte').addEventListener('input', (e) => actualizarCostoManual('transporte', e.target.value));
-    document.getElementById('porcentaje-mano-obra').addEventListener('input', (e) => actualizarCostoManual('manoObraPorcentaje', e.target.value));
-    document.getElementById('monto-mano-obra-manual').addEventListener('input', (e) => actualizarCostoManual('manoObraMontoManual', e.target.value));
+    document.getElementById('costo-transporte').addEventListener('input', (e) => {
+        cotizacion.costos.transporte = parseFloat(e.target.value) || 0;
+        calcularTotalCotizacion();
+    });
     
-    // Event listener para vista previa cuando cambia cualquier checkbox
+    document.getElementById('porcentaje-mano-obra').addEventListener('input', (e) => {
+        cotizacion.costos.manoObraPorcentaje = Math.min(100, Math.max(0, parseFloat(e.target.value) || 30));
+        calcularTotalCotizacion();
+    });
+    
+    document.getElementById('monto-mano-obra-manual').addEventListener('input', (e) => {
+        cotizacion.montoManoObraManual = Math.max(0, parseFloat(e.target.value) || 0);
+        calcularTotalCotizacion();
+    });
+    
+    document.getElementById('costo-materiales').addEventListener('input', (e) => {
+        calcularTotalCotizacion();
+    });
+    
+    document.getElementById('porcentaje-ganancia').addEventListener('input', (e) => {
+        calcularTotalCotizacion();
+    });
+    
     document.querySelectorAll('.pdf-config-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             actualizarConfigPDF();
@@ -485,12 +635,10 @@ function inicializarEventListeners() {
         });
     });
     
-    // Tooltip para botón de generar PDF
     document.getElementById('generar-cotizacion').addEventListener('mouseover', function() {
         actualizarTooltipPDF();
     });
     
-    // Escuchar cambios en inputs para actualizar botón flotante
     document.addEventListener('input', function() {
         setTimeout(actualizarBotonFlotantePDF, 100);
     });
@@ -526,59 +674,36 @@ function guardarPreferenciasUsuario() {
 }
 
 function actualizarConfigPDF() {
-    // Obtener el estado del checkbox de Modo Presupuesto Simple
     const modoSimple = document.getElementById('mostrar-presupuesto-simple');
-    
-    // Lista de los otros checkboxes que deben ser controlados
-    const otrosCheckboxes = [
-        'mostrar-mano-obra',
-        'mostrar-transporte',
-        'mostrar-detalle-materiales',
-        'mostrar-costo-materiales'
-    ];
+    const otrosCheckboxes = ['mostrar-mano-obra', 'mostrar-transporte', 'mostrar-detalle-materiales', 'mostrar-costo-materiales'];
     
     if (modoSimple.checked) {
-        // Si Modo Presupuesto Simple está ACTIVADO
-        // Desmarcar y deshabilitar todos los otros checkboxes
         otrosCheckboxes.forEach(id => {
             const checkbox = document.getElementById(id);
             checkbox.checked = false;
             checkbox.disabled = true;
         });
         
-        // Forzar configuración para Modo Simple:
-        // - Mostrar Detalle de Materiales: SIEMPRE true (para ver los artículos)
-        // - Los demás: SIEMPRE false (solo queremos artículos + total)
         configPDF.mostrarManoObra = false;
         configPDF.mostrarTransporte = false;
         configPDF.mostrarCostoMateriales = false;
         configPDF.mostrarDetalleMateriales = true;
         configPDF.mostrarPresupuestoSimple = true;
-        
-        // Mostrar notificación
         mostrarNotificacion('✅ Modo Presupuesto Simple activado. Solo se mostrarán artículos y total.', 'success');
-        
     } else {
-        // Si Modo Presupuesto Simple está DESACTIVADO
-        // Habilitar todos los otros checkboxes
         otrosCheckboxes.forEach(id => {
             document.getElementById(id).disabled = false;
         });
         
-        // Leer los valores actuales de los checkboxes
         configPDF.mostrarManoObra = document.getElementById('mostrar-mano-obra').checked;
         configPDF.mostrarTransporte = document.getElementById('mostrar-transporte').checked;
         configPDF.mostrarDetalleMateriales = document.getElementById('mostrar-detalle-materiales').checked;
         configPDF.mostrarCostoMateriales = document.getElementById('mostrar-costo-materiales').checked;
         configPDF.mostrarPresupuestoSimple = false;
-        
-        // Mostrar notificación
         mostrarNotificacion('✅ Modo Detallado activado. Puedes configurar opciones individuales.', 'success');
     }
     
-    // Guardar preferencias del usuario
     guardarPreferenciasUsuario();
-    
     actualizarResumen();
     actualizarBotonFlotantePDF();
 }
@@ -589,26 +714,16 @@ function actualizarConfigPDF() {
 
 function limpiarError(campoId) {
     const errorElement = document.getElementById(`error-${campoId}`);
-    if (errorElement) {
-        errorElement.textContent = '';
-    }
+    if (errorElement) errorElement.textContent = '';
     const inputElement = document.getElementById(campoId);
-    if (inputElement) {
-        inputElement.classList.remove('error');
-    }
+    if (inputElement) inputElement.classList.remove('error');
 }
 
 function mostrarError(campoId, mensaje) {
     const errorElement = document.getElementById(`error-${campoId}`);
-    if (errorElement) {
-        errorElement.textContent = mensaje;
-    }
+    if (errorElement) errorElement.textContent = mensaje;
     const inputElement = document.getElementById(campoId);
-    if (inputElement) {
-        inputElement.classList.add('error');
-    }
-    
-   
+    if (inputElement) inputElement.classList.add('error');
 }
 
 function validarCampo(campoId, valor) {
@@ -627,7 +742,6 @@ function validarCampo(campoId, valor) {
                 return false;
             }
             
-            // Crear fechas para comparación (ignorando hora)
             const fechaEvento = new Date(valor + 'T00:00:00');
             const hoy = new Date();
             hoy.setHours(0, 0, 0, 0);
@@ -646,9 +760,7 @@ function validarCampo(campoId, valor) {
                 return false;
             }
             
-            // Solo validar "otro" si está seleccionado
             if (valor === 'otro') {
-                // La validación de "otro-evento" se hará en su propio campo
                 limpiarError(campoId);
                 return true;
             }
@@ -657,7 +769,6 @@ function validarCampo(campoId, valor) {
             return true;
             
         case 'otro-evento':
-            // Solo validar si "otro" está seleccionado en tipo-evento
             const tipoEvento = document.getElementById('tipo-evento').value;
             if (tipoEvento === 'otro' && !valor.trim()) {
                 mostrarError(campoId, 'Debe especificar el tipo de evento');
@@ -680,10 +791,7 @@ function validarCampo(campoId, valor) {
                 return false;
             }
             
-            // Validar consistencia con tipo de evento
-            if (!validarConsistenciaEventoServicio()) {
-                return false;
-            }
+            if (!validarConsistenciaEventoServicio()) return false;
             
             limpiarError(campoId);
             return true;
@@ -704,23 +812,16 @@ function validarEmail(email) {
 
 function nextStep() {
     if (cotizacion.currentStep === 1) {
-        // VALIDAR SIN HACER SCROLL INMEDIATO
         if (!validarPaso1()) {
-            // Mostrar notificación sin hacer scroll automático
             mostrarNotificacion('⚠️ Complete los campos obligatorios antes de continuar', 'warning');
-            return; // Detener aquí sin cambiar de paso ni hacer scroll
+            return;
         }
         guardarDatosPaso1();
-    } else if (cotizacion.currentStep === 2) {
-        // Validación opcional para paso 2
     }
     
-    // SOLO hacer scroll si la validación fue exitosa
     if (cotizacion.currentStep < 3) {
         cotizacion.currentStep++;
         updateStepUI();
-        
-        // Scroll automático solo cuando TODO está correcto
         setTimeout(scrollToStepTop, 100);
     }
 }
@@ -729,8 +830,6 @@ function prevStep() {
     if (cotizacion.currentStep > 1) {
         cotizacion.currentStep--;
         updateStepUI();
-        
-        // Scroll automático al cambiar de paso
         setTimeout(scrollToStepTop, 100);
     }
 }
@@ -746,17 +845,12 @@ function updateStepUI() {
     const progress = document.getElementById('progress');
     const generarBtn = document.getElementById('generar-cotizacion');
     
-    // Actualizar indicadores de pasos
     const stepIndicators = document.querySelectorAll('.step-indicator');
     stepIndicators.forEach(indicator => {
         const stepNum = parseInt(indicator.dataset.step);
         indicator.classList.remove('active', 'completed');
-        
-        if (stepNum < cotizacion.currentStep) {
-            indicator.classList.add('completed');
-        } else if (stepNum === cotizacion.currentStep) {
-            indicator.classList.add('active');
-        }
+        if (stepNum < cotizacion.currentStep) indicator.classList.add('completed');
+        else if (stepNum === cotizacion.currentStep) indicator.classList.add('active');
     });
 
     steps.forEach((step, index) => {
@@ -797,56 +891,42 @@ function updateStepUI() {
     actualizarIndicadorPasoActual();
     actualizarBotonFlotantePDF();
     mejorarVisualizacionTotal();
-    
-    // ACTUALIZAR VISIBILIDAD DE BOTONES FLOTANTES
     setTimeout(actualizarVisibilidadBotonesFlotantes, 100);
-    
-    // Scroll al top del paso
     setTimeout(scrollToStepTop, 150);
 }
 
 // ----------------------------------------------------
-// PASO 1: INFORMACIÓN DEL CLIENTE - VALIDACIÓN CORREGIDA
+// PASO 1: INFORMACIÓN DEL CLIENTE
 // ----------------------------------------------------
 
 function validarPaso1() {
     let valido = true;
     
-    // Validar nombre (obligatorio)
     const nombre = document.getElementById('cliente-nombre').value.trim();
     if (!nombre) {
         mostrarError('cliente-nombre', 'El nombre del cliente es obligatorio');
         valido = false;
-    } else {
-        limpiarError('cliente-nombre');
-    }
+    } else limpiarError('cliente-nombre');
     
-    // Validar fecha (obligatorio)
     const fecha = document.getElementById('fecha-evento').value.trim();
     if (!fecha) {
         mostrarError('fecha-evento', 'La fecha del evento es obligatoria');
         valido = false;
     } else {
-        // Crear fecha sin considerar hora para comparación
         const fechaEvento = new Date(fecha + 'T00:00:00');
         const hoy = new Date();
         hoy.setHours(0, 0, 0, 0);
-        
         if (fechaEvento < hoy) {
             mostrarError('fecha-evento', 'La fecha del evento no puede ser en el pasado');
             valido = false;
-        } else {
-            limpiarError('fecha-evento');
-        }
+        } else limpiarError('fecha-evento');
     }
     
-    // Validar tipo de evento (obligatorio)
     const tipo = document.getElementById('tipo-evento').value;
     if (!tipo) {
         mostrarError('tipo-evento', 'El tipo de evento es obligatorio');
         valido = false;
     } else if (tipo === 'otro') {
-        // Si es "otro", validar que se haya especificado
         const otroEvento = document.getElementById('otro-evento').value.trim();
         if (!otroEvento) {
             mostrarError('otro-evento', 'Debe especificar el tipo de evento');
@@ -857,28 +937,22 @@ function validarPaso1() {
         }
     } else {
         limpiarError('tipo-evento');
-        limpiarError('otro-evento'); // Limpiar por si acaso
+        limpiarError('otro-evento');
     }
     
-    // Validar tipo de servicio (obligatorio) con validación de consistencia
     const servicio = document.getElementById('tipo-servicio').value;
     if (!servicio) {
         mostrarError('tipo-servicio', 'El tipo de servicio es obligatorio');
         valido = false;
     } else if (!validarConsistenciaEventoServicio()) {
         valido = false;
-    } else {
-        limpiarError('tipo-servicio');
-    }
+    } else limpiarError('tipo-servicio');
     
-    // Validar email (opcional, pero si está presente debe tener formato válido)
     const email = document.getElementById('cliente-email').value.trim();
     if (email && !validarEmail(email)) {
         mostrarError('cliente-email', 'El formato del email no es válido');
         valido = false;
-    } else {
-        limpiarError('cliente-email');
-    }
+    } else limpiarError('cliente-email');
 
     return valido;
 }
@@ -892,29 +966,22 @@ function guardarDatosPaso1() {
     cotizacion.cliente.notas = document.getElementById('cliente-notas').value.trim();
     
     const tipoEvento = document.getElementById('tipo-evento').value;
-    
     if (tipoEvento === 'otro') {
         cotizacion.tipoEvento = document.getElementById('otro-evento').value.trim();
-    } else {
-        cotizacion.tipoEvento = tipoEvento;
-    }
+    } else cotizacion.tipoEvento = tipoEvento;
     
     const tematicaEvento = document.getElementById('tematica-evento').value;
-    
     if (tematicaEvento === 'otra') {
         cotizacion.tematicaEvento = document.getElementById('otra-tematica').value.trim();
-    } else {
-        cotizacion.tematicaEvento = tematicaEvento;
-    }
+    } else cotizacion.tematicaEvento = tematicaEvento;
     
     cotizacion.tipoServicio = document.getElementById('tipo-servicio').value;
-    
     aplicarTema();
     actualizarResumen();
 }
 
 // ----------------------------------------------------
-// FUNCIÓN APLICAR TEMA - REPARADA
+// FUNCIÓN APLICAR TEMA
 // ----------------------------------------------------
 
 function aplicarTema() {
@@ -922,7 +989,6 @@ function aplicarTema() {
     const tipoSeleccionado = tipoEventoSelect ? tipoEventoSelect.value : '';
     const otroEventoContainer = document.getElementById('otro-evento-container');
     
-    // Obtener el nombre del evento para crear la clase
     let nombreEvento = '';
     if (tipoSeleccionado === 'otro') {
         nombreEvento = document.getElementById('otro-evento').value.trim().toLowerCase();
@@ -932,20 +998,13 @@ function aplicarTema() {
         if (otroEventoContainer) otroEventoContainer.style.display = 'none';
     }
     
-    // Limpiar todas las clases de tema anteriores
     const body = document.body;
     const clasesTema = Array.from(body.classList).filter(className => className.startsWith('theme-'));
     clasesTema.forEach(className => body.classList.remove(className));
     
     if (nombreEvento) {
-        // Crear nombre de clase válido (solo letras, números y guiones)
-        const temaClase = 'theme-' + nombreEvento
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/-$/, '')
-            .replace(/^-/, '');
+        const temaClase = 'theme-' + nombreEvento.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '').replace(/^-/, '');
         
-        // Si la clase no existe, usar tema genérico
         const existeTema = configuracion.tiposEvento.some(tipo => 
             tipo.toLowerCase().replace(/[^a-z0-9]+/g, '-') === nombreEvento.replace(/[^a-z0-9]+/g, '-')
         );
@@ -953,10 +1012,7 @@ function aplicarTema() {
         if (existeTema && temaClase !== 'theme-') {
             body.classList.add(temaClase);
         } else {
-            // Usar tema por defecto para eventos personalizados
             body.classList.add('theme-otro');
-            
-            // Crear dinámicamente un tema CSS si no existe
             if (!document.querySelector(`style[data-tema="${temaClase}"]`)) {
                 const colorPrimario = generarColorDesdeTexto(nombreEvento);
                 const colorOscuro = oscurecerColor(colorPrimario, 20);
@@ -964,36 +1020,23 @@ function aplicarTema() {
                 
                 const estilo = document.createElement('style');
                 estilo.setAttribute('data-tema', temaClase);
-                estilo.textContent = `
-                    .${temaClase} {
-                        --primary: ${colorPrimario};
-                        --primary-dark: ${colorOscuro};
-                        --accent: ${colorAcento};
-                    }
-                `;
+                estilo.textContent = `.${temaClase} { --primary: ${colorPrimario}; --primary-dark: ${colorOscuro}; --accent: ${colorAcento}; }`;
                 document.head.appendChild(estilo);
             }
         }
     }
 }
 
-// Funciones auxiliares para generar colores dinámicos
 function generarColorDesdeTexto(texto) {
     let hash = 0;
-    for (let i = 0; i < texto.length; i++) {
-        hash = texto.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    
-    // Generar colores más vivos (evitar grises)
+    for (let i = 0; i < texto.length; i++) hash = texto.charCodeAt(i) + ((hash << 5) - hash);
     const hue = Math.abs(hash % 360);
-    const saturation = 70 + (Math.abs(hash) % 30); // 70-100%
-    const lightness = 50 + (Math.abs(hash >> 8) % 20); // 50-70%
-    
+    const saturation = 70 + (Math.abs(hash) % 30);
+    const lightness = 50 + (Math.abs(hash >> 8) % 20);
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
 function oscurecerColor(color, porcentaje) {
-    // Implementación simple para oscurecer colores
     if (color.startsWith('hsl')) {
         const match = color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
         if (match) {
@@ -1005,7 +1048,6 @@ function oscurecerColor(color, porcentaje) {
 }
 
 function aclararColor(color, porcentaje) {
-    // Implementación simple para aclarar colores
     if (color.startsWith('hsl')) {
         const match = color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
         if (match) {
@@ -1019,119 +1061,78 @@ function aclararColor(color, porcentaje) {
 function actualizarTiposEvento() {
     const select = document.getElementById('tipo-evento');
     if (!select) return;
-    
     const valorActual = select.value;
-    
     select.innerHTML = '<option value="">Seleccione un tipo</option>';
-    
     configuracion.tiposEvento.forEach(tipo => {
         const option = document.createElement('option');
         option.value = tipo;
         option.textContent = tipo;
         select.appendChild(option);
     });
-    
     const otroOption = document.createElement('option');
     otroOption.value = 'otro';
     otroOption.textContent = 'Otro (Personalizado)';
     select.appendChild(otroOption);
-    
-    if (valorActual) {
-        select.value = valorActual;
-    }
+    if (valorActual) select.value = valorActual;
 }
 
 function actualizarTematicasEvento() {
     const select = document.getElementById('tematica-evento');
     if (!select) return;
-    
     const valorActual = select.value;
-    
     select.innerHTML = '<option value="">Seleccione una temática</option>';
-    
     configuracion.tematicasEvento.forEach(tematica => {
         const option = document.createElement('option');
         option.value = tematica;
         option.textContent = tematica;
         select.appendChild(option);
     });
-    
     const otraOption = document.createElement('option');
     otraOption.value = 'otra';
     otraOption.textContent = 'Otra (Personalizada)';
     select.appendChild(otraOption);
-    
-    if (valorActual) {
-        select.value = valorActual;
-    }
+    if (valorActual) select.value = valorActual;
 }
 
 function cambiarTipoServicio() {
     const tipoServicio = document.getElementById('tipo-servicio').value;
     cotizacion.tipoServicio = tipoServicio;
-    
     actualizarResumen();
-    
-    if (cotizacion.currentStep === 2) {
-        actualizarUIporTipoServicio();
-    }
+    if (cotizacion.currentStep === 2) actualizarUIporTipoServicio();
 }
 
 function actualizarUIporTipoServicio() {
     const paso2Title = document.getElementById('titulo-paso-2');
     const tabsContainer = document.getElementById('tabs-container');
-    
     if (!tabsContainer) return;
     
     if (cotizacion.tipoServicio === 'flores') {
         paso2Title.textContent = "2. Selección de Flores y Arreglos";
-        
         tabsContainer.innerHTML = `
-            <button class="tab-button active" data-tab="flores" onclick="switchTab('flores')">
-                🌹 Flores por Unidad
-            </button>
-            <button class="tab-button" data-tab="arreglos" onclick="switchTab('arreglos')">
-                💐 Arreglos Florales
-            </button>
-            <button class="tab-button" data-tab="manual" onclick="switchTab('manual')">
-                ✍️ Artículo Manual
-            </button>
+            <button class="tab-button active" data-tab="flores" onclick="switchTab('flores')">🌹 Flores por Unidad</button>
+            <button class="tab-button" data-tab="arreglos" onclick="switchTab('arreglos')">💐 Arreglos Florales</button>
+            <button class="tab-button" data-tab="manual" onclick="switchTab('manual')">✍️ Artículo Manual</button>
         `;
-        
         document.getElementById('tab-paquetes').style.display = 'none';
         document.getElementById('tab-accesorios').style.display = 'none';
-        
         document.getElementById('tab-flores').style.display = 'block';
         document.getElementById('tab-arreglos').style.display = 'none';
         document.getElementById('tab-manual').style.display = 'none';
-        
         renderizarArticulos('flores');
-        
     } else if (cotizacion.tipoServicio === 'decoracion') {
         paso2Title.textContent = "2. Selección de Artículos";
-        
         tabsContainer.innerHTML = `
-            <button class="tab-button active" data-tab="paquetes" onclick="switchTab('paquetes')">
-                🎈 Globos y Paquetes
-            </button>
-            <button class="tab-button" data-tab="accesorios" onclick="switchTab('accesorios')">
-                🛋️ Accesorios
-            </button>
-            <button class="tab-button" data-tab="manual" onclick="switchTab('manual')">
-                ✍️ Artículo Manual
-            </button>
+            <button class="tab-button active" data-tab="paquetes" onclick="switchTab('paquetes')">🎈 Globos y Paquetes</button>
+            <button class="tab-button" data-tab="accesorios" onclick="switchTab('accesorios')">🛋️ Accesorios</button>
+            <button class="tab-button" data-tab="manual" onclick="switchTab('manual')">✍️ Artículo Manual</button>
         `;
-        
         document.getElementById('tab-flores').style.display = 'none';
         document.getElementById('tab-arreglos').style.display = 'none';
-        
         document.getElementById('tab-paquetes').style.display = 'block';
         document.getElementById('tab-accesorios').style.display = 'none';
         document.getElementById('tab-manual').style.display = 'none';
-        
         renderizarArticulos('paquetes');
     }
-    
     actualizarResumen();
 }
 
@@ -1140,17 +1141,11 @@ function actualizarUIporTipoServicio() {
 // ----------------------------------------------------
 
 function switchTab(tabName) {
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.style.display = 'none';
-    });
-    
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('active');
-    });
+    document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+    document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
 
     const activeContent = document.getElementById(`tab-${tabName}`);
     const activeBtn = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
-    
     if (activeContent) activeContent.style.display = 'block';
     if (activeBtn) activeBtn.classList.add('active');
     
@@ -1159,8 +1154,6 @@ function switchTab(tabName) {
     } else if (tabName === 'manual') {
         renderizarArticulosManuales();
     }
-    
-    // Scroll a las tabs en móviles
     scrollToTabs();
 }
 
@@ -1169,22 +1162,10 @@ function renderizarArticulos(tipo) {
     let listaArticulos = [];
     
     switch(tipo) {
-        case 'paquetes':
-            containerId = 'paquetes-container';
-            listaArticulos = cotizacion.articulos.paquetes;
-            break;
-        case 'accesorios':
-            containerId = 'accesorios-container';
-            listaArticulos = cotizacion.articulos.accesorios;
-            break;
-        case 'flores':
-            containerId = 'flores-container';
-            listaArticulos = cotizacion.articulos.flores;
-            break;
-        case 'arreglos':
-            containerId = 'arreglos-container';
-            listaArticulos = cotizacion.articulos.arreglosFlorales;
-            break;
+        case 'paquetes': containerId = 'paquetes-container'; listaArticulos = cotizacion.articulos.paquetes; break;
+        case 'accesorios': containerId = 'accesorios-container'; listaArticulos = cotizacion.articulos.accesorios; break;
+        case 'flores': containerId = 'flores-container'; listaArticulos = cotizacion.articulos.flores; break;
+        case 'arreglos': containerId = 'arreglos-container'; listaArticulos = cotizacion.articulos.arreglosFlorales; break;
     }
     
     const container = document.getElementById(containerId);
@@ -1193,12 +1174,10 @@ function renderizarArticulos(tipo) {
     
     listaArticulos.forEach(articulo => {
         const isSelected = articulo.cantidad > 0;
+        const infoExtra = articulo.color ? `<p>Color: ${articulo.color}</p>` : '';
         const card = document.createElement('div');
         card.className = `item-card ${isSelected ? 'selected' : ''}`;
         card.id = `${tipo}-${articulo.id}`;
-        
-        const infoExtra = articulo.color ? `<p>Color: ${articulo.color}</p>` : '';
-        
         card.innerHTML = `
             <div class="item-details" onclick="toggleArticulo('${tipo}', ${articulo.id})">
                 <h4>${articulo.emoji || '📦'} ${articulo.nombre}</h4>
@@ -1209,10 +1188,9 @@ function renderizarArticulos(tipo) {
                 <span class="price">${formatoMonedaRD(articulo.precio * articulo.cantidad)}</span>
                 <div class="quantity-control">
                     <button onclick="updateCantidad('${tipo}', ${articulo.id}, -1)">-</button>
-                    <input type="number" value="${articulo.cantidad}" min="0" 
-                            oninput="updateCantidadInput('${tipo}', ${articulo.id}, this.value)">
+                    <input type="number" value="${articulo.cantidad}" min="0" oninput="updateCantidadInput('${tipo}', ${articulo.id}, this.value)">
                     <button onclick="updateCantidad('${tipo}', ${articulo.id}, 1)">+</button>
-            </div>
+                </div>
             </div>
         `;
         container.appendChild(card);
@@ -1223,20 +1201,16 @@ function filtrarFloresPorColor() {
     const colorSeleccionado = document.getElementById('filtro-color-flores').value;
     const container = document.getElementById('flores-container');
     if (!container) return;
-    
     container.innerHTML = '';
     
     let floresFiltradas = cotizacion.articulos.flores;
-    if (colorSeleccionado !== 'todos') {
-        floresFiltradas = cotizacion.articulos.flores.filter(flor => flor.color === colorSeleccionado);
-    }
+    if (colorSeleccionado !== 'todos') floresFiltradas = cotizacion.articulos.flores.filter(flor => flor.color === colorSeleccionado);
     
     floresFiltradas.forEach(articulo => {
         const isSelected = articulo.cantidad > 0;
         const card = document.createElement('div');
         card.className = `item-card ${isSelected ? 'selected' : ''}`;
         card.id = `flores-${articulo.id}`;
-        
         card.innerHTML = `
             <div class="item-details" onclick="toggleArticulo('flores', ${articulo.id})">
                 <h4>${articulo.emoji || '🌹'} ${articulo.nombre}</h4>
@@ -1247,10 +1221,9 @@ function filtrarFloresPorColor() {
                 <span class="price">${formatoMonedaRD(articulo.precio * articulo.cantidad)}</span>
                 <div class="quantity-control">
                     <button onclick="updateCantidad('flores', ${articulo.id}, -1)">-</button>
-                    <input type="number" value="${articulo.cantidad}" min="0" 
-                            oninput="updateCantidadInput('flores', ${articulo.id}, this.value)">
+                    <input type="number" value="${articulo.cantidad}" min="0" oninput="updateCantidadInput('flores', ${articulo.id}, this.value)">
                     <button onclick="updateCantidad('flores', ${articulo.id}, 1)">+</button>
-            </div>
+                </div>
             </div>
         `;
         container.appendChild(card);
@@ -1259,28 +1232,14 @@ function filtrarFloresPorColor() {
 
 function toggleArticulo(tipo, id) {
     let articulo;
-    
     switch(tipo) {
-        case 'paquetes':
-            articulo = cotizacion.articulos.paquetes.find(a => a.id === id);
-            break;
-        case 'accesorios':
-            articulo = cotizacion.articulos.accesorios.find(a => a.id === id);
-            break;
-        case 'flores':
-            articulo = cotizacion.articulos.flores.find(a => a.id === id);
-            break;
-        case 'arreglos':
-            articulo = cotizacion.articulos.arreglosFlorales.find(a => a.id === id);
-            break;
+        case 'paquetes': articulo = cotizacion.articulos.paquetes.find(a => a.id === id); break;
+        case 'accesorios': articulo = cotizacion.articulos.accesorios.find(a => a.id === id); break;
+        case 'flores': articulo = cotizacion.articulos.flores.find(a => a.id === id); break;
+        case 'arreglos': articulo = cotizacion.articulos.arreglosFlorales.find(a => a.id === id); break;
     }
-    
     if (articulo) {
-        if (articulo.cantidad > 0) {
-            articulo.cantidad = 0;
-        } else {
-            articulo.cantidad = 1;
-        }
+        articulo.cantidad = articulo.cantidad > 0 ? 0 : 1;
         renderizarArticulos(tipo);
         actualizarResumen();
     }
@@ -1288,22 +1247,12 @@ function toggleArticulo(tipo, id) {
 
 function updateCantidad(tipo, id, cambio) {
     let articulo;
-    
     switch(tipo) {
-        case 'paquetes':
-            articulo = cotizacion.articulos.paquetes.find(a => a.id === id);
-            break;
-        case 'accesorios':
-            articulo = cotizacion.articulos.accesorios.find(a => a.id === id);
-            break;
-        case 'flores':
-            articulo = cotizacion.articulos.flores.find(a => a.id === id);
-            break;
-        case 'arreglos':
-            articulo = cotizacion.articulos.arreglosFlorales.find(a => a.id === id);
-            break;
+        case 'paquetes': articulo = cotizacion.articulos.paquetes.find(a => a.id === id); break;
+        case 'accesorios': articulo = cotizacion.articulos.accesorios.find(a => a.id === id); break;
+        case 'flores': articulo = cotizacion.articulos.flores.find(a => a.id === id); break;
+        case 'arreglos': articulo = cotizacion.articulos.arreglosFlorales.find(a => a.id === id); break;
     }
-    
     if (articulo) {
         articulo.cantidad = Math.max(0, articulo.cantidad + cambio);
         renderizarArticulos(tipo);
@@ -1313,22 +1262,12 @@ function updateCantidad(tipo, id, cambio) {
 
 function updateCantidadInput(tipo, id, valor) {
     let articulo;
-    
     switch(tipo) {
-        case 'paquetes':
-            articulo = cotizacion.articulos.paquetes.find(a => a.id === id);
-            break;
-        case 'accesorios':
-            articulo = cotizacion.articulos.accesorios.find(a => a.id === id);
-            break;
-        case 'flores':
-            articulo = cotizacion.articulos.flores.find(a => a.id === id);
-            break;
-        case 'arreglos':
-            articulo = cotizacion.articulos.arreglosFlorales.find(a => a.id === id);
-            break;
+        case 'paquetes': articulo = cotizacion.articulos.paquetes.find(a => a.id === id); break;
+        case 'accesorios': articulo = cotizacion.articulos.accesorios.find(a => a.id === id); break;
+        case 'flores': articulo = cotizacion.articulos.flores.find(a => a.id === id); break;
+        case 'arreglos': articulo = cotizacion.articulos.arreglosFlorales.find(a => a.id === id); break;
     }
-    
     if (articulo) {
         const parsedValor = parseInt(valor);
         articulo.cantidad = isNaN(parsedValor) ? 0 : Math.max(0, parsedValor);
@@ -1339,13 +1278,7 @@ function updateCantidadInput(tipo, id, valor) {
 
 function agregarArticuloManual() {
     const newId = manualItemIdCounter++;
-    cotizacion.articulos.manuales.push({
-        id: newId,
-        nombre: `Artículo Personalizado ${newId}`,
-        precioUnitario: 0,
-        cantidad: 1,
-        tipo: 'manual'
-    });
+    cotizacion.articulos.manuales.push({ id: newId, nombre: `Artículo Personalizado ${newId}`, precioUnitario: 0, cantidad: 1, tipo: 'manual' });
     renderizarArticulosManuales();
     actualizarResumen();
 }
@@ -1359,12 +1292,9 @@ function renderizarArticulosManuales() {
         const div = document.createElement('div');
         div.className = 'manual-item';
         div.innerHTML = `
-            <input type="text" placeholder="Nombre del Artículo" value="${item.nombre}" 
-                    oninput="actualizarArticuloManual(${item.id}, 'nombre', this.value)">
-            <input type="number" placeholder="Precio Unitario" value="${item.precioUnitario}" min="0"
-                    oninput="actualizarArticuloManual(${item.id}, 'precioUnitario', this.value)">
-            <input type="number" placeholder="Cantidad" value="${item.cantidad}" min="1"
-                    oninput="actualizarArticuloManual(${item.id}, 'cantidad', this.value)">
+            <input type="text" placeholder="Nombre del Artículo" value="${item.nombre}" oninput="actualizarArticuloManual(${item.id}, 'nombre', this.value)">
+            <input type="number" placeholder="Precio Unitario" value="${item.precioUnitario}" min="0" oninput="actualizarArticuloManual(${item.id}, 'precioUnitario', this.value)">
+            <input type="number" placeholder="Cantidad" value="${item.cantidad}" min="1" oninput="actualizarArticuloManual(${item.id}, 'cantidad', this.value)">
             <button class="btn-remove" onclick="eliminarArticuloManual(${item.id})">×</button>
         `;
         container.appendChild(div);
@@ -1374,11 +1304,8 @@ function renderizarArticulosManuales() {
 function actualizarArticuloManual(id, campo, valor) {
     const item = cotizacion.articulos.manuales.find(a => a.id === id);
     if (item) {
-        if (campo === 'nombre') {
-            item.nombre = valor;
-        } else {
-            item[campo] = campo === 'cantidad' ? Math.max(1, parseInt(valor) || 1) : parseFloat(valor) || 0;
-        }
+        if (campo === 'nombre') item.nombre = valor;
+        else item[campo] = campo === 'cantidad' ? Math.max(1, parseInt(valor) || 1) : parseFloat(valor) || 0;
         actualizarResumen();
     }
 }
@@ -1407,76 +1334,7 @@ function cambiarTipoManoObra() {
         porcentajeContainer.style.display = 'none';
         manualContainer.style.display = 'flex';
     }
-    
     actualizarResumen();
-}
-
-function actualizarCostoManual(tipo, valor) {
-    let numVal = parseFloat(valor) || 0;
-
-    if (tipo === 'transporte') {
-        cotizacion.costos.transporte = numVal;
-    } else if (tipo === 'manoObraPorcentaje') {
-        cotizacion.costos.manoObraPorcentaje = Math.min(100, Math.max(0, numVal));
-    } else if (tipo === 'manoObraMontoManual') {
-        cotizacion.montoManoObraManual = Math.max(0, numVal);
-    }
-    
-    document.getElementById('porcentaje-mano-obra').value = cotizacion.costos.manoObraPorcentaje;
-    document.getElementById('monto-mano-obra-manual').value = cotizacion.montoManoObraManual;
-    actualizarResumen();
-}
-
-function calcularTotalCotizacion() {
-    let subtotalMateriales = 0;
-
-    if (cotizacion.tipoServicio === 'decoracion') {
-        const articulosDecoracion = [
-            ...cotizacion.articulos.paquetes,
-            ...cotizacion.articulos.accesorios
-        ];
-
-        articulosDecoracion.forEach(item => {
-            subtotalMateriales += item.precio * item.cantidad;
-        });
-        
-    } else if (cotizacion.tipoServicio === 'flores') {
-        const articulosFlores = [
-            ...cotizacion.articulos.flores,
-            ...cotizacion.articulos.arreglosFlorales
-        ];
-
-        articulosFlores.forEach(item => {
-            subtotalMateriales += item.precio * item.cantidad;
-        });
-    }
-
-    cotizacion.articulos.manuales.forEach(item => {
-        subtotalMateriales += (item.precioUnitario * item.cantidad);
-    });
-
-    cotizacion.costos.materiales = subtotalMateriales;
-    
-    if (cotizacion.tipoServicio === 'decoracion') {
-        if (cotizacion.tipoManoObra === 'porcentaje') {
-            const porcentajeManoObra = cotizacion.costos.manoObraPorcentaje / 100;
-            const costoManoObra = subtotalMateriales * porcentajeManoObra;
-            cotizacion.costos.manoObra = costoManoObra;
-        } else if (cotizacion.tipoManoObra === 'manual') {
-            cotizacion.costos.manoObra = cotizacion.montoManoObraManual;
-        }
-    } else {
-        cotizacion.costos.manoObra = 0;
-    }
-
-    let totalCalculado = subtotalMateriales;
-    
-    if (cotizacion.tipoServicio === 'decoracion') {
-        totalCalculado += cotizacion.costos.manoObra;
-        totalCalculado += cotizacion.costos.transporte;
-    }
-    
-    cotizacion.costos.total = totalCalculado;
 }
 
 function actualizarResumen() {
@@ -1491,16 +1349,11 @@ function actualizarResumen() {
     
     document.getElementById('resumen-fecha').textContent = cotizacion.cliente.fechaEvento || '-';
 
-    let totalItems1 = 0;
-    let totalItems2 = 0;
-    let titulo1 = 'Globos:';
-    let titulo2 = 'Accesorios:';
+    let totalItems1 = 0, totalItems2 = 0, titulo1 = 'Globos:', titulo2 = 'Accesorios:';
     
     if (cotizacion.tipoServicio === 'decoracion') {
         totalItems1 = cotizacion.articulos.paquetes.filter(a => a.cantidad > 0).length;
         totalItems2 = cotizacion.articulos.accesorios.filter(a => a.cantidad > 0).length;
-        titulo1 = 'Globos:';
-        titulo2 = 'Accesorios:';
     } else if (cotizacion.tipoServicio === 'flores') {
         totalItems1 = cotizacion.articulos.flores.filter(a => a.cantidad > 0).length;
         totalItems2 = cotizacion.articulos.arreglosFlorales.filter(a => a.cantidad > 0).length;
@@ -1513,11 +1366,9 @@ function actualizarResumen() {
     
     document.getElementById('resumen-titulo1').textContent = titulo1;
     document.getElementById('resumen-titulo2').textContent = titulo2;
-    
     document.getElementById('resumen-paquetes').textContent = `${totalItems1} item(s)${manualText}`;
     document.getElementById('resumen-accesorios').textContent = `${totalItems2} item(s)`;
 
-    // Calcular total de artículos
     let totalArticulos = 0;
     if (cotizacion.tipoServicio === 'decoracion') {
         totalArticulos = cotizacion.articulos.paquetes.reduce((sum, item) => sum + item.cantidad, 0) +
@@ -1529,38 +1380,27 @@ function actualizarResumen() {
     totalArticulos += cotizacion.articulos.manuales.reduce((sum, item) => sum + item.cantidad, 0);
     
     document.getElementById('total-articulos').textContent = totalArticulos;
-
     document.getElementById('resumen-materiales').textContent = formatoMonedaRD(cotizacion.costos.materiales);
     
     const manoObraElement = document.getElementById('resumen-mano-obra');
     const transporteElement = document.getElementById('resumen-transporte');
     
-    // Diferencia entre Flores Externas y Decoración en el resumen
     if (cotizacion.tipoServicio === 'decoracion') {
-        // Para Decoración: Mostrar desglose si está activado en configPDF
         if (configPDF.mostrarCostoMateriales) {
             document.getElementById('resumen-materiales').textContent = formatoMonedaRD(cotizacion.costos.materiales);
             document.getElementById('resumen-materiales').parentElement.style.display = 'flex';
-        } else {
-            document.getElementById('resumen-materiales').parentElement.style.display = 'none';
-        }
+        } else document.getElementById('resumen-materiales').parentElement.style.display = 'none';
         
         if (configPDF.mostrarManoObra) {
             manoObraElement.textContent = formatoMonedaRD(cotizacion.costos.manoObra);
             manoObraElement.parentElement.style.display = 'flex';
-        } else {
-            manoObraElement.parentElement.style.display = 'none';
-        }
+        } else manoObraElement.parentElement.style.display = 'none';
         
         if (configPDF.mostrarTransporte) {
             transporteElement.textContent = formatoMonedaRD(cotizacion.costos.transporte);
             transporteElement.parentElement.style.display = 'flex';
-        } else {
-            transporteElement.parentElement.style.display = 'none';
-        }
-        
+        } else transporteElement.parentElement.style.display = 'none';
     } else if (cotizacion.tipoServicio === 'flores') {
-        // Para Flores Externas: OCULTAR COMPLETAMENTE el desglose
         document.getElementById('resumen-materiales').parentElement.style.display = 'none';
         manoObraElement.parentElement.style.display = 'none';
         transporteElement.parentElement.style.display = 'none';
@@ -1569,16 +1409,10 @@ function actualizarResumen() {
     document.getElementById('total-cotizacion').textContent = formatoMonedaRD(cotizacion.costos.total);
     
     const generarBtn = document.getElementById('generar-cotizacion');
-    if (generarBtn) {
-        generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
-    }
+    if (generarBtn) generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
     
-    // Actualizar vista previa del PDF
-    if (cotizacion.currentStep === 3) {
-        actualizarVistaPreviaPDF();
-    }
+    if (cotizacion.currentStep === 3) actualizarVistaPreviaPDF();
     
-    // Actualizar mejoras UX
     actualizarBotonFlotantePDF();
     mejorarVisualizacionTotal();
 }
@@ -1586,7 +1420,6 @@ function actualizarResumen() {
 function actualizarVistaPreviaPDF() {
     const preview = document.getElementById('preview-content');
     if (!preview) return;
-    
     const modo = configPDF.mostrarPresupuestoSimple ? 'Modo Presupuesto Simple' : 'Modo Detallado';
     
     let previewHTML = `<div style="margin-bottom: 10px;"><strong>${modo}</strong></div>`;
@@ -1600,18 +1433,10 @@ function actualizarVistaPreviaPDF() {
         `;
     } else {
         previewHTML += `
-            <div style="color: ${configPDF.mostrarDetalleMateriales ? '#4ecdc4' : '#ff6b6b'}">
-                ${configPDF.mostrarDetalleMateriales ? '✓' : '✗'} Detalle de materiales
-            </div>
-            <div style="color: ${configPDF.mostrarCostoMateriales ? '#4ecdc4' : '#ff6b6b'}">
-                ${configPDF.mostrarCostoMateriales ? '✓' : '✗'} Costo de materiales
-            </div>
-            <div style="color: ${configPDF.mostrarManoObra ? '#4ecdc4' : '#ff6b6b'}">
-                ${configPDF.mostrarManoObra ? '✓' : '✗'} Mano de obra
-            </div>
-            <div style="color: ${configPDF.mostrarTransporte ? '#4ecdc4' : '#ff6b6b'}">
-                ${configPDF.mostrarTransporte ? '✓' : '✗'} Transporte
-            </div>
+            <div style="color: ${configPDF.mostrarDetalleMateriales ? '#4ecdc4' : '#ff6b6b'}">${configPDF.mostrarDetalleMateriales ? '✓' : '✗'} Detalle de materiales</div>
+            <div style="color: ${configPDF.mostrarCostoMateriales ? '#4ecdc4' : '#ff6b6b'}">${configPDF.mostrarCostoMateriales ? '✓' : '✗'} Costo de materiales</div>
+            <div style="color: ${configPDF.mostrarManoObra ? '#4ecdc4' : '#ff6b6b'}">${configPDF.mostrarManoObra ? '✓' : '✗'} Mano de obra</div>
+            <div style="color: ${configPDF.mostrarTransporte ? '#4ecdc4' : '#ff6b6b'}">${configPDF.mostrarTransporte ? '✓' : '✗'} Transporte</div>
         `;
     }
     
@@ -1623,10 +1448,8 @@ function actualizarTooltipPDF() {
     const modo = configPDF.mostrarPresupuestoSimple ? 'Modo Presupuesto Simple' : 'Modo Detallado';
     const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
     const total = document.getElementById('total-cotizacion').textContent;
-    
     btn.title = `Generar PDF en ${modo}\n📊 Artículos: ${totalArticulos}\n💰 Total: ${total}`;
     
-    // Actualizar indicador de modo en el botón
     const indicator = document.getElementById('pdf-mode-indicator');
     if (indicator) {
         indicator.textContent = `(${modo})`;
@@ -1635,11 +1458,442 @@ function actualizarTooltipPDF() {
 }
 
 // ----------------------------------------------------
-// PDF GENERATION - CON MANEJO DE ERRORES ROBUSTO CORREGIDO
+// FUNCIONES DE CONFIGURACIÓN CON COSTOS - CORREGIDAS
+// ----------------------------------------------------
+
+function createConfigItemHTML(tipo, item) {
+    // PARA TIPOS DE EVENTO Y TEMÁTICAS (sin costo)
+    if (tipo === 'tipo-evento' || tipo === 'tematica-evento') {
+        return `
+            <div class="config-item" data-id="${item.id || item}" data-tipo="${tipo}">
+                <div class="config-input-group">
+                    <div class="config-label">Nombre</div>
+                    <input type="text" placeholder="${tipo === 'tematica-evento' ? 'Nombre de la temática' : 'Nombre del tipo de evento'}" value="${typeof item === 'string' ? item : item.nombre || ''}" 
+                            oninput="actualizarConfigItem('${tipo}', '${typeof item === 'string' ? item : item.id}', 'nombre', this.value)">
+                </div>
+                <button class="btn-remove" onclick="eliminarConfigItem('${tipo}', '${typeof item === 'string' ? item : item.id}')">×</button>
+            </div>
+        `;
+    }
+    
+    // PARA PAQUETES Y ACCESORIOS (con costo)
+    if (tipo === 'paquete' || tipo === 'accesorio') {
+        return `
+            <div class="config-item" data-id="${item.id}" data-tipo="${tipo}">
+                <div class="config-input-group">
+                    <div class="config-label">Nombre</div>
+                    <input type="text" placeholder="Ej: Globo Azul" value="${item.nombre || ''}" 
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'nombre', this.value)">
+                </div>
+                
+                <div class="config-input-group">
+                    <div class="config-label">Precio Venta</div>
+                    <input type="number" placeholder="RD$" value="${item.precio || 0}" min="0" step="10"
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'precio', this.value)">
+                </div>
+                
+                <div class="config-input-group">
+                    <div class="config-label">Costo Real</div>
+                    <input type="number" placeholder="RD$" value="${item.costo || 0}" min="0" step="10"
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'costo', this.value)">
+                </div>
+                
+                <button class="btn-remove" onclick="eliminarConfigItem('${tipo}', ${item.id})">×</button>
+            </div>
+        `;
+    }
+    
+    // PARA FLORES (con costo y color)
+    if (tipo === 'flor' || tipo === 'flores') {
+        return `
+            <div class="config-item" data-id="${item.id}" data-tipo="${tipo}">
+                <div class="config-input-group">
+                    <div class="config-label">Nombre</div>
+                    <input type="text" placeholder="Ej: Rosas Rojas" value="${item.nombre || ''}" 
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'nombre', this.value)">
+                </div>
+                
+                <div class="config-input-group">
+                    <div class="config-label">Precio Venta</div>
+                    <input type="number" placeholder="RD$" value="${item.precio || 0}" min="0" step="10"
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'precio', this.value)">
+                </div>
+                
+                <div class="config-input-group">
+                    <div class="config-label">Costo Real</div>
+                    <input type="number" placeholder="RD$" value="${item.costo || 0}" min="0" step="10"
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'costo', this.value)">
+                </div>
+                
+                <div class="config-input-group">
+                    <div class="config-label">Color</div>
+                    <input type="text" placeholder="Ej: Rojo" value="${item.color || 'Mixto'}" 
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'color', this.value)">
+                </div>
+                
+                <button class="btn-remove" onclick="eliminarConfigItem('${tipo}', ${item.id})">×</button>
+            </div>
+        `;
+    }
+    
+    // PARA ARREGLOS (con costo)
+    if (tipo === 'arreglo') {
+        return `
+            <div class="config-item" data-id="${item.id}" data-tipo="${tipo}">
+                <div class="config-input-group">
+                    <div class="config-label">Nombre</div>
+                    <input type="text" placeholder="Ej: Ramo Pequeño" value="${item.nombre || ''}" 
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'nombre', this.value)">
+                </div>
+                
+                <div class="config-input-group">
+                    <div class="config-label">Precio Venta</div>
+                    <input type="number" placeholder="RD$" value="${item.precio || 0}" min="0" step="10"
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'precio', this.value)">
+                </div>
+                
+                <div class="config-input-group">
+                    <div class="config-label">Costo Real</div>
+                    <input type="number" placeholder="RD$" value="${item.costo || 0}" min="0" step="10"
+                            oninput="actualizarConfigItem('${tipo}', ${item.id}, 'costo', this.value)">
+                </div>
+                
+                <button class="btn-remove" onclick="eliminarConfigItem('${tipo}', ${item.id})">×</button>
+            </div>
+        `;
+    }
+    
+    return '';
+}
+
+function renderizarConfiguracion() {
+    const configTiposEventoContainer = document.getElementById('config-tipos-evento');
+    const configTematicasContainer = document.getElementById('config-tematicas-evento');
+    const configPaquetesContainer = document.getElementById('config-paquetes');
+    const configAccesoriosContainer = document.getElementById('config-accesorios');
+    const configFloresContainer = document.getElementById('config-flores');
+    const configArreglosContainer = document.getElementById('config-arreglos');
+    
+    if (configTiposEventoContainer) configTiposEventoContainer.innerHTML = '';
+    if (configTematicasContainer) configTematicasContainer.innerHTML = '';
+    if (configPaquetesContainer) configPaquetesContainer.innerHTML = '';
+    if (configAccesoriosContainer) configAccesoriosContainer.innerHTML = '';
+    if (configFloresContainer) configFloresContainer.innerHTML = '';
+    if (configArreglosContainer) configArreglosContainer.innerHTML = '';
+    
+    // Renderizar tipos de evento
+    configuracion.tiposEvento.forEach((tipo, index) => {
+        if (configTiposEventoContainer) {
+            configTiposEventoContainer.innerHTML += createConfigItemHTML('tipo-evento', tipo);
+        }
+    });
+    
+    // Renderizar temáticas de evento
+    configuracion.tematicasEvento.forEach((tematica, index) => {
+        if (configTematicasContainer) {
+            configTematicasContainer.innerHTML += createConfigItemHTML('tematica-evento', tematica);
+        }
+    });
+    
+    // Renderizar paquetes
+    configuracion.paquetes.forEach(item => {
+        if (configPaquetesContainer) configPaquetesContainer.innerHTML += createConfigItemHTML('paquete', item);
+    });
+
+    // Renderizar accesorios
+    configuracion.accesorios.forEach(item => {
+        if (configAccesoriosContainer) configAccesoriosContainer.innerHTML += createConfigItemHTML('accesorio', item);
+    });
+    
+    // Renderizar flores
+    configuracion.flores.forEach(item => {
+        if (configFloresContainer) configFloresContainer.innerHTML += createConfigItemHTML('flor', item);
+    });
+    
+    // Renderizar arreglos
+    configuracion.arreglosFlorales.forEach(item => {
+        if (configArreglosContainer) configArreglosContainer.innerHTML += createConfigItemHTML('arreglo', item);
+    });
+}
+
+function actualizarConfigItem(tipo, id, campo, valor) {
+    let lista;
+    
+    switch(tipo) {
+        case 'tipo-evento': 
+            lista = configuracion.tiposEvento; 
+            // Para tipos de evento, el id es el índice
+            if (typeof id === 'string') {
+                // Buscar por valor
+                const index = lista.indexOf(id);
+                if (index !== -1) {
+                    lista[index] = valor;
+                }
+            } else if (lista[id] !== undefined) {
+                lista[id] = valor;
+            }
+            actualizarTiposEvento();
+            return;
+            
+        case 'tematica-evento': 
+            lista = configuracion.tematicasEvento; 
+            // Para temáticas, el id es el índice
+            if (typeof id === 'string') {
+                // Buscar por valor
+                const index = lista.indexOf(id);
+                if (index !== -1) {
+                    lista[index] = valor;
+                }
+            } else if (lista[id] !== undefined) {
+                lista[id] = valor;
+            }
+            actualizarTematicasEvento();
+            return;
+            
+        case 'paquete': lista = configuracion.paquetes; break;
+        case 'accesorio': lista = configuracion.accesorios; break;
+        case 'flor': 
+        case 'flores': lista = configuracion.flores; break;
+        case 'arreglo': lista = configuracion.arreglosFlorales; break;
+    }
+    
+    // Para items con id numérico (paquetes, accesorios, etc.)
+    const itemId = parseInt(id);
+    const item = lista.find(a => a.id === itemId);
+    if (item) {
+        if (campo === 'nombre') item.nombre = valor;
+        else if (campo === 'color') item.color = valor;
+        else if (campo === 'precio') item.precio = parseFloat(valor) || 0;
+        else if (campo === 'costo') item.costo = parseFloat(valor) || 0;
+        else if (campo === 'emoji') item.emoji = valor;
+    }
+}
+
+function eliminarConfigItem(tipo, id) {
+    switch(tipo) {
+        case 'tipo-evento': 
+            // Para tipos de evento, el id es el índice o el valor
+            if (typeof id === 'string') {
+                const index = configuracion.tiposEvento.indexOf(id);
+                if (index !== -1) {
+                    configuracion.tiposEvento.splice(index, 1);
+                }
+            } else {
+                configuracion.tiposEvento.splice(id, 1);
+            }
+            actualizarTiposEvento();
+            break;
+            
+        case 'tematica-evento': 
+            // Para temáticas, el id es el índice o el valor
+            if (typeof id === 'string') {
+                const index = configuracion.tematicasEvento.indexOf(id);
+                if (index !== -1) {
+                    configuracion.tematicasEvento.splice(index, 1);
+                }
+            } else {
+                configuracion.tematicasEvento.splice(id, 1);
+            }
+            actualizarTematicasEvento();
+            break;
+            
+        case 'paquete': 
+            configuracion.paquetes = configuracion.paquetes.filter(a => a.id !== parseInt(id)); 
+            break;
+            
+        case 'accesorio': 
+            configuracion.accesorios = configuracion.accesorios.filter(a => a.id !== parseInt(id)); 
+            break;
+            
+        case 'flor':
+        case 'flores': 
+            configuracion.flores = configuracion.flores.filter(a => a.id !== parseInt(id)); 
+            break;
+            
+        case 'arreglo': 
+            configuracion.arreglosFlorales = configuracion.arreglosFlorales.filter(a => a.id !== parseInt(id)); 
+            break;
+    }
+    renderizarConfiguracion();
+}
+
+function agregarTipoEvento() {
+    const nuevoId = `nuevo-tipo-${Date.now()}`;
+    configuracion.tiposEvento.push("Nuevo Tipo de Evento");
+    renderizarConfiguracion();
+    actualizarTiposEvento();
+    mostrarNotificacion('✅ Nueva casilla para tipo de evento agregada');
+    
+    setTimeout(() => {
+        const configItems = document.querySelectorAll('#config-tipos-evento .config-item');
+        if (configItems.length > 0) {
+            const lastItem = configItems[configItems.length - 1];
+            const input = lastItem.querySelector('input[type="text"]');
+            if (input) {
+                input.focus();
+                input.placeholder = "Escriba el nuevo tipo de evento";
+            }
+        }
+    }, 100);
+}
+
+function agregarTematicaEvento() {
+    configuracion.tematicasEvento.push("Nueva Temática");
+    renderizarConfiguracion();
+    actualizarTematicasEvento();
+    mostrarNotificacion('✅ Nueva casilla para temática de evento agregada');
+    
+    setTimeout(() => {
+        const configItems = document.querySelectorAll('#config-tematicas-evento .config-item');
+        if (configItems.length > 0) {
+            const lastItem = configItems[configItems.length - 1];
+            const input = lastItem.querySelector('input[type="text"]');
+            if (input) {
+                input.focus();
+                input.placeholder = "Escriba la nueva temática";
+            }
+        }
+    }, 100);
+}
+
+function agregarPaquete() {
+    const newId = configIdCounter++;
+    configuracion.paquetes.push({ 
+        id: newId, 
+        nombre: `Nuevo Globo ${newId}`, 
+        precio: 0, 
+        costo: 0, 
+        emoji: '🎈', 
+        cantidad: 0, 
+        tipo: 'decoracion' 
+    });
+    renderizarConfiguracion();
+}
+
+function agregarAccesorio() {
+    const newId = configIdCounter++;
+    configuracion.accesorios.push({ 
+        id: newId, 
+        nombre: `Nuevo Accesorio ${newId}`, 
+        precio: 0, 
+        costo: 0, 
+        emoji: '✨', 
+        cantidad: 0, 
+        tipo: 'decoracion' 
+    });
+    renderizarConfiguracion();
+}
+
+function agregarFlor() {
+    const newId = configIdCounter++;
+    configuracion.flores.push({ 
+        id: newId, 
+        nombre: `Nueva Flor ${newId}`, 
+        precio: 0, 
+        costo: 0, 
+        emoji: '🌹', 
+        cantidad: 0, 
+        tipo: 'flores', 
+        color: 'Mixto' 
+    });
+    renderizarConfiguracion();
+}
+
+function agregarArreglo() {
+    const newId = configIdCounter++;
+    configuracion.arreglosFlorales.push({ 
+        id: newId, 
+        nombre: `Nuevo Arreglo ${newId}`, 
+        precio: 0, 
+        costo: 0, 
+        emoji: '💐', 
+        cantidad: 0, 
+        tipo: 'flores' 
+    });
+    renderizarConfiguracion();
+}
+
+function cargarConfiguracion() {
+    const configGuardada = localStorage.getItem('arteyevents_config');
+    if (configGuardada) {
+        try {
+            const configCargada = JSON.parse(configGuardada);
+            
+            configuracion.tiposEvento = configCargada.tiposEvento || ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower'];
+            configuracion.tematicasEvento = configCargada.tematicasEvento || ['Clásica', 'Moderno', 'Vintage', 'Rústico'];
+            
+            // CARGAR PAQUETES CON COSTO
+            configuracion.paquetes = (configCargada.paquetes || configuracion.paquetes).map(p => ({
+                ...p,
+                costo: p.costo !== undefined ? p.costo : p.precio * 0.3
+            }));
+            
+            // CARGAR ACCESORIOS CON COSTO
+            configuracion.accesorios = (configCargada.accesorios || configuracion.accesorios).map(a => ({
+                ...a,
+                costo: a.costo !== undefined ? a.costo : a.precio * 0.3
+            }));
+            
+            // CARGAR FLORES CON COSTO
+            configuracion.flores = (configCargada.flores || configuracion.flores).map(f => ({
+                ...f,
+                costo: f.costo !== undefined ? f.costo : f.precio * 0.3
+            }));
+            
+            // CARGAR ARREGLOS CON COSTO
+            configuracion.arreglosFlorales = (configCargada.arreglosFlorales || configuracion.arreglosFlorales).map(af => ({
+                ...af,
+                costo: af.costo !== undefined ? af.costo : af.precio * 0.3
+            }));
+            
+            configuracion.manoObraPorcentaje = configCargada.manoObraPorcentaje || 30;
+            
+            cotizacion.articulos.paquetes = configuracion.paquetes.map(p => ({...p, cantidad: 0}));
+            cotizacion.articulos.accesorios = configuracion.accesorios.map(a => ({...a, cantidad: 0}));
+            cotizacion.articulos.flores = configuracion.flores.map(f => ({...f, cantidad: 0}));
+            cotizacion.articulos.arreglosFlorales = configuracion.arreglosFlorales.map(af => ({...af, cantidad: 0}));
+            cotizacion.costos.manoObraPorcentaje = configuracion.manoObraPorcentaje;
+            
+        } catch (e) {
+            console.error('Error al cargar configuración:', e);
+            mostrarNotificacion('❌ Error al cargar configuración guardada', 'error');
+        }
+    }
+    
+    actualizarTiposEvento();
+    actualizarTematicasEvento();
+    actualizarResumen();
+}
+
+function guardarConfiguracion() {
+    configuracion.manoObraPorcentaje = parseFloat(document.getElementById('porcentaje-mano-obra').value) || 0;
+    
+    const configToSave = {
+        tiposEvento: configuracion.tiposEvento,
+        tematicasEvento: configuracion.tematicasEvento,
+        paquetes: configuracion.paquetes.map(({ id, nombre, precio, costo, emoji }) => ({ id, nombre, precio, costo, emoji: emoji || '🎈' })),
+        accesorios: configuracion.accesorios.map(({ id, nombre, precio, costo, emoji }) => ({ id, nombre, precio, costo, emoji: emoji || '✨' })),
+        flores: configuracion.flores.map(({ id, nombre, precio, costo, emoji, color }) => ({ id, nombre, precio, costo, emoji: emoji || '🌹', color: color || 'Mixto' })),
+        arreglosFlorales: configuracion.arreglosFlorales.map(({ id, nombre, precio, costo, emoji }) => ({ id, nombre, precio, costo, emoji: emoji || '💐' })),
+        manoObraPorcentaje: configuracion.manoObraPorcentaje
+    };
+    
+    localStorage.setItem('arteyevents_config', JSON.stringify(configToSave));
+    mostrarNotificacion('✅ Configuración guardada con éxito. Los costos reales se han guardado.');
+    toggleConfig();
+    
+    cargarConfiguracion();
+    actualizarTiposEvento();
+    actualizarTematicasEvento();
+    renderizarArticulos('paquetes');
+    actualizarResumen();
+}
+
+// ----------------------------------------------------
+// PDF GENERATION (sin cambios)
 // ----------------------------------------------------
 
 async function generarCotizacionPDF() {
-    // Verificar que jsPDF esté cargado
     if (!window.jspdf) {
         mostrarNotificacion('❌ Error: La librería jsPDF no se ha cargado correctamente. Recargue la página.', 'error');
         console.error('jsPDF no está disponible:', { jsPDF: typeof jsPDF, jspdf: window.jspdf });
@@ -1649,7 +1903,6 @@ async function generarCotizacionPDF() {
 
     const { jsPDF } = window.jspdf;
     
-    // Verificar que haya datos para generar el PDF
     const total = cotizacion.costos.total || 0;
     if (total === 0) {
         mostrarNotificacion('❌ Error: No hay artículos seleccionados para generar el PDF.', 'error');
@@ -1657,7 +1910,6 @@ async function generarCotizacionPDF() {
         return;
     }
 
-    // Verificar que haya al menos un artículo seleccionado
     let totalArticulos = 0;
     if (cotizacion.tipoServicio === 'decoracion') {
         totalArticulos = cotizacion.articulos.paquetes.filter(p => p.cantidad > 0).length +
@@ -1675,13 +1927,11 @@ async function generarCotizacionPDF() {
         return;
     }
 
-    // Mostrar estado de carga
     mostrarEstadoCargaPDF(true);
     
     try {
         const doc = new jsPDF();
         
-        // Verificar que doc se creó correctamente
         if (!doc || typeof doc.addPage !== 'function') {
             throw new Error('Error al crear documento PDF');
         }
@@ -1701,20 +1951,12 @@ async function generarCotizacionPDF() {
             ];
         }
 
-        // Verificar que hay artículos seleccionados
         if (itemsSeleccionados.length === 0) {
             throw new Error('No hay artículos seleccionados');
         }
 
-        console.log('Generando PDF con:', { 
-            itemsSeleccionados, 
-            total, 
-            configPDF,
-            tipoServicio: cotizacion.tipoServicio,
-            totalArticulos
-        });
+        console.log('Generando PDF con:', { itemsSeleccionados, total, configPDF, tipoServicio: cotizacion.tipoServicio, totalArticulos });
 
-        // DETECCIÓN DEL MODO
         if (configPDF.mostrarPresupuestoSimple) {
             await generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total);
         } else {
@@ -1722,13 +1964,9 @@ async function generarCotizacionPDF() {
         }
 
         const nombreArchivo = `cotizacion-${cotizacion.cliente.nombre.replace(/[^a-z0-9]/gi, '_') || 'arte-events'}-${new Date().getTime()}.pdf`;
-        
-        // Guardar el PDF
         doc.save(nombreArchivo);
 
         mostrarNotificacion('✅ ¡Cotización generada con éxito!');
-        
-        // Ocultar estado de carga
         mostrarEstadoCargaPDF(false);
         
     } catch (error) {
@@ -1764,41 +2002,33 @@ async function generarEncabezadoPDF(doc) {
     const margin = 15;
     const pageWidth = doc.internal.pageSize.width;
     
-    // Fondo del encabezado
     doc.setFillColor(138, 43, 226);
     doc.rect(0, 0, pageWidth, 40, 'F');
     
-    // Efecto de degradado
     doc.setFillColor(157, 78, 221);
     doc.setGState(new doc.GState({opacity: 0.3}));
     doc.rect(0, 0, pageWidth, 20, 'F');
     doc.setGState(new doc.GState({opacity: 1}));
     
-    // Elementos decorativos
     doc.setFillColor(255, 255, 255);
     doc.setGState(new doc.GState({opacity: 0.05}));
     doc.circle(20, 20, 25, 'F');
     doc.circle(pageWidth - 20, 20, 25, 'F');
     doc.setGState(new doc.GState({opacity: 1}));
     
-    // Logo placeholder (mejorado con manejo de errores)
     doc.setFillColor(255, 255, 255);
     doc.circle(32.5, 17.5, 13, 'F');
     
     try {
-        // Intentar cargar logo desde URL con timeout
         const logoUrl = 'https://raw.githubusercontent.com/francisdominguez/cotizador-arte-events/main/logo%20arte%20y%20eventos.png';
-        
-        // Crear una promesa con timeout para el logo
         const logoPromise = new Promise((resolve, reject) => {
             const img = new Image();
             img.crossOrigin = 'Anonymous';
             img.onload = () => resolve(img);
             img.onerror = () => reject(new Error('Error al cargar el logo'));
-            img.src = logoUrl + '?t=' + new Date().getTime(); // Evitar cache
+            img.src = logoUrl + '?t=' + new Date().getTime();
         });
         
-        // Timeout de 3 segundos para cargar el logo
         const timeoutPromise = new Promise((_, reject) => 
             setTimeout(() => reject(new Error('Timeout al cargar logo')), 3000)
         );
@@ -1808,14 +2038,12 @@ async function generarEncabezadoPDF(doc) {
         
     } catch (logoError) {
         console.log('Logo no cargado, usando alternativa:', logoError.message);
-        // Alternativa: texto del logo
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(138, 43, 226);
         doc.text('AE', 32, 21);
     }
     
-    // Texto del encabezado
     doc.setFontSize(22);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
@@ -1829,7 +2057,6 @@ async function generarEncabezadoPDF(doc) {
     doc.setFont('helvetica', 'normal');
     doc.text('@arteeventop  |  Creando magia para tus momentos especiales', 55, 27);
     
-    // Información de la cotización
     doc.setFontSize(9);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(255, 255, 255);
@@ -1839,7 +2066,6 @@ async function generarEncabezadoPDF(doc) {
     doc.setFont('helvetica', 'normal');
     doc.text(`Fecha: ${new Date().toLocaleDateString('es-DO')}`, pageWidth - margin, 20, {align: 'right'});
     
-    // Línea decorativa
     doc.setDrawColor(255, 215, 0);
     doc.setLineWidth(2);
     doc.line(margin, 42, pageWidth - margin, 42);
@@ -1850,7 +2076,6 @@ async function generarEncabezadoPDF(doc) {
     doc.line(margin, 44, pageWidth - margin, 44);
     doc.setGState(new doc.GState({opacity: 1}));
     
-    // Sombra sutil
     doc.setFillColor(0, 0, 0);
     doc.setGState(new doc.GState({opacity: 0.08}));
     doc.rect(0, 40, pageWidth, 5, 'F');
@@ -1895,10 +2120,6 @@ function generarInformacionClientePDF(doc, yPos) {
     return yPos + 10;
 }
 
-// ====================================================
-// MODO PRESUPUESTO SIMPLE - FLORES CON VIÑETAS, DECORACIÓN NORMAL
-// ====================================================
-
 async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     const margin = 15;
     let yPos = margin + 5;
@@ -1913,20 +2134,16 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
         }
     }
 
-    // ENCABEZADO
     await generarEncabezadoPDF(doc);
     yPos = 55;
 
-    // INFORMACIÓN DE LA COTIZACIÓN
     doc.setFontSize(9);
     doc.setTextColor(100, 100, 100);
     doc.text(`Fecha de Creación: ${new Date().toLocaleDateString('es-DO')}`, pageWidth - margin, yPos + 10, { align: "right" });
     yPos += 10;
 
-    // INFORMACIÓN DEL CLIENTE
     yPos = generarInformacionClientePDF(doc, yPos);
 
-    // SECCIÓN: DETALLE DE ARTÍCULOS - FORMATO DIFERENCIADO
     if (itemsSeleccionados.length > 0) {
         checkPageBreak(50);
 
@@ -1936,9 +2153,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
         doc.text("Detalle de Artículos y Servicios", margin, yPos);
         yPos += 7;
 
-        // ================================================================
-        // SOLO FLORES: Formato de lista con viñetas (•)
-        // ================================================================
         if (cotizacion.tipoServicio === 'flores') {
             doc.setFont("helvetica", "normal");
             doc.setTextColor(50, 50, 50);
@@ -1946,28 +2160,15 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
 
             itemsSeleccionados.forEach(item => {
                 checkPageBreak(6);
-                
                 const nombre = item.nombre;
                 const cantidad = item.cantidad || 1;
                 const esManual = item.tipo === 'manual';
-                
-                // Texto del artículo con viñeta
                 let textoItem = `• ${nombre} - ${cantidad} unidad${cantidad !== 1 ? 'es' : ''}`;
-                
-                // Agregar indicador si es manual
-                if (esManual) {
-                    textoItem += ' [Artículo manual]';
-                }
-                
+                if (esManual) textoItem += ' [Artículo manual]';
                 doc.text(textoItem, margin + 2, yPos + 4);
                 yPos += 6;
             });
-            
-        } 
-        // ================================================================
-        // DECORACIÓN: Mantener formato ORIGINAL (sin viñetas)
-        // ================================================================
-        else if (cotizacion.tipoServicio === 'decoracion') {
+        } else if (cotizacion.tipoServicio === 'decoracion') {
             doc.setFillColor(245, 245, 245);
             doc.rect(margin, yPos, pageWidth - 2 * margin, 7, 'F');
             
@@ -1976,7 +2177,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
             doc.setTextColor(80, 80, 80);
             doc.text("Descripción", margin + 2, yPos + 5);
             doc.text("Cantidad", pageWidth - margin - 5, yPos + 5, { align: "right" });
-            
             yPos += 7;
 
             doc.setFont("helvetica", "normal");
@@ -1986,7 +2186,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
                 checkPageBreak(5);
                 const nombre = item.nombre;
                 const cantidad = item.cantidad || 1;
-                
                 doc.text(`• ${nombre}`, margin + 2, yPos + 4);
                 doc.text(cantidad.toString(), pageWidth - margin - 5, yPos + 4, { align: "right" });
                 yPos += 6;
@@ -1996,7 +2195,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
         yPos += 10;
     }
 
-    // SECCIÓN: RESUMEN DE COSTOS (SOLO TOTAL)
     checkPageBreak(50);
     
     doc.setDrawColor(138, 43, 226);
@@ -2006,7 +2204,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     
     const xCostos = pageWidth - margin - 5;
     
-    // SOLO MOSTRAR EL TOTAL
     yPos += 8;
     
     doc.setDrawColor(138, 43, 226);
@@ -2026,7 +2223,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     doc.text(formatoMonedaRD(total), xCostos, yPos, { align: "right" });
     yPos += 15;
     
-    // NOTAS (si hay)
     if (cotizacion.cliente.notas) {
         checkPageBreak(20);
         doc.setFontSize(10);
@@ -2043,7 +2239,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
         yPos += textLines.length * 4;
     }
     
-    // PIE DE PÁGINA
     checkPageBreak(20);
     doc.setFillColor(245, 245, 245);
     doc.rect(0, pageHeight - 20, pageWidth, 20, 'F');
@@ -2054,10 +2249,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     
     doc.text("Arte y Events - Decoración Profesional", pageWidth / 2, pageHeight - 10, { align: "center" });
 }
-
-// ====================================================
-// MODO NORMAL - FLORES CON VIÑETAS, DECORACIÓN NORMAL
-// ====================================================
 
 async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     const margin = 15;
@@ -2073,20 +2264,16 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
         }
     }
 
-    // ENCABEZADO
     await generarEncabezadoPDF(doc);
     yPos = 55;
 
-    // INFORMACIÓN DE LA COTIZACIÓN
     doc.setFontSize(9);
     doc.setTextColor(100, 100, 100);
     doc.text(`Fecha de Creación: ${new Date().toLocaleDateString('es-DO')}`, pageWidth - margin, yPos + 10, { align: "right" });
     yPos += 10;
 
-    // INFORMACIÓN DEL CLIENTE
     yPos = generarInformacionClientePDF(doc, yPos);
 
-    // SECCIÓN: DETALLE DE ARTÍCULOS - FORMATO DIFERENCIADO
     if (configPDF.mostrarDetalleMateriales && itemsSeleccionados.length > 0) {
         checkPageBreak(50);
 
@@ -2096,9 +2283,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
         doc.text("Detalle de Artículos y Servicios", margin, yPos);
         yPos += 7;
 
-        // ================================================================
-        // SOLO FLORES: Formato de lista con viñetas (•)
-        // ================================================================
         if (cotizacion.tipoServicio === 'flores') {
             doc.setFont("helvetica", "normal");
             doc.setTextColor(50, 50, 50);
@@ -2106,42 +2290,21 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
 
             itemsSeleccionados.forEach(item => {
                 checkPageBreak(6);
-                
                 const nombre = item.nombre;
                 const cantidad = item.cantidad || 1;
                 const esManual = item.tipo === 'manual';
-                
                 let precioUnitario;
-                if (esManual) {
-                    precioUnitario = item.precioUnitario;
-                } else {
-                    precioUnitario = item.precio;
-                }
+                if (esManual) precioUnitario = item.precioUnitario;
+                else precioUnitario = item.precio;
 
                 const precioTotalItem = precioUnitario * cantidad;
-                
-                // Texto del artículo con viñeta
                 let textoItem = `• ${nombre} - ${cantidad} unidad${cantidad !== 1 ? 'es' : ''}`;
-                
-                // Agregar indicador si es manual
-                if (esManual) {
-                    textoItem += ' [Artículo manual]';
-                }
-                
-                // Mostrar precios individuales solo si está activado
-                if (configPDF.mostrarCostoMateriales) {
-                    textoItem += ` (${formatoMonedaRD(precioTotalItem)})`;
-                }
-                
+                if (esManual) textoItem += ' [Artículo manual]';
+                if (configPDF.mostrarCostoMateriales) textoItem += ` (${formatoMonedaRD(precioTotalItem)})`;
                 doc.text(textoItem, margin + 2, yPos + 4);
                 yPos += 6;
             });
-            
-        } 
-        // ================================================================
-        // DECORACIÓN: Mantener formato ORIGINAL (sin viñetas, con tabla)
-        // ================================================================
-        else if (cotizacion.tipoServicio === 'decoracion') {
+        } else if (cotizacion.tipoServicio === 'decoracion') {
             doc.setFillColor(245, 245, 245);
             doc.rect(margin, yPos, pageWidth - 2 * margin, 7, 'F');
             
@@ -2151,7 +2314,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
             doc.text("Descripción", margin + 2, yPos + 5);
             doc.text("Cant.", pageWidth - margin - 35, yPos + 5);
             doc.text("Precio Total", pageWidth - margin - 5, yPos + 5, { align: "right" });
-            
             yPos += 7;
 
             doc.setFont("helvetica", "normal");
@@ -2161,23 +2323,15 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
                 checkPageBreak(5);
                 const nombre = item.nombre;
                 const cantidad = item.cantidad || 1;
-                
                 let precioUnitario;
-                if (item.tipo === 'manual') {
-                    precioUnitario = item.precioUnitario;
-                } else {
-                    precioUnitario = item.precio;
-                }
+                if (item.tipo === 'manual') precioUnitario = item.precioUnitario;
+                else precioUnitario = item.precio;
 
                 const precioTotalItem = precioUnitario * cantidad;
 
                 doc.text(`• ${nombre}`, margin + 2, yPos + 4);
                 doc.text(cantidad.toString(), pageWidth - margin - 35, yPos + 4, { align: "right" });
-                
-                // Mostrar precios solo si está activado
-                if (configPDF.mostrarCostoMateriales) {
-                    doc.text(formatoMonedaRD(precioTotalItem), pageWidth - margin - 5, yPos + 4, { align: "right" });
-                }
+                if (configPDF.mostrarCostoMateriales) doc.text(formatoMonedaRD(precioTotalItem), pageWidth - margin - 5, yPos + 4, { align: "right" });
                 yPos += 6;
             });
         }
@@ -2185,7 +2339,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
         yPos += 10;
     }
 
-    // SECCIÓN: RESUMEN DE COSTOS
     checkPageBreak(50);
     
     doc.setDrawColor(138, 43, 226);
@@ -2197,13 +2350,7 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     
     doc.setFontSize(10);
     
-    // DIFERENCIAR ENTRE TIPOS DE SERVICIO
-    if (cotizacion.tipoServicio === 'flores') {
-        // PARA FLORES EXTERNAS: NO MOSTRAR NINGÚN DESGLOSE
-        // Ir directamente al total
-        
-    } else if (cotizacion.tipoServicio === 'decoracion') {
-        // PARA DECORACIÓN: Mostrar desglose normal
+    if (cotizacion.tipoServicio === 'decoracion') {
         if (configPDF.mostrarCostoMateriales) {
             doc.text("Costo de Materiales:", pageWidth / 2, yPos, { align: "left" });
             doc.text(formatoMonedaRD(cotizacion.costos.materiales), xCostos, yPos, { align: "right" });
@@ -2258,7 +2405,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
         yPos += textLines.length * 4;
     }
     
-    // PIE DE PÁGINA
     checkPageBreak(20);
     doc.setFillColor(245, 245, 245);
     doc.rect(0, pageHeight - 20, pageWidth, 20, 'F');
@@ -2272,17 +2418,12 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
 
 function formatearFecha(fechaISO) {
     if (!fechaISO) return '';
-    
     const fecha = new Date(fechaISO + 'T00:00:00');
-    return fecha.toLocaleDateString('es-DO', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+    return fecha.toLocaleDateString('es-DO', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 // ----------------------------------------------------
-// LIMPIEZA DE COTIZACIÓN CON CONFIRMACIÓN CORREGIDA
+// LIMPIEZA DE COTIZACIÓN
 // ----------------------------------------------------
 
 function confirmarLimpiarCotizacion() {
@@ -2294,10 +2435,9 @@ function cerrarConfirmacion() {
 }
 
 function limpiarCamposCotizacion() {
-    // Cerrar modal de confirmación
     cerrarConfirmacion();
     
-    // Limpiar campos del formulario
+    // 1. LIMPIAR FORMULARIOS
     document.getElementById('cliente-nombre').value = '';
     document.getElementById('cliente-telefono').value = '';
     document.getElementById('cliente-email').value = '';
@@ -2311,82 +2451,133 @@ function limpiarCamposCotizacion() {
     document.getElementById('otra-tematica-container').style.display = 'none';
     document.getElementById('tipo-servicio').value = '';
     
-    // Limpiar errores de validación
+    // 2. LIMPIAR ERRORES
     const errorElements = document.querySelectorAll('.validation-error');
     errorElements.forEach(el => el.textContent = '');
-    
     const errorInputs = document.querySelectorAll('.error');
     errorInputs.forEach(el => el.classList.remove('error'));
     
-    // Inicializar fecha actual
+    // 3. INICIALIZAR FECHA
     inicializarFechaEvento();
     
-    // Reiniciar contadores
+    // 4. RESETEAR CONTADORES
     manualItemIdCounter = 1;
     configIdCounter = 1000;
     
-    // Limpiar artículos
-    cotizacion.articulos.paquetes.forEach(p => p.cantidad = 0);
-    cotizacion.articulos.accesorios.forEach(a => a.cantidad = 0);
-    cotizacion.articulos.flores.forEach(f => f.cantidad = 0);
-    cotizacion.articulos.arreglosFlorales.forEach(af => af.cantidad = 0);
-    cotizacion.articulos.manuales = [];
+    // 5. ¡¡¡IMPORTANTE!!! RESETEAR COMPLETAMENTE LA VARIABLE cotizacion
+    cotizacion = {
+        currentStep: 1,
+        tipoServicio: '',
+        tipoManoObra: 'porcentaje',
+        montoManoObraManual: 0,
+        cliente: {
+            nombre: '', telefono: '', email: '', fechaEvento: '', lugarEvento: '', notas: ''
+        },
+        tipoEvento: '',
+        tematicaEvento: '',
+        articulos: {
+            paquetes: JSON.parse(JSON.stringify(configuracion.paquetes.map(p => ({...p, cantidad: 0})))),
+            accesorios: JSON.parse(JSON.stringify(configuracion.accesorios.map(a => ({...a, cantidad: 0})))),
+            flores: JSON.parse(JSON.stringify(configuracion.flores.map(f => ({...f, cantidad: 0})))),
+            arreglosFlorales: JSON.parse(JSON.stringify(configuracion.arreglosFlorales.map(af => ({...af, cantidad: 0})))),
+            manuales: []
+        },
+        costos: {
+            materiales: 0,
+            costoRealMateriales: 0,
+            transporte: 0,
+            manoObra: 0,
+            manoObraPorcentaje: 30,
+            total: 0
+        }
+    };
     
-    // Limpiar costos
+    // 6. LIMPIAR CAMPOS DE COSTOS
     document.getElementById('costo-transporte').value = 0;
     document.getElementById('porcentaje-mano-obra').value = 30;
     document.getElementById('tipo-mano-obra').value = 'porcentaje';
     document.getElementById('monto-mano-obra-manual').value = 0;
+    document.getElementById('costo-materiales').value = 0;
+    document.getElementById('porcentaje-ganancia').value = 30;
     
-    cotizacion.tipoManoObra = 'porcentaje';
-    cotizacion.montoManoObraManual = 0;
-    cotizacion.costos.transporte = 0;
-    cotizacion.costos.manoObraPorcentaje = 30;
-    
-    // Reset checkboxes (todos)
+    // 7. RESETEAR CONFIGURACIÓN PDF
     document.getElementById('mostrar-mano-obra').checked = true;
     document.getElementById('mostrar-transporte').checked = true;
     document.getElementById('mostrar-detalle-materiales').checked = true;
     document.getElementById('mostrar-costo-materiales').checked = true;
     document.getElementById('mostrar-presupuesto-simple').checked = false;
     
-    // HABILITAR TODOS los checkboxes al limpiar
     document.getElementById('mostrar-mano-obra').disabled = false;
     document.getElementById('mostrar-transporte').disabled = false;
     document.getElementById('mostrar-detalle-materiales').disabled = false;
     document.getElementById('mostrar-costo-materiales').disabled = false;
     
+    // 8. ACTUALIZAR CONFIGURACIÓN
     actualizarConfigPDF();
     
-    // Actualizar UI
+    // 9. RENDERIZAR TODO NUEVO
     renderizarArticulos('paquetes');
     renderizarArticulos('accesorios');
     renderizarArticulos('flores');
     renderizarArticulos('arreglos');
     renderizarArticulosManuales();
-    actualizarResumen();
     
-    // Resetear pasos
+    // 10. ¡¡¡ELIMINAR CUALQUIER DESGLOSE DE GANANCIA QUE EXISTA!!!
+    const container = document.querySelector('.form-group.full-width');
+    if (container) {
+        const existingDesglose = container.querySelector('#desglose-ganancia');
+        if (existingDesglose) existingDesglose.remove();
+    }
+    
+    // 11. RESETEAR PASO
     cotizacion.currentStep = 1;
     updateStepUI();
     
-    // Aplicar tema por defecto
+    // 12. LIMPIAR TEMAS
     const body = document.body;
     const clasesTema = Array.from(body.classList).filter(className => className.startsWith('theme-'));
     clasesTema.forEach(className => body.classList.remove(className));
     
-    // Actualizar mejoras UX
+    // 13. FORZAR ACTUALIZACIÓN COMPLETA
+    actualizarResumen();
     actualizarBotonFlotantePDF();
     actualizarIndicadorPasoActual();
     mejorarVisualizacionTotal();
     actualizarVisibilidadBotonesFlotantes();
     
-    // Mostrar notificación
+    // 14. RESETEAR DISPLAYS DE COSTOS A "RD$0.00"
+    const displays = [
+        'display-costo-real',
+        'display-precio-venta', 
+        'display-ganancia',
+        'display-porcentaje-ganancia',
+        'display-mano-obra',
+        'display-transporte',
+        'display-total-final'
+    ];
+    
+    displays.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            if (id === 'display-porcentaje-ganancia') {
+                element.textContent = '0%';
+                element.style.color = '#e91e63';
+            } else {
+                element.textContent = 'RD$0.00';
+            }
+        }
+    });
+    
+    // 15. NOTIFICACIÓN
     mostrarNotificacion('✅ Cotización limpiada correctamente. Puede comenzar una nueva.', 'success');
+    
+    // 16. FORZAR UN DELAY PARA ASEGURAR LIMPIEZA
+    setTimeout(() => {
+        actualizarResumen();
+    }, 100);
 }
-
 // ----------------------------------------------------
-// NOTIFICACIONES MEJORADAS
+// NOTIFICACIONES
 // ----------------------------------------------------
 
 function mostrarNotificacion(mensaje, tipo = 'success') {
@@ -2395,10 +2586,8 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     
     if (!notification || !messageElement) return;
     
-    // Actualizar mensaje y tipo
     messageElement.textContent = mensaje;
     
-    // Actualizar icono según tipo
     let icon = '✅';
     if (tipo === 'warning') icon = '⚠️';
     if (tipo === 'error') icon = '❌';
@@ -2406,320 +2595,23 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     
     notification.querySelector('span:first-child').textContent = icon;
     
-    // Actualizar clase de tipo
     notification.className = 'notification show';
     if (tipo === 'warning') notification.classList.add('warning');
     if (tipo === 'error') notification.classList.add('error');
     if (tipo === 'info') notification.classList.add('info');
     
-    // Ocultar después de 3 segundos
     setTimeout(() => {
         notification.classList.remove('show');
     }, 3000);
 }
 
 // ----------------------------------------------------
-// UTILIDADES Y PANEL DE CONFIGURACIÓN
+// UTILIDADES
 // ----------------------------------------------------
 
 function toggleConfig() {
     document.getElementById('configPanel').classList.toggle('active');
 }
-
-function cargarConfiguracion() {
-    const configGuardada = localStorage.getItem('arteyevents_config');
-    if (configGuardada) {
-        try {
-            const configCargada = JSON.parse(configGuardada);
-            
-            configuracion.tiposEvento = configCargada.tiposEvento || ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower'];
-            configuracion.tematicasEvento = configCargada.tematicasEvento || ['Clásica', 'Moderno', 'Vintage', 'Rústico'];
-            configuracion.paquetes = configCargada.paquetes || configuracion.paquetes;
-            configuracion.accesorios = configCargada.accesorios || configuracion.accesorios;
-            configuracion.flores = configCargada.flores || configuracion.flores;
-            configuracion.arreglosFlorales = configCargada.arreglosFlorales || configuracion.arreglosFlorales;
-            configuracion.manoObraPorcentaje = configCargada.manoObraPorcentaje || 30;
-            
-            cotizacion.articulos.paquetes = configuracion.paquetes.map(p => ({...p, cantidad: 0}));
-            cotizacion.articulos.accesorios = configuracion.accesorios.map(a => ({...a, cantidad: 0}));
-            cotizacion.articulos.flores = configuracion.flores.map(f => ({...f, cantidad: 0}));
-            cotizacion.articulos.arreglosFlorales = configuracion.arreglosFlorales.map(af => ({...af, cantidad: 0}));
-            cotizacion.costos.manoObraPorcentaje = configuracion.manoObraPorcentaje;
-            
-        } catch (e) {
-            console.error('Error al cargar configuración:', e);
-            mostrarNotificacion('❌ Error al cargar configuración guardada', 'error');
-        }
-    }
-    
-    actualizarTiposEvento();
-    actualizarTematicasEvento();
-    actualizarResumen();
-}
-
-function guardarConfiguracion() {
-    configuracion.manoObraPorcentaje = parseFloat(document.getElementById('porcentaje-mano-obra').value) || 0;
-    
-    const configToSave = {
-        tiposEvento: configuracion.tiposEvento,
-        tematicasEvento: configuracion.tematicasEvento,
-        paquetes: configuracion.paquetes.map(({ id, nombre, precio, emoji }) => ({ id, nombre, precio, emoji: emoji || '🎈' })),
-        accesorios: configuracion.accesorios.map(({ id, nombre, precio, emoji }) => ({ id, nombre, precio, emoji: emoji || '✨' })),
-        flores: configuracion.flores.map(({ id, nombre, precio, emoji, color }) => ({ id, nombre, precio, emoji: emoji || '🌹', color: color || 'Mixto' })),
-        arreglosFlorales: configuracion.arreglosFlorales.map(({ id, nombre, precio, emoji }) => ({ id, nombre, precio, emoji: emoji || '💐' })),
-        manoObraPorcentaje: configuracion.manoObraPorcentaje
-    };
-    
-    localStorage.setItem('arteyevents_config', JSON.stringify(configToSave));
-    mostrarNotificacion('✅ Configuración guardada con éxito.');
-    toggleConfig();
-    
-    cargarConfiguracion();
-    actualizarTiposEvento();
-    actualizarTematicasEvento();
-    renderizarArticulos('paquetes');
-    actualizarResumen();
-}
-
-function renderizarConfiguracion() {
-    const configTiposEventoContainer = document.getElementById('config-tipos-evento');
-    const configTematicasContainer = document.getElementById('config-tematicas-evento');
-    const configPaquetesContainer = document.getElementById('config-paquetes');
-    const configAccesoriosContainer = document.getElementById('config-accesorios');
-    const configFloresContainer = document.getElementById('config-flores');
-    const configArreglosContainer = document.getElementById('config-arreglos');
-    
-    if (configTiposEventoContainer) configTiposEventoContainer.innerHTML = '';
-    if (configTematicasContainer) configTematicasContainer.innerHTML = '';
-    if (configPaquetesContainer) configPaquetesContainer.innerHTML = '';
-    if (configAccesoriosContainer) configAccesoriosContainer.innerHTML = '';
-    if (configFloresContainer) configFloresContainer.innerHTML = '';
-    if (configArreglosContainer) configArreglosContainer.innerHTML = '';
-    
-    // Renderizar tipos de evento
-    configuracion.tiposEvento.forEach((tipo, index) => {
-        if (configTiposEventoContainer) {
-            configTiposEventoContainer.innerHTML += `
-                <div class="config-item" data-id="${index}" data-tipo="tipo-evento">
-                    <input type="text" placeholder="Nombre del tipo de evento" value="${tipo}" 
-                            oninput="actualizarConfigItem('tipo-evento', ${index}, 'nombre', this.value)">
-                    <button class="btn-remove" onclick="eliminarConfigItem('tipo-evento', ${index})">×</button>
-                </div>
-            `;
-        }
-    });
-    
-    // Renderizar temáticas de evento
-    configuracion.tematicasEvento.forEach((tematica, index) => {
-        if (configTematicasContainer) {
-            configTematicasContainer.innerHTML += `
-                <div class="config-item" data-id="${index}" data-tipo="tematica-evento">
-                    <input type="text" placeholder="Nombre de la temática" value="${tematica}" 
-                            oninput="actualizarConfigItem('tematica-evento', ${index}, 'nombre', this.value)">
-                    <button class="btn-remove" onclick="eliminarConfigItem('tematica-evento', ${index})">×</button>
-                </div>
-            `;
-        }
-    });
-    
-    configuracion.paquetes.forEach(item => {
-        if (configPaquetesContainer) configPaquetesContainer.innerHTML += createConfigItemHTML('paquete', item);
-    });
-
-    configuracion.accesorios.forEach(item => {
-        if (configAccesoriosContainer) configAccesoriosContainer.innerHTML += createConfigItemHTML('accesorio', item);
-    });
-    
-    configuracion.flores.forEach(item => {
-        if (configFloresContainer) configFloresContainer.innerHTML += createConfigItemHTML('flor', item);
-    });
-    
-    configuracion.arreglosFlorales.forEach(item => {
-        if (configArreglosContainer) configArreglosContainer.innerHTML += createConfigItemHTML('arreglo', item);
-    });
-}
-
-function createConfigItemHTML(tipo, item) {
-    if (tipo === 'tipo-evento' || tipo === 'tematica-evento') {
-        return `
-            <div class="config-item" data-id="${item.id}" data-tipo="${tipo}">
-                <input type="text" placeholder="${tipo === 'tematica-evento' ? 'Nombre de la temática' : 'Nombre del tipo de evento'}" value="${item.nombre || ''}" 
-                        oninput="actualizarConfigItem('${tipo}', ${item.id}, 'nombre', this.value)">
-                <button class="btn-remove" onclick="eliminarConfigItem('${tipo}', ${item.id})">×</button>
-            </div>
-        `;
-    }
-    
-    if (tipo === 'flor' || tipo === 'flores') {
-        return `
-            <div class="config-item" data-id="${item.id}" data-tipo="${tipo}">
-                <input type="text" placeholder="Nombre" value="${item.nombre || ''}" 
-                        oninput="actualizarConfigItem('${tipo}', ${item.id}, 'nombre', this.value)">
-                <input type="number" placeholder="Precio" value="${item.precio || 0}" min="0" step="10"
-                        oninput="actualizarConfigItem('${tipo}', ${item.id}, 'precio', this.value)">
-                <input type="text" placeholder="Color" value="${item.color || 'Mixto'}" 
-                        oninput="actualizarConfigItem('${tipo}', ${item.id}, 'color', this.value)">
-                <button class="btn-remove" onclick="eliminarConfigItem('${tipo}', ${item.id})">×</button>
-            </div>
-        `;
-    }
-    
-    return `
-        <div class="config-item" data-id="${item.id}" data-tipo="${tipo}">
-            <input type="text" placeholder="Nombre" value="${item.nombre || ''}" 
-                    oninput="actualizarConfigItem('${tipo}', ${item.id}, 'nombre', this.value)">
-            <input type="number" placeholder="Precio" value="${item.precio || 0}" min="0" step="10"
-                    oninput="actualizarConfigItem('${tipo}', ${item.id}, 'precio', this.value)">
-            <button class="btn-remove" onclick="eliminarConfigItem('${tipo}', ${item.id})">×</button>
-        </div>
-    `;
-}
-
-function agregarTipoEvento() {
-    configuracion.tiposEvento.push("");
-    renderizarConfiguracion();
-    actualizarTiposEvento();
-    mostrarNotificacion('✅ Nueva casilla para tipo de evento agregada');
-    
-    setTimeout(() => {
-        const configItems = document.querySelectorAll('#config-tipos-evento .config-item');
-        if (configItems.length > 0) {
-            const lastItem = configItems[configItems.length - 1];
-            const input = lastItem.querySelector('input[type="text"]');
-            if (input) {
-                input.focus();
-                input.placeholder = "Escriba el nuevo tipo de evento";
-            }
-        }
-    }, 100);
-}
-
-function agregarTematicaEvento() {
-    configuracion.tematicasEvento.push("");
-    renderizarConfiguracion();
-    actualizarTematicasEvento();
-    mostrarNotificacion('✅ Nueva casilla para temática de evento agregada');
-    
-    setTimeout(() => {
-        const configItems = document.querySelectorAll('#config-tematicas-evento .config-item');
-        if (configItems.length > 0) {
-            const lastItem = configItems[configItems.length - 1];
-            const input = lastItem.querySelector('input[type="text"]');
-            if (input) {
-                input.focus();
-                input.placeholder = "Escriba la nueva temática";
-            }
-        }
-    }, 100);
-}
-
-function agregarPaquete() {
-    const newId = configIdCounter++;
-    configuracion.paquetes.push({ id: newId, nombre: `Nuevo Globo ${newId}`, precio: 0, emoji: '🎈', cantidad: 0, tipo: 'decoracion' });
-    renderizarConfiguracion();
-}
-
-function agregarAccesorio() {
-    const newId = configIdCounter++;
-    configuracion.accesorios.push({ id: newId, nombre: `Nuevo Accesorio ${newId}`, precio: 0, emoji: '✨', cantidad: 0, tipo: 'decoracion' });
-    renderizarConfiguracion();
-}
-
-function agregarFlor() {
-    const newId = configIdCounter++;
-    configuracion.flores.push({ 
-        id: newId, 
-        nombre: `Nueva Flor ${newId}`, 
-        precio: 0, 
-        emoji: '🌹', 
-        cantidad: 0, 
-        tipo: 'flores', 
-        color: 'Mixto' 
-    });
-    renderizarConfiguracion();
-}
-
-function agregarArreglo() {
-    const newId = configIdCounter++;
-    configuracion.arreglosFlorales.push({ 
-        id: newId, 
-        nombre: `Nuevo Arreglo ${newId}`, 
-        precio: 0, 
-        emoji: '💐', 
-        cantidad: 0, 
-        tipo: 'flores' 
-    });
-    renderizarConfiguracion();
-}
-
-function actualizarConfigItem(tipo, id, campo, valor) {
-    let lista;
-    switch(tipo) {
-        case 'tipo-evento': 
-            lista = configuracion.tiposEvento; 
-            if (lista[id] !== undefined) {
-                lista[id] = valor;
-            }
-            actualizarTiposEvento();
-            return;
-        case 'tematica-evento': 
-            lista = configuracion.tematicasEvento; 
-            if (lista[id] !== undefined) {
-                lista[id] = valor;
-            }
-            actualizarTematicasEvento();
-            return;
-        case 'paquete': lista = configuracion.paquetes; break;
-        case 'accesorio': lista = configuracion.accesorios; break;
-        case 'flor': 
-        case 'flores': lista = configuracion.flores; break;
-        case 'arreglo': lista = configuracion.arreglosFlorales; break;
-    }
-    
-    const item = lista.find(a => a.id === id);
-    if (item) {
-        if (campo === 'nombre') {
-            item.nombre = valor;
-        } else if (campo === 'color') {
-            item.color = valor;
-        } else if (campo === 'precio') {
-            item.precio = parseFloat(valor) || 0;
-        } else if (campo === 'emoji') {
-            item.emoji = valor;
-        }
-    }
-}
-
-function eliminarConfigItem(tipo, id) {
-    switch(tipo) {
-        case 'tipo-evento': 
-            configuracion.tiposEvento.splice(id, 1);
-            actualizarTiposEvento();
-            break;
-        case 'tematica-evento': 
-            configuracion.tematicasEvento.splice(id, 1);
-            actualizarTematicasEvento();
-            break;
-        case 'paquete': 
-            configuracion.paquetes = configuracion.paquetes.filter(a => a.id !== id); 
-            break;
-        case 'accesorio': 
-            configuracion.accesorios = configuracion.accesorios.filter(a => a.id !== id); 
-            break;
-        case 'flor':
-        case 'flores': 
-            configuracion.flores = configuracion.flores.filter(a => a.id !== id); 
-            break;
-        case 'arreglo': 
-            configuracion.arreglosFlorales = configuracion.arreglosFlorales.filter(a => a.id !== id); 
-            break;
-    }
-    renderizarConfiguracion();
-}
-
-// =============================================
-// FUNCIÓN PARA ACTUALIZAR BOTÓN FLOTANTE PDF
-// =============================================
 
 function actualizarBotonFlotantePDF() {
     const floatingBtn = document.getElementById('floating-pdf-btn');
@@ -2729,7 +2621,6 @@ function actualizarBotonFlotantePDF() {
     const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
     const modo = configPDF.mostrarPresupuestoSimple ? 'Simple' : 'Detallado';
     
-    // Actualizar texto del botón con el total
     const textSpan = floatingBtn.querySelector('.floating-text');
     if (textSpan) {
         if (total > 0) {
@@ -2739,16 +2630,12 @@ function actualizarBotonFlotantePDF() {
         }
     }
     
-    // Actualizar tooltip
     floatingBtn.title = `Generar PDF (Modo ${modo})\nArtículos: ${totalArticulos}\nTotal: ${formatoMonedaRD(total)}`;
-    
-    // Llamar a actualizar visibilidad
     actualizarVisibilidadBotonesFlotantes();
 }
 
 // PWA Support
 let deferredPrompt;
-
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
