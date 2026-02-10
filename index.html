@@ -277,258 +277,324 @@
                                     Porcentaje Mano de Obra (%)
                                     <span class="tooltip-icon" title="Porcentaje aplicado sobre el costo de materiales para calcular mano de obra">?</span>
                                 </label>
-                                <input type="number" id="porcentaje-mano-obra" value="30" min="0" max="100" step="5">
+                                    <input type="number" id="porcentaje-mano-obra" value="30" min="0" max="100" step="5">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-section form-grid two-columns" id="mano-obra-manual-container" style="display: none;">
-                            <div class="form-group">
-                                <label for="monto-mano-obra-manual" class="optional-label">
-                                    Monto Manual Mano de Obra (RD$)
-                                    <span class="tooltip-icon" title="Monto fijo para la instalación profesional">?</span>
-                                </label>
-                                <input type="number" id="monto-mano-obra-manual" value="0" min="0" step="100">
+                            <div class="form-section form-grid two-columns" id="mano-obra-manual-container" style="display: none;">
+                                <div class="form-group">
+                                    <label for="monto-mano-obra-manual" class="optional-label">
+                                        Monto Manual Mano de Obra (RD$)
+                                        <span class="tooltip-icon" title="Monto fijo para la instalación profesional">?</span>
+                                    </label>
+                                    <input type="number" id="monto-mano-obra-manual" value="0" min="0" step="100">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-section form-grid two-columns">
-                            <div class="form-group">
-                                <label for="costo-materiales" class="optional-label">
-                                    Costo de Materiales (RD$)
-                                    <span class="tooltip-icon" title="Costo real de materiales (70% del subtotal sugerido)">?</span>
-                                </label>
-                                <input type="number" id="costo-materiales" value="0" min="0" step="100">
+                            <div class="form-section form-grid two-columns">
+                                <div class="form-group">
+                                    <label for="costo-materiales" class="optional-label">
+                                        Costo de Materiales (RD$)
+                                        <span class="tooltip-icon" title="Costo real de materiales (se calcula automáticamente)">?</span>
+                                    </label>
+                                    <input type="number" id="costo-materiales" value="0" min="0" step="100">
+                                </div>
+                                <div class="form-group">
+                                    <label for="porcentaje-ganancia" class="optional-label">
+                                        Margen de Ganancia (%)
+                                        <span class="tooltip-icon" title="Porcentaje de ganancia sobre costo de materiales (se calcula automáticamente)">?</span>
+                                    </label>
+                                    <input type="number" id="porcentaje-ganancia" value="30" min="0" max="100" step="5" readonly style="background-color: #f5f5f5;">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="porcentaje-ganancia" class="optional-label">
-                                    Margen de Ganancia (%)
-                                    <span class="tooltip-icon" title="Porcentaje de ganancia sobre costo de materiales">?</span>
-                                </label>
-                                <input type="number" id="porcentaje-ganancia" value="30" min="0" max="100" step="5">
-                            </div>
-                        </div>
 
-                        <div class="form-group full-width" style="margin-top: 20px;">
-                            <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; border: 2px solid #e9ecef; position: relative; z-index: 1;">
-                                <h4 style="color: var(--primary-dark); margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 16px;">
-                                    💰 Resumen de Costos y Ganancia
-                                </h4>
-                                
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; position: relative; z-index: 1;">
-                                    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #4ecdc4; text-align: center;">
-                                        <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">📦 Materiales</div>
-                                        <div id="display-subtotal-materiales" style="font-size: 1.2em; font-weight: 700; color: var(--dark);">
+                            <!-- NUEVO PANEL MEJORADO DE RESUMEN DE COSTOS Y GANANCIA -->
+                            <div class="form-group full-width" style="margin-top: 20px;">
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; border: 2px solid #e9ecef; position: relative; z-index: 1;">
+                                    <h4 style="color: var(--primary-dark); margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 16px;">
+                                        💰 Resumen de Costos y Ganancia
+                                    </h4>
+                                    
+                                   <!-- NUEVO CÓDIGO CON GANANCIA - REEMPLAZA TODO LO DE ARRIBA -->
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; position: relative; z-index: 1;">
+    <!-- FILA 1 -->
+    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #ff9800; text-align: center;">
+        <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">💰 Costo Real</div>
+        <div id="display-costo-real" style="font-size: 1.2em; font-weight: 700; color: #ff9800;">
+            RD$0.00
+        </div>
+    </div>
+    
+    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); text-align: center;">
+        <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">📦 Precio Venta</div>
+        <div id="display-precio-venta" style="font-size: 1.2em; font-weight: 700; color: var(--primary);">
+            RD$0.00
+        </div>
+    </div>
+    
+    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid var(--success); text-align: center;">
+        <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">💵 Ganancia Neto</div>
+        <div id="display-ganancia" style="font-size: 1.2em; font-weight: 700; color: var(--success);">
+            RD$0.00
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; position: relative; z-index: 1;">
+    <!-- FILA 2 -->
+    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #e91e63; text-align: center;">
+        <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">📈 % Ganancia</div>
+        <div id="display-porcentaje-ganancia" style="font-size: 1.2em; font-weight: 700; color: #e91e63;">
+            0%
+        </div>
+    </div>
+    
+    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid var(--warning); text-align: center;">
+        <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">
+            👷 Mano de Obra <span style="font-size: 0.75em;">(<span id="display-porcentaje-mano-obra">30</span>%)</span>
+        </div>
+        <div id="display-mano-obra" style="font-size: 1.2em; font-weight: 700; color: var(--warning);">
+            RD$0.00
+        </div>
+    </div>
+    
+    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #2196f3; text-align: center;">
+        <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">🚚 Transporte</div>
+        <div id="display-transporte" style="font-size: 1.2em; font-weight: 700; color: #2196f3;">
+            RD$0.00
+        </div>
+    </div>
+</div>
+                                    
+                                    <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 10px; position: relative; z-index: 1;">
+                                        <div style="font-size: 0.8em; color: rgba(255, 255, 255, 0.9); margin-bottom: 5px;">TOTAL FINAL (Precio al Cliente)</div>
+                                        <div id="display-total-final" style="font-size: 1.6em; font-weight: 900; color: white;">
                                             RD$0.00
                                         </div>
                                     </div>
                                     
-                                    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid var(--success); text-align: center;">
-                                        <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">
-                                            👷 Mano de Obra <span style="font-size: 0.75em;">(<span id="display-porcentaje-mano-obra">30</span>%)</span>
-                                        </div>
-                                        <div id="display-mano-obra" style="font-size: 1.2em; font-weight: 700; color: var(--success);">
-                                            RD$0.00
-                                        </div>
-                                    </div>
-                                    
-                                    <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #ff9800; text-align: center;">
-                                        <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">🚚 Transporte</div>
-                                        <div id="display-transporte" style="font-size: 1.2em; font-weight: 700; color: #ff9800;">
-                                            RD$0.00
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 10px; position: relative; z-index: 1;">
-                                    <div style="font-size: 0.8em; color: rgba(255, 255, 255, 0.9); margin-bottom: 5px;">TOTAL FINAL</div>
-                                    <div id="display-total-final" style="font-size: 1.6em; font-weight: 900; color: white;">
-                                        RD$0.00
-                                    </div>
-                                </div>
-                                
-                                <div style="padding: 10px; background: #fff8e1; border-radius: 8px; border-left: 4px solid #ffc107; font-size: 0.85em; position: relative; z-index: 1;">
-                                    <div style="display: flex; align-items: flex-start; gap: 8px;">
-                                        <span style="color: #ff9800; flex-shrink: 0;">💡</span>
-                                        <div>
-                                            <div style="font-weight: 600; color: #ff9800; margin-bottom: 3px;">Nota importante:</div>
-                                            <div style="color: #666; line-height: 1.3;">
-                                                La <strong>mano de obra</strong> (calculada como porcentaje de los materiales) <strong>es tu ganancia</strong>. No hay una ganancia adicional separada.
+                                    <div style="padding: 10px; background: #fff8e1; border-radius: 8px; border-left: 4px solid #ffc107; font-size: 0.85em; position: relative; z-index: 1;">
+                                        <div style="display: flex; align-items: flex-start; gap: 8px;">
+                                            <span style="color: #ff9800; flex-shrink: 0;">💡</span>
+                                            <div>
+                                                <div style="font-weight: 600; color: #ff9800; margin-bottom: 3px;">Nota importante:</div>
+                                                <div style="color: #666; line-height: 1.3;">
+                                                    <strong>Fórmula:</strong> Precio Venta + Mano de Obra + Transporte = Total Final<br>
+                                                    <strong>Ganancia:</strong> (Precio Venta - Costo Real) + Mano de Obra + Transporte
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="form-section" style="border-left: 4px solid #4ecdc4; padding-left: 15px; margin: 20px 0; position: relative; z-index: 1;">
+                                <h4 style="color: #4ecdc4; margin-bottom: 15px;">📄 Configuración del PDF</h4>
+                                
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px; position: relative; z-index: 1;">
+                                    <h5 style="color: #8a2be2; margin-bottom: 10px;">🎯 Modo de Cotización</h5>
+                                    <div class="form-group">
+                                        <label style="display: flex; align-items: center; gap: 8px;" title="Perfecto para enviar al cliente - Solo muestra artículos y total">
+                                            <input type="checkbox" id="mostrar-presupuesto-simple" class="pdf-config-checkbox" onchange="actualizarConfigPDF()">
+                                            <strong>📋 Modo Presupuesto Simple</strong> (Muestra solo artículos y total, sin precios individuales)
+                                        </label>
+                                    </div>
+                                    <p style="font-size: 0.85em; color: #666; margin-top: 5px; padding-left: 28px;">
+                                        <em>Ideal para compartir con el cliente - Oculta precios internos</em>
+                                    </p>
+                                </div>
+                                
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; position: relative; z-index: 1;">
+                                    <h5 style="color: #8a2be2; margin-bottom: 10px;">🔧 Opciones Detalladas</h5>
+                                    <div class="form-group">
+                                        <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el costo de instalación profesional">
+                                            <input type="checkbox" id="mostrar-mano-obra" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
+                                            👷 Mostrar Mano de Obra (Muestra el costo de instalación)
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el costo de envío y logística">
+                                            <input type="checkbox" id="mostrar-transporte" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
+                                            🚚 Mostrar Transporte (Muestra el costo de envío/logística)
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="display: flex; align-items: center; gap: 8px;" title="Muestra la lista completa de artículos seleccionados">
+                                            <input type="checkbox" id="mostrar-detalle-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
+                                            📋 Mostrar Detalle de Materiales (Lista de artículos con cantidades)
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el subtotal de todos los materiales">
+                                            <input type="checkbox" id="mostrar-costo-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
+                                            💰 Mostrar Costo de Materiales (Muestra subtotal de materiales)
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div id="pdf-preview" style="margin-top: 20px; padding: 15px; background: white; border: 2px dashed #dfe6e9; border-radius: 10px; font-size: 0.9em; position: relative; z-index: 1;">
+                                    <h5 style="color: #636e72; margin-bottom: 10px;">👁️ Vista Previa del PDF:</h5>
+                                    <div id="preview-content" style="color: #666;">
+                                        Cargando vista previa...
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 600; position: relative; z-index: 1;">* El resumen de la cotización final se muestra a la derecha.</p>
                         </div>
 
-                        <div class="form-section" style="border-left: 4px solid #4ecdc4; padding-left: 15px; margin: 20px 0; position: relative; z-index: 1;">
-                            <h4 style="color: #4ecdc4; margin-bottom: 15px;">📄 Configuración del PDF</h4>
-                            
-                            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px; position: relative; z-index: 1;">
-                                <h5 style="color: #8a2be2; margin-bottom: 10px;">🎯 Modo de Cotización</h5>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Perfecto para enviar al cliente - Solo muestra artículos y total">
-                                        <input type="checkbox" id="mostrar-presupuesto-simple" class="pdf-config-checkbox" onchange="actualizarConfigPDF()">
-                                        <strong>📋 Modo Presupuesto Simple</strong> (Muestra solo artículos y total, sin precios individuales)
-                                    </label>
-                                </div>
-                                <p style="font-size: 0.85em; color: #666; margin-top: 5px; padding-left: 28px;">
-                                    <em>Ideal para compartir con el cliente - Oculta precios internos</em>
-                                </p>
-                            </div>
-                            
-                            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; position: relative; z-index: 1;">
-                                <h5 style="color: #8a2be2; margin-bottom: 10px;">🔧 Opciones Detalladas</h5>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el costo de instalación profesional">
-                                        <input type="checkbox" id="mostrar-mano-obra" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        👷 Mostrar Mano de Obra (Muestra el costo de instalación)
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el costo de envío y logística">
-                                        <input type="checkbox" id="mostrar-transporte" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        🚚 Mostrar Transporte (Muestra el costo de envío/logística)
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra la lista completa de artículos seleccionados">
-                                        <input type="checkbox" id="mostrar-detalle-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        📋 Mostrar Detalle de Materiales (Lista de artículos con cantidades)
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el subtotal de todos los materiales">
-                                        <input type="checkbox" id="mostrar-costo-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        💰 Mostrar Costo de Materiales (Muestra subtotal de materiales)
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div id="pdf-preview" style="margin-top: 20px; padding: 15px; background: white; border: 2px dashed #dfe6e9; border-radius: 10px; font-size: 0.9em; position: relative; z-index: 1;">
-                                <h5 style="color: #636e72; margin-bottom: 10px;">👁️ Vista Previa del PDF:</h5>
-                                <div id="preview-content" style="color: #666;">
-                                    Cargando vista previa...
-                                </div>
-                            </div>
+                        <div class="nav-buttons" style="position: relative; z-index: 10;">
+                            <button class="btn-secondary" onclick="prevStep()" id="prev-btn" style="display: none;">← Anterior</button>
+                            <button class="btn-primary" onclick="nextStep()" id="next-btn">Siguiente →</button>
                         </div>
-                        <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 600; position: relative; z-index: 1;">* El resumen de la cotización final se muestra a la derecha.</p>
-                    </div>
-
-                    <div class="nav-buttons" style="position: relative; z-index: 10;">
-                        <button class="btn-secondary" onclick="prevStep()" id="prev-btn" style="display: none;">← Anterior</button>
-                        <button class="btn-primary" onclick="nextStep()" id="next-btn">Siguiente →</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="resumen-panel">
-                <h3>📋 Detalles de la Cotización</h3>
-                <div class="resumen-details">
-                    <div class="resumen-item">
-                        <span>Cliente:</span>
-                        <span id="resumen-cliente">-</span>
-                    </div>
-                    <div class="resumen-item">
-                        <span>Evento:</span>
-                        <span id="resumen-evento">-</span>
-                    </div>
-                    <div class="resumen-item">
-                        <span>Servicio:</span>
-                        <span id="resumen-servicio">-</span>
-                    </div>
-                    <div class="resumen-item">
-                        <span>Fecha:</span>
-                        <span id="resumen-fecha">-</span>
-                    </div>
-                    <div class="resumen-separator"></div>
-                    <div class="resumen-item">
-                        <span id="resumen-titulo1">Globos:</span>
-                        <span id="resumen-paquetes">-</span>
-                    </div>
-                    <div class="resumen-item">
-                        <span id="resumen-titulo2">Accesorios:</span>
-                        <span id="resumen-accesorios">-</span>
-                    </div>
-                    <div class="resumen-item" style="font-size: 0.9em; color: #4ecdc4; margin-top: 5px;">
-                        <span>📊 Artículos totales:</span>
-                        <span id="total-articulos">0</span>
                     </div>
                 </div>
 
-                <div class="resumen-total-section">
-                    <div class="resumen-costs">
+                <div class="resumen-panel">
+                    <h3>📋 Detalles de la Cotización</h3>
+                    <div class="resumen-details">
                         <div class="resumen-item">
-                            <span>Subtotal Materiales:</span>
-                            <span id="resumen-materiales">RD$0.00</span>
+                            <span>Cliente:</span>
+                            <span id="resumen-cliente">-</span>
                         </div>
                         <div class="resumen-item">
-                            <span>🛠️ Mano de Obra:</span>
-                            <span id="resumen-mano-obra">RD$0.00</span>
+                            <span>Evento:</span>
+                            <span id="resumen-evento">-</span>
                         </div>
                         <div class="resumen-item">
-                            <span>🚚 Transporte:</span>
-                            <span id="resumen-transporte">RD$0.00</span>
+                            <span>Servicio:</span>
+                            <span id="resumen-servicio">-</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span>Fecha:</span>
+                            <span id="resumen-fecha">-</span>
                         </div>
                         <div class="resumen-separator"></div>
-                        <div class="resumen-total">
-                            <span>Total Cotización:</span>
-                            <span id="total-cotizacion">RD$0.00</span>
+                        <div class="resumen-item">
+                            <span id="resumen-titulo1">Globos:</span>
+                            <span id="resumen-paquetes">-</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span id="resumen-titulo2">Accesorios:</span>
+                            <span id="resumen-accesorios">-</span>
+                        </div>
+                        <div class="resumen-item" style="font-size: 0.9em; color: #4ecdc4; margin-top: 5px;">
+                            <span>📊 Artículos totales:</span>
+                            <span id="total-articulos">0</span>
                         </div>
                     </div>
-                    
-                    <div class="button-group">
-                        <button id="generar-cotizacion" class="btn-primary" onclick="generarCotizacionPDF()" disabled
-                                title="Generar PDF de la cotización">
-                            <span id="pdf-icon">📄</span> 
-                            <span id="pdf-text">Generar Cotización PDF</span>
-                            <div id="pdf-loading" style="display: none;">
-                                <div class="spinner"></div>
-                                <span>Generando PDF...</span>
-                            </div>
-                            <div id="pdf-mode-indicator" style="font-size: 0.8em; margin-top: 5px; font-weight: normal;"></div>
-                        </button>
-                        
-                        <button id="limpiar-cotizacion" class="btn-secondary" onclick="confirmarLimpiarCotizacion()" title="Limpiar todos los datos">
-                            🗑️ Limpiar Todo
-                        </button>
-                    </div>
 
-                    <div class="info-box">
-                        <h4>✅ Esta cotización incluye:</h4>
-                        <ul>
-                            <li>Materiales de primera calidad</li>
-                            <li>Instalación profesional</li>
-                            <li>Asesoría de diseño</li>
-                            <li>Garantía de satisfacción</li>
-                            <li>Coordinación del evento</li>
-                        </ul>
+                    <div class="resumen-total-section">
+                        <div class="resumen-costs">
+                            <!-- Estos elementos se crearán dinámicamente -->
+                            <div class="resumen-item">
+                                <span>Subtotal Materiales:</span>
+                                <span id="resumen-materiales">RD$0.00</span>
+                            </div>
+                            <div class="resumen-item">
+                                <span>🛠️ Mano de Obra:</span>
+                                <span id="resumen-mano-obra">RD$0.00</span>
+                            </div>
+                            <div class="resumen-item">
+                                <span>🚚 Transporte:</span>
+                                <span id="resumen-transporte">RD$0.00</span>
+                            </div>
+                            <div class="resumen-separator"></div>
+                            <div class="resumen-total">
+                                <span>Total Cotización:</span>
+                                <span id="total-cotizacion">RD$0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button id="generar-cotizacion" class="btn-primary" onclick="generarCotizacionPDF()" disabled
+                                    title="Generar PDF de la cotización">
+                                <span id="pdf-icon">📄</span> 
+                                <span id="pdf-text">Generar Cotización PDF</span>
+                                <div id="pdf-loading" style="display: none;">
+                                    <div class="spinner"></div>
+                                    <span>Generando PDF...</span>
+                                </div>
+                                <div id="pdf-mode-indicator" style="font-size: 0.8em; margin-top: 5px; font-weight: normal;"></div>
+                            </button>
+                            
+                            <button id="limpiar-cotizacion" class="btn-secondary" onclick="confirmarLimpiarCotizacion()" title="Limpiar todos los datos">
+                                🗑️ Limpiar Todo
+                            </button>
+                        </div>
+
+                        <div class="info-box">
+                            <h4>✅ Esta cotización incluye:</h4>
+                            <ul>
+                                <li>Materiales de primera calidad</li>
+                                <li>Instalación profesional</li>
+                                <li>Asesoría de diseño</li>
+                                <li>Garantía de satisfacción</li>
+                                <li>Coordinación del evento</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="notification" id="notification">
-        <span>✅</span> <span id="notification-message">¡Cotización generada con éxito!</span>
-    </div>
+        <div class="notification" id="notification">
+            <span>✅</span> <span id="notification-message">¡Cotización generada con éxito!</span>
+        </div>
 
-    <!-- Confirmación para limpiar -->
-    <div class="modal-overlay" id="confirmModal" style="display: none;">
-        <div class="modal">
-            <h3>⚠️ Confirmar Limpieza</h3>
-            <p>¿Está seguro de que desea limpiar todos los datos de la cotización actual?</p>
-            <p><small>Esta acción no se puede deshacer.</small></p>
-            <div class="modal-buttons">
-                <button class="btn-secondary" onclick="cerrarConfirmacion()">Cancelar</button>
-                <button class="btn-primary" onclick="limpiarCamposCotizacion()">Sí, Limpiar Todo</button>
+        <!-- Confirmación para limpiar -->
+        <div class="modal-overlay" id="confirmModal" style="display: none;">
+            <div class="modal">
+                <h3>⚠️ Confirmar Limpieza</h3>
+                <p>¿Está seguro de que desea limpiar todos los datos de la cotización actual?</p>
+                <p><small>Esta acción no se puede deshacer.</small></p>
+                <div class="modal-buttons">
+                    <button class="btn-secondary" onclick="cerrarConfirmacion()">Cancelar</button>
+                    <button class="btn-primary" onclick="limpiarCamposCotizacion()">Sí, Limpiar Todo</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Los elementos flotantes se crearán dinámicamente desde JavaScript -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="script.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="script.js"></script>
+        
+        <script>
+            // Inicializar elementos dinámicos que crea el JavaScript
+            document.addEventListener('DOMContentLoaded', function() {
+                // Crear elementos flotantes si no existen
+                if (!document.getElementById('floating-pdf-btn')) {
+                    const floatingBtn = document.createElement('button');
+                    floatingBtn.id = 'floating-pdf-btn';
+                    floatingBtn.className = 'floating-button';
+                    floatingBtn.innerHTML = `<span class="floating-icon">📄</span><span class="floating-text">Generar PDF</span>`;
+                    floatingBtn.title = 'Generar PDF - Haga clic para descargar la cotización';
+                    floatingBtn.onclick = generarCotizacionPDF;
+                    document.body.appendChild(floatingBtn);
+                    
+                    const backToTopBtn = document.createElement('button');
+                    backToTopBtn.id = 'back-to-top-btn';
+                    backToTopBtn.className = 'floating-button back-to-top';
+                    backToTopBtn.innerHTML = '↑';
+                    backToTopBtn.title = 'Volver al inicio de la página';
+                    backToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+                    document.body.appendChild(backToTopBtn);
+                }
+                
+                // Crear indicador de paso actual si no existe
+                if (!document.getElementById('current-step-indicator')) {
+                    const indicator = document.createElement('div');
+                    indicator.id = 'current-step-indicator';
+                    indicator.className = 'step-indicator-badge';
+                    document.body.appendChild(indicator);
+                }
+                
+                // Forzar actualización inicial
+                setTimeout(function() {
+                    if (typeof actualizarIndicadorPasoActual === 'function') actualizarIndicadorPasoActual();
+                    if (typeof actualizarVisibilidadBotonesFlotantes === 'function') actualizarVisibilidadBotonesFlotantes();
+                    if (typeof mejorarVisualizacionTotal === 'function') mejorarVisualizacionTotal();
+                }, 500);
+            });
+        </script>
 </body>
 </html>
