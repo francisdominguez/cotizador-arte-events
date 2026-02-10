@@ -121,24 +121,33 @@ function scrollToErrorField(fieldId) {
 // FUNCIONES DE MEJORA UX
 // ----------------------------------------------------
 
-function crearBotonFlotantePDF() {
-    if (document.getElementById('floating-pdf-btn')) return;
-    
+function crearElementosFlotantes() {
+    // Crear botón PDF flotante
     const floatingBtn = document.createElement('button');
     floatingBtn.id = 'floating-pdf-btn';
     floatingBtn.className = 'floating-button';
+    floatingBtn.style.display = 'none'; // Oculto inicialmente
     floatingBtn.innerHTML = `<span class="floating-icon">📄</span><span class="floating-text">Generar PDF</span>`;
     floatingBtn.title = 'Generar PDF - Haga clic para descargar la cotización';
     floatingBtn.onclick = generarCotizacionPDF;
     document.body.appendChild(floatingBtn);
     
+    // Crear botón volver arriba
     const backToTopBtn = document.createElement('button');
     backToTopBtn.id = 'back-to-top-btn';
     backToTopBtn.className = 'floating-button back-to-top';
+    backToTopBtn.style.display = 'none'; // Oculto inicialmente
     backToTopBtn.innerHTML = '↑';
     backToTopBtn.title = 'Volver al inicio de la página';
     backToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
     document.body.appendChild(backToTopBtn);
+    
+    // Crear indicador de paso
+    const indicator = document.createElement('div');
+    indicator.id = 'current-step-indicator';
+    indicator.className = 'step-indicator-badge';
+    indicator.style.display = 'none'; // Oculto inicialmente
+    document.body.appendChild(indicator);
 }
 
 function actualizarVisibilidadBotonesFlotantes() {
@@ -173,16 +182,6 @@ function actualizarVisibilidadBotonesFlotantes() {
         floatingPdfBtn.classList.remove('visible');
         backToTopBtn.classList.remove('visible');
     }
-}
-
-function crearIndicadorPasoActual() {
-    if (document.getElementById('current-step-indicator')) return;
-    
-    const indicator = document.createElement('div');
-    indicator.id = 'current-step-indicator';
-    indicator.className = 'step-indicator-badge';
-    document.body.appendChild(indicator);
-    actualizarIndicadorPasoActual();
 }
 
 function actualizarIndicadorPasoActual() {
@@ -235,6 +234,10 @@ function formatoMonedaRD(monto) {
 // ----------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', function() {
+    // 1. PRIMERO crear los elementos flotantes
+    crearElementosFlotantes();
+    
+    // 2. Después el resto de la inicialización normal
     cargarConfiguracion();
     inicializarEventListeners();
     inicializarFechaEvento();
@@ -252,8 +255,6 @@ document.addEventListener('DOMContentLoaded', function() {
     aplicarTema();
     actualizarVistaPreviaPDF();
     
-    crearBotonFlotantePDF();
-    crearIndicadorPasoActual();
     mejorarVisualizacionTotal();
     
     setTimeout(actualizarVisibilidadBotonesFlotantes, 200);
