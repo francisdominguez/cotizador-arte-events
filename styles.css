@@ -920,16 +920,21 @@ textarea {
     width: 100%;
 }
 
+/* =============================================
+   ESTILOS UNIFICADOS PARA CONFIG-ITEM
+   ============================================= */
+
 .config-item {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 10px;
-    align-items: center;
-    padding: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    align-items: start;
+    padding: 15px;
     background: var(--light);
     border-radius: 10px;
     border: 1px solid var(--light-gray);
     transition: all 0.3s ease;
+    margin-bottom: 12px;
 }
 
 .config-item:hover {
@@ -937,15 +942,32 @@ textarea {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+.config-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.config-label {
+    font-size: 0.8em;
+    font-weight: 600;
+    color: var(--primary-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .config-item input[type="text"],
 .config-item input[type="number"] {
     padding: 10px;
     border: 1px solid var(--light-gray);
     border-radius: 6px;
-    font-size: 0.95em;
+    font-size: 0.9em;
     width: 100%;
     transition: all 0.3s ease;
     background: white;
+    min-width: 0;
 }
 
 .config-item input[type="text"]:focus,
@@ -959,6 +981,13 @@ textarea {
 .config-item input[type="number"]::placeholder {
     color: var(--gray);
     opacity: 0.7;
+    font-size: 0.85em;
+}
+
+/* Estilo especial para costo real */
+.config-item input[type="number"][placeholder="RD$"] {
+    border-left: 3px solid var(--success);
+    background-color: #f8fff8;
 }
 
 .config-item .btn-remove {
@@ -975,6 +1004,8 @@ textarea {
     justify-content: center;
     transition: all 0.3s ease;
     flex-shrink: 0;
+    align-self: center;
+    margin-top: 15px;
 }
 
 .config-item .btn-remove:hover {
@@ -982,14 +1013,18 @@ textarea {
     transform: scale(1.1);
 }
 
-#config-tipos-evento .config-item,
-#config-tematicas-evento .config-item {
+/* Para los tipos de evento y temáticas (solo 2 columnas) */
+.config-item[data-tipo="tipo-evento"],
+.config-item[data-tipo="tematica-evento"] {
     grid-template-columns: 1fr auto;
 }
 
-#config-flores .config-item {
-    grid-template-columns: 1fr 1fr 1fr auto;
+.config-item[data-tipo="tipo-evento"] .config-input-group,
+.config-item[data-tipo="tematica-evento"] .config-input-group {
+    grid-column: 1;
 }
+
+/* Fin de estilos unificados para config-item */
 
 .notification {
     position: fixed;
@@ -1536,6 +1571,7 @@ textarea {
     animation: pulseStep 2s infinite;
 }
 
+/* Responsive */
 @media (max-width: 1200px) {
     .app-container {
         grid-template-columns: 1fr;
