@@ -2613,18 +2613,107 @@ function actualizarBotonFlotantePDF() {
 }
 
 // PWA Support
-let deferredPrompt;
+let deferredPrompt = null;
+let installButton = null;
+
+// Detectar cuando el navegador quiere mostrar el prompt de instalación
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
+    
+    // Mostrar botón de instalación personalizado
+    installButton = document.getElementById('install-pwa-button');
+    if (installButton) {
+        installButton.style.display = 'block';
+        installButton.addEventListener('click', handleInstallClick);
+    }
+    
+    console.log('PWA installation available');
 });
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').then(registration => {
-      console.log('ServiceWorker registrado con éxito:', registration.scope);
-    }).catch(registrationError => {
-      console.log('Error al registrar ServiceWorker:', registrationError);
+// Manejar clic en botón de instalación
+function handleInstallClick() {
+    if (!deferredPrompt) {
+        console.log('No installation prompt available');
+        return;
+    }
+    
+    deferredPrompt.prompt();
+    
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the PWA installation');
+            mostrarNotificacion('✅ Aplicación instalada con éxito', 'success');
+        } else {
+            console.log('User dismissed the PWA installation');
+        }
+        
+        deferredPrompt = null;
+        if (installButton) {
+            installButton.style.display = 'none';
+            installButton.removeEventListener('click', handleInstallClick);
+        }
     });
-  });
 }
+
+// Registrar Service Worker
+function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) {
+        console.log('Service workers not supported');
+        return;
+    }
+    
+    window.addEventListener('load', () => {
+        const swUrl = './service-worker.js';
+        
+        navigator.serviceWorker.register(swUrl)
+            .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+                
+                // Manejar actualizaciones
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    
+                    newWorker.addEventListener('statechange', () => {
+                        switch (newWorker.state) {
+                            case 'installed':
+                                if (navigator.serviceWorker.controller) {
+                                    console.log('New content available; please refresh.');
+                                    // Mostrar notificación de actualización
+                                    mostrarNotificacion('📦 Nueva versión disponible. Recarga para actualizar.', 'info');
+                                }
+                                break;
+                        }
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Service Worker registration failed:', error);
+                
+                // Si falla, intentar sin cache
+                if (error.toString().includes('MIME type')) {
+                    console.warn('Trying without Service Worker due to MIME type issues');
+                }
+            });
+            
+        // Recargar cuando hay nuevo controlador
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                refreshing = true;
+                window.location.reload();
+            }
+        });
+    });
+}
+
+// Detectar si la app está en modo standalone (ya instalada)
+window.addEventListener('DOMContentLoaded', () => {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('App running in standalone mode');
+        document.body.classList.add('pwa-installed');
+    }
+});
+
+// Iniciar todo
+registerServiceWorker();
