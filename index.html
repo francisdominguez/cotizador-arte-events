@@ -99,7 +99,7 @@
                     </div>
                 </div>
 
-                <div class="steps-container" style="position: relative; z-index: 1;">
+                <div class="steps-container">
                     <div class="step-section" id="step-1">
                         <h2>1. Información del Cliente y Evento <span class="required-hint">(* Campos obligatorios)</span></h2>
                         <div class="form-section">
@@ -202,7 +202,7 @@
                         </div>
                     </div>
 
-                    <div class="step-section" id="step-2" style="display: none; position: relative; z-index: 2;">
+                    <div class="step-section" id="step-2" style="display: none;">
                         <h2 id="titulo-paso-2">2. Selección de Artículos</h2>
                         
                         <div class="tabs" id="tabs-container">
@@ -247,7 +247,7 @@
                         </div>
                     </div>
 
-                    <div class="step-section" id="step-3" style="display: none; position: relative; z-index: 3;">
+                    <div class="step-section" id="step-3" style="display: none;">
                         <h2>3. Costos y Transporte</h2>
                         <div class="form-section form-grid two-columns">
                             <div class="form-group">
@@ -310,13 +310,13 @@
 
                             <!-- NUEVO PANEL MEJORADO DE RESUMEN DE COSTOS Y GANANCIA -->
                             <div class="form-group full-width" style="margin-top: 20px;">
-                                <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; border: 2px solid #e9ecef; position: relative; z-index: 1;">
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; border: 2px solid #e9ecef;">
                                     <h4 style="color: var(--primary-dark); margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; font-size: 16px;">
                                         💰 Resumen de Costos y Ganancia
                                     </h4>
                                     
                                    <!-- NUEVO CÓDIGO CON GANANCIA - REEMPLAZA TODO LO DE ARRIBA -->
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; position: relative; z-index: 1;">
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px;">
     <!-- FILA 1 -->
     <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #ff9800; text-align: center;">
         <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">💰 Costo Real</div>
@@ -340,7 +340,7 @@
     </div>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; position: relative; z-index: 1;">
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px;">
     <!-- FILA 2 -->
     <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #e91e63; text-align: center;">
         <div style="font-size: 0.8em; color: #666; margin-bottom: 5px;">📈 % Ganancia</div>
@@ -366,14 +366,14 @@
     </div>
 </div>
                                     
-                                    <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 10px; position: relative; z-index: 1;">
+                                    <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 10px;">
                                         <div style="font-size: 0.8em; color: rgba(255, 255, 255, 0.9); margin-bottom: 5px;">TOTAL FINAL (Precio al Cliente)</div>
                                         <div id="display-total-final" style="font-size: 1.6em; font-weight: 900; color: white;">
                                             RD$0.00
                                         </div>
                                     </div>
                                     
-                                    <div style="padding: 10px; background: #fff8e1; border-radius: 8px; border-left: 4px solid #ffc107; font-size: 0.85em; position: relative; z-index: 1;">
+                                    <div style="padding: 10px; background: #fff8e1; border-radius: 8px; border-left: 4px solid #ffc107; font-size: 0.85em;">
                                         <div style="display: flex; align-items: flex-start; gap: 8px;">
                                             <span style="color: #ff9800; flex-shrink: 0;">💡</span>
                                             <div>
@@ -388,10 +388,10 @@
                                 </div>
                             </div>
 
-                            <div class="form-section" style="border-left: 4px solid #4ecdc4; padding-left: 15px; margin: 20px 0; position: relative; z-index: 1;">
+                            <div class="form-section" style="border-left: 4px solid #4ecdc4; padding-left: 15px; margin: 20px 0;">
                                 <h4 style="color: #4ecdc4; margin-bottom: 15px;">📄 Configuración del PDF</h4>
                                 
-                                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px; position: relative; z-index: 1;">
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                                     <h5 style="color: #8a2be2; margin-bottom: 10px;">🎯 Modo de Cotización</h5>
                                     <div class="form-group">
                                         <label style="display: flex; align-items: center; gap: 8px;" title="Perfecto para enviar al cliente - Solo muestra artículos y total">
@@ -404,7 +404,7 @@
                                     </p>
                                 </div>
                                 
-                                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; position: relative; z-index: 1;">
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
                                     <h5 style="color: #8a2be2; margin-bottom: 10px;">🔧 Opciones Detalladas</h5>
                                     <div class="form-group">
                                         <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el costo de instalación profesional">
@@ -432,17 +432,17 @@
                                     </div>
                                 </div>
                                 
-                                <div id="pdf-preview" style="margin-top: 20px; padding: 15px; background: white; border: 2px dashed #dfe6e9; border-radius: 10px; font-size: 0.9em; position: relative; z-index: 1;">
+                                <div id="pdf-preview" style="margin-top: 20px; padding: 15px; background: white; border: 2px dashed #dfe6e9; border-radius: 10px; font-size: 0.9em;">
                                     <h5 style="color: #636e72; margin-bottom: 10px;">👁️ Vista Previa del PDF:</h5>
                                     <div id="preview-content" style="color: #666;">
                                         Cargando vista previa...
                                     </div>
                                 </div>
                             </div>
-                            <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 600; position: relative; z-index: 1;">* El resumen de la cotización final se muestra a la derecha.</p>
+                            <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 600;">* El resumen de la cotización final se muestra a la derecha.</p>
                         </div>
 
-                        <div class="nav-buttons" style="position: relative; z-index: 10;">
+                        <div class="nav-buttons">
                             <button class="btn-secondary" onclick="prevStep()" id="prev-btn" style="display: none;">← Anterior</button>
                             <button class="btn-primary" onclick="nextStep()" id="next-btn">Siguiente →</button>
                         </div>
@@ -553,48 +553,10 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-        <script src="script.js"></script>
-        
-        <script>
-            // Inicializar elementos dinámicos que crea el JavaScript
-            document.addEventListener('DOMContentLoaded', function() {
-                // Crear elementos flotantes si no existen
-                if (!document.getElementById('floating-pdf-btn')) {
-                    const floatingBtn = document.createElement('button');
-                    floatingBtn.id = 'floating-pdf-btn';
-                    floatingBtn.className = 'floating-button';
-                    floatingBtn.innerHTML = `<span class="floating-icon">📄</span><span class="floating-text">Generar PDF</span>`;
-                    floatingBtn.title = 'Generar PDF - Haga clic para descargar la cotización';
-                    floatingBtn.onclick = generarCotizacionPDF;
-                    document.body.appendChild(floatingBtn);
-                    
-                    const backToTopBtn = document.createElement('button');
-                    backToTopBtn.id = 'back-to-top-btn';
-                    backToTopBtn.className = 'floating-button back-to-top';
-                    backToTopBtn.innerHTML = '↑';
-                    backToTopBtn.title = 'Volver al inicio de la página';
-                    backToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-                    document.body.appendChild(backToTopBtn);
-                }
-                
-                // Crear indicador de paso actual si no existe
-                if (!document.getElementById('current-step-indicator')) {
-                    const indicator = document.createElement('div');
-                    indicator.id = 'current-step-indicator';
-                    indicator.className = 'step-indicator-badge';
-                    document.body.appendChild(indicator);
-                }
-                
-                // Forzar actualización inicial
-                setTimeout(function() {
-                    if (typeof actualizarIndicadorPasoActual === 'function') actualizarIndicadorPasoActual();
-                    if (typeof actualizarVisibilidadBotonesFlotantes === 'function') actualizarVisibilidadBotonesFlotantes();
-                    if (typeof mejorarVisualizacionTotal === 'function') mejorarVisualizacionTotal();
-                }, 500);
-            });
-        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
