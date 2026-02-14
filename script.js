@@ -1,43 +1,47 @@
-// Asegurar que las librerías se carguen
-const { jsPDF } = window.jspdf;
-
-// ----------------------------------------------------
-// DATOS INICIALES Y ESTRUCTURA DE LA APLICACIÓN
-// ----------------------------------------------------
+// Cargar jsPDF si no está disponible
+if (!window.jspdf) {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    document.head.appendChild(script);
+    
+    const script2 = document.createElement('script');
+    script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    document.head.appendChild(script2);
+}
 
 let configuracion = {
     tiposEvento: ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower', 'Graduaciones', 'Aniversarios', 'Flores'],
     tematicasEvento: ['Clásica', 'Moderno', 'Vintage', 'Rústica', 'Minimalista', 'Bohemia', 'Elegante', 'Divertida'],
     paquetes: [
-        { id: 1, nombre: "Globo Azul", precio: 1200, costo: 400, emoji: '💙', cantidad: 0, tipo: 'decoracion' },
-        { id: 2, nombre: "Globo Dorado", precio: 1500, costo: 500, emoji: '✨', cantidad: 0, tipo: 'decoracion' },
-        { id: 3, nombre: "Globo Blanco", precio: 1000, costo: 300, emoji: '☁️', cantidad: 0, tipo: 'decoracion' },
-        { id: 4, nombre: "Globo Rosa", precio: 1300, costo: 450, emoji: '💖', cantidad: 0, tipo: 'decoracion' }
+        { id: 1, nombre: "Globo Azul", precio: 1200, costo: 400, emoji: '💙', cantidad: 0, tipo: 'decoracion', unidad: 'paquete' },
+        { id: 2, nombre: "Globo Dorado", precio: 1500, costo: 500, emoji: '✨', cantidad: 0, tipo: 'decoracion', unidad: 'paquete' },
+        { id: 3, nombre: "Globo Blanco", precio: 1000, costo: 300, emoji: '☁️', cantidad: 0, tipo: 'decoracion', unidad: 'paquete' },
+        { id: 4, nombre: "Globo Rosa", precio: 1300, costo: 450, emoji: '💖', cantidad: 0, tipo: 'decoracion', unidad: 'paquete' }
     ],
     accesorios: [
-        { id: 1, nombre: "Mampara Circular", precio: 800, costo: 300, emoji: '🖼️', cantidad: 0, tipo: 'decoracion' },
-        { id: 2, nombre: "Cilindro Decorativo", precio: 400, costo: 150, emoji: '🏺', cantidad: 0, tipo: 'decoracion' },
-        { id: 3, nombre: "Mesa Principal", precio: 300, costo: 100, emoji: '🪑', cantidad: 0, tipo: 'decoracion' },
-        { id: 4, nombre: "Sillas Tiffany (x10)", precio: 1500, costo: 600, emoji: '🪑', cantidad: 0, tipo: 'decoracion' },
-        { id: 5, nombre: "Alfombra Roja", precio: 600, costo: 200, emoji: '🟥', cantidad: 0, tipo: 'decoracion' }
+        { id: 1, nombre: "Mampara Circular", precio: 800, costo: 300, emoji: '🖼️', cantidad: 0, tipo: 'decoracion', unidad: 'unidad' },
+        { id: 2, nombre: "Cilindro Decorativo", precio: 400, costo: 150, emoji: '🏺', cantidad: 0, tipo: 'decoracion', unidad: 'unidad' },
+        { id: 3, nombre: "Mesa Principal", precio: 300, costo: 100, emoji: '🪑', cantidad: 0, tipo: 'decoracion', unidad: 'unidad' },
+        { id: 4, nombre: "Sillas Tiffany (x10)", precio: 1500, costo: 600, emoji: '🪑', cantidad: 0, tipo: 'decoracion', unidad: 'juego' },
+        { id: 5, nombre: "Alfombra Roja", precio: 600, costo: 200, emoji: '🟥', cantidad: 0, tipo: 'decoracion', unidad: 'unidad' }
     ],
     flores: [
-        { id: 100, nombre: "Rosas Rojas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rojo' },
-        { id: 101, nombre: "Rosas Blancas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Blanco' },
-        { id: 102, nombre: "Rosas Rosadas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rosa' },
-        { id: 103, nombre: "Girasoles", precio: 300, costo: 100, emoji: '🌻', cantidad: 0, tipo: 'flores', color: 'Amarillo' },
-        { id: 104, nombre: "Lirios Blancos", precio: 350, costo: 120, emoji: '⚜️', cantidad: 0, tipo: 'flores', color: 'Blanco' },
-        { id: 105, nombre: "Orquídeas", precio: 500, costo: 200, emoji: '💮', cantidad: 0, tipo: 'flores', color: 'Morado' },
-        { id: 106, nombre: "Tulipanes", precio: 400, costo: 150, emoji: '🌷', cantidad: 0, tipo: 'flores', color: 'Multicolor' },
-        { id: 107, nombre: "Flores Silvestres", precio: 200, costo: 60, emoji: '🌸', cantidad: 0, tipo: 'flores', color: 'Mixto' }
+        { id: 100, nombre: "Rosas Rojas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rojo', unidad: 'flor' },
+        { id: 101, nombre: "Rosas Blancas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Blanco', unidad: 'flor' },
+        { id: 102, nombre: "Rosas Rosadas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rosa', unidad: 'flor' },
+        { id: 103, nombre: "Girasoles", precio: 300, costo: 100, emoji: '🌻', cantidad: 0, tipo: 'flores', color: 'Amarillo', unidad: 'flor' },
+        { id: 104, nombre: "Lirios Blancos", precio: 350, costo: 120, emoji: '⚜️', cantidad: 0, tipo: 'flores', color: 'Blanco', unidad: 'flor' },
+        { id: 105, nombre: "Orquídeas", precio: 500, costo: 200, emoji: '💮', cantidad: 0, tipo: 'flores', color: 'Morado', unidad: 'flor' },
+        { id: 106, nombre: "Tulipanes", precio: 400, costo: 150, emoji: '🌷', cantidad: 0, tipo: 'flores', color: 'Multicolor', unidad: 'flor' },
+        { id: 107, nombre: "Flores Silvestres", precio: 200, costo: 60, emoji: '🌸', cantidad: 0, tipo: 'flores', color: 'Mixto', unidad: 'flor' }
     ],
     arreglosFlorales: [
-        { id: 200, nombre: "Ramo Pequeño (12 flores)", precio: 3000, costo: 1200, emoji: '💐', cantidad: 0, tipo: 'flores' },
-        { id: 201, nombre: "Ramo Mediano (24 flores)", precio: 5500, costo: 2200, emoji: '💐', cantidad: 0, tipo: 'flores' },
-        { id: 202, nombre: "Ramo Grande (36 flores)", precio: 8000, costo: 3200, emoji: '💐', cantidad: 0, tipo: 'flores' },
-        { id: 203, nombre: "Centro de Mesa", precio: 4500, costo: 1800, emoji: '🏺', cantidad: 0, tipo: 'flores' },
-        { id: 204, nombre: "Arco Floral", precio: 12000, costo: 5000, emoji: '🎀', cantidad: 0, tipo: 'flores' },
-        { id: 205, nombre: "Guirnalda Floral", precio: 7500, costo: 3000, emoji: '🌿', cantidad: 0, tipo: 'flores' }
+        { id: 200, nombre: "Ramo Pequeño (12 flores)", precio: 3000, costo: 1200, emoji: '💐', cantidad: 0, tipo: 'flores', unidad: 'ramo' },
+        { id: 201, nombre: "Ramo Mediano (24 flores)", precio: 5500, costo: 2200, emoji: '💐', cantidad: 0, tipo: 'flores', unidad: 'ramo' },
+        { id: 202, nombre: "Ramo Grande (36 flores)", precio: 8000, costo: 3200, emoji: '💐', cantidad: 0, tipo: 'flores', unidad: 'ramo' },
+        { id: 203, nombre: "Centro de Mesa", precio: 4500, costo: 1800, emoji: '🏺', cantidad: 0, tipo: 'flores', unidad: 'centro' },
+        { id: 204, nombre: "Arco Floral", precio: 12000, costo: 5000, emoji: '🎀', cantidad: 0, tipo: 'flores', unidad: 'arco' },
+        { id: 205, nombre: "Guirnalda Floral", precio: 7500, costo: 3000, emoji: '🌿', cantidad: 0, tipo: 'flores', unidad: 'guirnalda' }
     ],
     manoObraPorcentaje: 30
 };
@@ -84,25 +88,36 @@ let configIdCounter = 1000;
 // FUNCIONES DE SCROLL AUTOMÁTICO
 // ----------------------------------------------------
 
+// ----------------------------------------------------
+// FUNCIONES DE SCROLL MEJORADAS PARA MÓVIL
+// ----------------------------------------------------
+
 function scrollToStepTop() {
-    const currentStepElement = document.getElementById(`step-${cotizacion.currentStep}`);
-    if (currentStepElement) {
-        currentStepElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (window.innerWidth <= 768) {
-            setTimeout(() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 300);
-        }
+    // Solo hacer scroll si el usuario está más abajo del header
+    if (window.scrollY > 150) {
+        setTimeout(() => {
+            window.scrollTo({ 
+                top: 0, 
+                behavior: 'smooth' 
+            });
+        }, 150);
     }
 }
 
 function scrollToTabs() {
+    // Solo en móvil y si los tabs están fuera de vista
     if (window.innerWidth <= 768) {
         const tabsContainer = document.getElementById('tabs-container');
-        if (tabsContainer) {
+        const tabsPosition = tabsContainer?.getBoundingClientRect().top || 0;
+        
+        // Si los tabs están fuera de la vista superior
+        if (tabsContainer && tabsPosition < 0) {
             setTimeout(() => {
-                tabsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
+                tabsContainer.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }, 150);
         }
     }
 }
@@ -110,13 +125,25 @@ function scrollToTabs() {
 function scrollToErrorField(fieldId) {
     const fieldElement = document.getElementById(fieldId);
     if (fieldElement) {
-        setTimeout(() => {
-            fieldElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Calcular si el campo está visible
+        const rect = fieldElement.getBoundingClientRect();
+        const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+        
+        // Solo hacer scroll si no está visible
+        if (!isVisible) {
+            setTimeout(() => {
+                fieldElement.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                fieldElement.focus();
+            }, 300);
+        } else {
+            // Si ya está visible, solo enfocar
             fieldElement.focus();
-        }, 300);
+        }
     }
 }
-
 // ----------------------------------------------------
 // FUNCIONES DE MEJORA UX
 // ----------------------------------------------------
@@ -128,7 +155,7 @@ function crearElementosFlotantes() {
     floatingBtn.style.display = 'none';
     floatingBtn.innerHTML = `<span class="floating-icon">📄</span><span class="floating-text">Generar PDF</span>`;
     floatingBtn.title = 'Generar PDF - Haga clic para descargar la cotización';
-    floatingBtn.onclick = generarCotizacionPDF;
+    floatingBtn.onclick = () => generarCotizacionPDF();
     document.body.appendChild(floatingBtn);
     
     const backToTopBtn = document.createElement('button');
@@ -153,12 +180,12 @@ function actualizarVisibilidadBotonesFlotantes() {
     
     if (!floatingPdfBtn || !backToTopBtn) return;
     
-    if (window.innerWidth <= 768 && cotizacion.currentStep === 3) {
-        floatingPdfBtn.style.display = 'none';
-        floatingPdfBtn.classList.remove('visible');
-    } else if (cotizacion.currentStep === 3) {
+    // ✅ VERSIÓN SIMPLIFICADA PARA MÓVIL
+    if (cotizacion.currentStep === 3) {
+        // Mostrar el botón flotante en el paso 3 (tanto en móvil como desktop)
         floatingPdfBtn.style.display = 'flex';
         floatingPdfBtn.classList.add('visible');
+        
         const total = cotizacion.costos.total || 0;
         const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
         
@@ -174,10 +201,12 @@ function actualizarVisibilidadBotonesFlotantes() {
             floatingPdfBtn.title = 'No hay artículos seleccionados para generar PDF';
         }
     } else {
+        // Ocultar en otros pasos
         floatingPdfBtn.classList.remove('visible');
         floatingPdfBtn.style.display = 'none';
     }
     
+    // Botón para volver arriba (sin cambios)
     if (window.scrollY > 300) {
         backToTopBtn.classList.add('visible');
         backToTopBtn.style.display = 'flex';
@@ -186,7 +215,6 @@ function actualizarVisibilidadBotonesFlotantes() {
         backToTopBtn.style.display = 'none';
     }
 }
-
 function actualizarIndicadorPasoActual() {
     const indicator = document.getElementById('current-step-indicator');
     if (!indicator) return;
@@ -250,20 +278,24 @@ document.addEventListener('DOMContentLoaded', function() {
     actualizarConfigPDF();
     cargarPreferenciasUsuario();
     
-    document.getElementById('tab-flores').style.display = 'none';
-    document.getElementById('tab-arreglos').style.display = 'none';
     aplicarTema();
     actualizarVistaPreviaPDF();
     mejorarVisualizacionTotal();
     
     setTimeout(actualizarVisibilidadBotonesFlotantes, 200);
-    window.addEventListener('scroll', function() {
-        actualizarVisibilidadBotonesFlotantes();
+    window.addEventListener('scroll', actualizarVisibilidadBotonesFlotantes);
+    
+    // Prevenir zoom en iOS
+    document.addEventListener('gesturestart', function(e) {
+        e.preventDefault();
     });
+    
+    // Mejorar rendimiento en móvil
+    document.addEventListener('touchstart', function() {}, { passive: true });
 });
 
 // ----------------------------------------------------
-// FUNCIÓN DE SINCRONIZACIÓN EVENTO-SERVICIO
+// SINCRONIZACIÓN EVENTO-SERVICIO
 // ----------------------------------------------------
 
 function sincronizarEventoServicio() {
@@ -272,16 +304,14 @@ function sincronizarEventoServicio() {
     
     if (tipoEvento === 'Flores') {
         tipoServicioSelect.value = 'flores';
-        mostrarNotificacion('💡 El servicio se ha ajustado a "Flores Externas" para coincidir con el tipo de evento.', 'info');
+        limpiarError('tipo-servicio');
     } else if (tipoEvento !== '' && tipoEvento !== 'Flores') {
         tipoServicioSelect.value = 'decoracion';
-        mostrarNotificacion('💡 El servicio se ha ajustado a "Decoración" para coincidir con el tipo de evento.', 'info');
+        limpiarError('tipo-servicio');
     }
     
     if (cotizacion.currentStep === 2) actualizarUIporTipoServicio();
     guardarDatosPaso1();
-    limpiarError('tipo-servicio');
-    limpiarError('tipo-evento');
 }
 
 function validarConsistenciaEventoServicio() {
@@ -289,10 +319,7 @@ function validarConsistenciaEventoServicio() {
     const tipoServicio = document.getElementById('tipo-servicio').value;
     
     if (tipoEvento === 'Flores' && tipoServicio !== 'flores') {
-        mostrarError('tipo-servicio', 'Para eventos tipo "Flores", el servicio debe ser "Flores Externas"');
-        return false;
-    } else if (tipoEvento !== 'Flores' && tipoEvento !== '' && tipoServicio === 'flores') {
-        mostrarError('tipo-servicio', 'El servicio "Flores Externas" solo está disponible para eventos tipo "Flores"');
+        mostrarError('tipo-servicio', 'Para eventos de tipo "Flores", el servicio debe ser "Flores Externas".');
         return false;
     }
     
@@ -471,24 +498,32 @@ function actualizarDisplayResumen(costoReal, precioVenta, manoObra, diferenciaMa
     const inputPorcentajeGanancia = document.getElementById('porcentaje-ganancia');
     if (inputPorcentajeGanancia) inputPorcentajeGanancia.value = Math.round(porcentajeGanancia);
     
-    mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMateriales, 
-                           transporte, totalFinal, gananciaTotal, porcentajeGanancia);
+    // Solo mostrar desglose en paso 3
+    if (cotizacion.currentStep === 3) {
+        mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMateriales, 
+                               transporte, totalFinal, gananciaTotal, porcentajeGanancia);
+    }
 }
 
+// Función para mostrar desglose de ganancia SOLO en paso 3
 function mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMateriales, 
                                 transporte, totalFinal, gananciaTotal, porcentajeGanancia) {
     
-    const container = document.querySelector('.form-group.full-width');
-    if (!container || costoReal <= 0) return;
+    // Buscar el contenedor correcto en el paso 3
+    const paso3 = document.getElementById('step-3');
+    if (!paso3) return;
     
-    const existingDesglose = container.querySelector('#desglose-ganancia');
+    // Remover desglose existente
+    const existingDesglose = paso3.querySelector('#desglose-ganancia-paso3');
     if (existingDesglose) existingDesglose.remove();
     
+    if (costoReal <= 0) return;
+    
     const esDecoracion = cotizacion.tipoServicio === 'decoracion';
-    const porcentajeManoObra = document.getElementById('porcentaje-mano-obra').value || 30;
+    const porcentajeManoObra = document.getElementById('porcentaje-mano-obra')?.value || 30;
     
     let desgloseHTML = `
-        <div id="desglose-ganancia" style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; border-left: 4px solid var(--success);">
+        <div id="desglose-ganancia-paso3" style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; border-left: 4px solid var(--success);">
             <div style="font-weight: 700; color: var(--success); margin-bottom: 10px; font-size: 1.1em; display: flex; align-items: center; gap: 8px;">💰 DESGLOSE DE GANANCIA (${esDecoracion ? 'DECORACIÓN' : 'FLORES EXTERNAS'})</div>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
@@ -533,15 +568,28 @@ function mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMat
                 <div style="font-size: 0.85em; color: #666; grid-column: 1 / -1; text-align: center; margin-top: 5px; padding: 5px; background: rgba(0, 184, 148, 0.1); border-radius: 5px;">
                     <span style="font-weight: 700; color: var(--success);">${Math.round(porcentajeGanancia)}%</span> de ganancia sobre costo real
                 </div>
+                
+                <div style="font-size: 1em; color: #fff; background: var(--primary); padding: 10px; border-radius: 8px; grid-column: 1 / -1; margin-top: 10px; text-align: center; font-weight: 700; box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);">
+                    💵 PRECIO FINAL AL CLIENTE: ${formatoMonedaRD(totalFinal)}
+                </div>
             </div>
             
             <div style="font-size: 0.8em; color: #666; font-style: italic; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">💡 <strong>${formulaTexto}</strong></div>
         </div>
     `;
     
-    container.insertAdjacentHTML('beforeend', desgloseHTML);
+    // Insertar antes del panel de configuración del PDF
+    const configPDFSection = paso3.querySelector('.form-section[style*="border-left: 4px solid #4ecdc4"]');
+    if (configPDFSection) {
+        configPDFSection.insertAdjacentHTML('beforebegin', desgloseHTML);
+    } else {
+        // Si no encuentra el panel de config, insertar al final del formulario
+        const formSections = paso3.querySelectorAll('.form-section');
+        if (formSections.length > 0) {
+            formSections[formSections.length - 1].insertAdjacentHTML('afterend', desgloseHTML);
+        }
+    }
 }
-// PARTE 2 - EVENT LISTENERS Y VALIDACIÓN
 
 function inicializarEventListeners() {
     const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'tipo-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tipo-servicio', 'otro-evento', 'otra-tematica'];
@@ -559,73 +607,91 @@ function inicializarEventListeners() {
         }
     });
     
-    document.getElementById('tipo-evento').addEventListener('change', function() {
-        const otroEventoContainer = document.getElementById('otro-evento-container');
-        const otroEventoInput = document.getElementById('otro-evento');
-        
-        if (this.value === 'otro') {
-            otroEventoContainer.style.display = 'block';
-            setTimeout(() => {
+    const tipoEventoSelect = document.getElementById('tipo-evento');
+    if (tipoEventoSelect) {
+        tipoEventoSelect.addEventListener('change', function() {
+            const otroEventoContainer = document.getElementById('otro-evento-container');
+            const otroEventoInput = document.getElementById('otro-evento');
+            
+            if (this.value === 'otro') {
+                otroEventoContainer.style.display = 'block';
+                setTimeout(() => {
+                    if (otroEventoInput) {
+                        otroEventoInput.focus();
+                        scrollToErrorField('otro-evento');
+                    }
+                }, 100);
+            } else {
+                otroEventoContainer.style.display = 'none';
                 if (otroEventoInput) {
-                    otroEventoInput.focus();
-                    scrollToErrorField('otro-evento');
+                    otroEventoInput.value = '';
+                    limpiarError('otro-evento');
                 }
-            }, 100);
-        } else {
-            otroEventoContainer.style.display = 'none';
-            if (otroEventoInput) {
-                otroEventoInput.value = '';
-                limpiarError('otro-evento');
             }
-        }
-        
-        aplicarTema();
-        guardarDatosPaso1();
-        limpiarError('tipo-evento');
-        validarCampo('tipo-evento', this.value);
-        sincronizarEventoServicio();
-        
-        if (window.innerWidth <= 768) {
-            setTimeout(() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 50);
-        }
-    });
+            
+            aplicarTema();
+            guardarDatosPaso1();
+            limpiarError('tipo-evento');
+            validarCampo('tipo-evento', this.value);
+            sincronizarEventoServicio();
+            
+           
+            
+        });
+    }
     
-    document.getElementById('otro-evento').addEventListener('blur', function() {
-        validarCampo('otro-evento', this.value);
-    });
+    const otroEventoInput = document.getElementById('otro-evento');
+    if (otroEventoInput) {
+        otroEventoInput.addEventListener('blur', function() {
+            validarCampo('otro-evento', this.value);
+        });
+    }
     
-    document.getElementById('tematica-evento').addEventListener('change', function() {
-        cambiarTematicaEvento();
-    });
+    const tematicaEventoSelect = document.getElementById('tematica-evento');
+    if (tematicaEventoSelect) {
+        tematicaEventoSelect.addEventListener('change', cambiarTematicaEvento);
+    }
     
-    document.getElementById('tipo-servicio').addEventListener('change', function() {
-        if (validarConsistenciaEventoServicio()) cambiarTipoServicio();
-    });
+    const tipoServicioSelect = document.getElementById('tipo-servicio');
+    if (tipoServicioSelect) {
+        tipoServicioSelect.addEventListener('change', function() {
+            if (validarConsistenciaEventoServicio()) cambiarTipoServicio();
+        });
+    }
     
-    document.getElementById('costo-transporte').addEventListener('input', (e) => {
-        cotizacion.costos.transporte = parseFloat(e.target.value) || 0;
-        calcularTotalCotizacion();
-    });
+    const costoTransporteInput = document.getElementById('costo-transporte');
+    if (costoTransporteInput) {
+        costoTransporteInput.addEventListener('input', (e) => {
+            cotizacion.costos.transporte = parseFloat(e.target.value) || 0;
+            calcularTotalCotizacion();
+        });
+    }
     
-    document.getElementById('porcentaje-mano-obra').addEventListener('input', (e) => {
-        cotizacion.costos.manoObraPorcentaje = Math.min(100, Math.max(0, parseFloat(e.target.value) || 30));
-        calcularTotalCotizacion();
-    });
+    const porcentajeManoObraInput = document.getElementById('porcentaje-mano-obra');
+    if (porcentajeManoObraInput) {
+        porcentajeManoObraInput.addEventListener('input', (e) => {
+            cotizacion.costos.manoObraPorcentaje = Math.min(100, Math.max(0, parseFloat(e.target.value) || 30));
+            calcularTotalCotizacion();
+        });
+    }
     
-    document.getElementById('monto-mano-obra-manual').addEventListener('input', (e) => {
-        cotizacion.montoManoObraManual = Math.max(0, parseFloat(e.target.value) || 0);
-        calcularTotalCotizacion();
-    });
+    const montoManoObraManualInput = document.getElementById('monto-mano-obra-manual');
+    if (montoManoObraManualInput) {
+        montoManoObraManualInput.addEventListener('input', (e) => {
+            cotizacion.montoManoObraManual = Math.max(0, parseFloat(e.target.value) || 0);
+            calcularTotalCotizacion();
+        });
+    }
     
-    document.getElementById('costo-materiales').addEventListener('input', (e) => {
-        calcularTotalCotizacion();
-    });
+    const costoMaterialesInput = document.getElementById('costo-materiales');
+    if (costoMaterialesInput) {
+        costoMaterialesInput.addEventListener('input', calcularTotalCotizacion);
+    }
     
-    document.getElementById('porcentaje-ganancia').addEventListener('input', (e) => {
-        calcularTotalCotizacion();
-    });
+    const porcentajeGananciaInput = document.getElementById('porcentaje-ganancia');
+    if (porcentajeGananciaInput) {
+        porcentajeGananciaInput.addEventListener('input', calcularTotalCotizacion);
+    }
     
     document.querySelectorAll('.pdf-config-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
@@ -634,9 +700,10 @@ function inicializarEventListeners() {
         });
     });
     
-    document.getElementById('generar-cotizacion').addEventListener('mouseover', function() {
-        actualizarTooltipPDF();
-    });
+    const generarCotizacionBtn = document.getElementById('generar-cotizacion');
+    if (generarCotizacionBtn) {
+        generarCotizacionBtn.addEventListener('mouseover', actualizarTooltipPDF);
+    }
     
     document.addEventListener('input', function() {
         setTimeout(actualizarBotonFlotantePDF, 100);
@@ -806,30 +873,44 @@ function validarEmail(email) {
 }
 
 // ----------------------------------------------------
-// CONTROL DE PASOS Y VALIDACIÓN
+// CONTROL DE PASOS MEJORADO
 // ----------------------------------------------------
 
 function nextStep() {
+    console.log('✅ nextStep - Paso actual:', cotizacion.currentStep);
+    
     if (cotizacion.currentStep === 1) {
         if (!validarPaso1()) {
-            mostrarNotificacion('⚠️ Complete los campos obligatorios antes de continuar', 'warning');
+            console.warn('⚠️ Validación falló en paso 1');
+            mostrarNotificacion('⚠️ Por favor complete todos los campos obligatorios', 'warning');
+            
+            const primerCampoError = document.querySelector('input.error, select.error');
+            if (primerCampoError) {
+                primerCampoError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => primerCampoError.focus(), 500);
+            }
             return;
         }
         guardarDatosPaso1();
+        console.log('✅ Paso 1 validado correctamente');
     }
     
     if (cotizacion.currentStep < 3) {
         cotizacion.currentStep++;
+        console.log('➡️ Avanzando a paso:', cotizacion.currentStep);
         updateStepUI();
-        setTimeout(scrollToStepTop, 100);
+        scrollToStepTop();
     }
 }
 
 function prevStep() {
+    console.log('⬅️ prevStep - Paso actual:', cotizacion.currentStep);
+    
     if (cotizacion.currentStep > 1) {
         cotizacion.currentStep--;
+        console.log('⬅️ Retrocediendo a paso:', cotizacion.currentStep);
         updateStepUI();
-        setTimeout(scrollToStepTop, 100);
+        scrollToStepTop();
     }
 }
 
@@ -844,6 +925,8 @@ function updateStepUI() {
     const progress = document.getElementById('progress');
     const generarBtn = document.getElementById('generar-cotizacion');
     
+    console.log('🔄 updateStepUI - Actualizando interfaz para paso:', cotizacion.currentStep);
+    
     const stepIndicators = document.querySelectorAll('.step-indicator');
     stepIndicators.forEach(indicator => {
         const stepNum = parseInt(indicator.dataset.step);
@@ -853,29 +936,55 @@ function updateStepUI() {
     });
 
     steps.forEach((step, index) => {
-        step.style.display = (index + 1 === cotizacion.currentStep) ? 'block' : 'none';
+        if (step) {
+            const shouldShow = (index + 1 === cotizacion.currentStep);
+            step.style.display = shouldShow ? 'block' : 'none';
+            console.log(`  Step ${index + 1} display: ${step.style.display}`);
+        }
     });
     
-    prevBtn.style.display = cotizacion.currentStep > 1 ? 'inline-flex' : 'none';
+    if (prevBtn) prevBtn.style.display = cotizacion.currentStep > 1 ? 'inline-flex' : 'none';
     
-    if (cotizacion.currentStep === 3) {
-        nextBtn.style.display = 'none';
-    } else {
-        nextBtn.style.display = 'inline-flex';
-        nextBtn.textContent = 'Siguiente →';
+    if (nextBtn) {
+        if (cotizacion.currentStep === 3) {
+            nextBtn.style.display = 'none';
+        } else {
+            nextBtn.style.display = 'inline-flex';
+            nextBtn.textContent = 'Siguiente →';
+        }
     }
     
-    generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
+    if (generarBtn) {
+        generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
+    }
 
-    const progressPercent = (cotizacion.currentStep / 3) * 100;
-    progress.style.width = `${progressPercent}%`;
+    if (progress) {
+        const progressPercent = (cotizacion.currentStep / 3) * 100;
+        progress.style.width = `${progressPercent}%`;
+    }
 
     if (cotizacion.currentStep === 2) {
+        console.log('📦 Configurando paso 2 - Tipo de servicio:', cotizacion.tipoServicio);
         actualizarUIporTipoServicio();
-        const activeTabButton = document.querySelector('.tabs .tab-button.active');
-        const activeTab = activeTabButton ? activeTabButton.dataset.tab : 'paquetes';
-        switchTab(activeTab);
-        renderizarArticulosManuales();
+        
+        setTimeout(() => {
+            const activeTabButton = document.querySelector('.tab-button.active');
+            let activeTab = 'paquetes';
+            
+            if (activeTabButton && activeTabButton.dataset.tab) {
+                activeTab = activeTabButton.dataset.tab;
+            } else if (cotizacion.tipoServicio === 'flores') {
+                activeTab = 'flores';
+            }
+            
+            console.log('  🎯 Tab activo:', activeTab);
+            if (activeTab === 'manual') {
+                renderizarArticulosManuales();
+            } else {
+                renderizarArticulos(activeTab);
+            }
+        }, 100);
+        
     } else if (cotizacion.currentStep === 3) {
         document.getElementById('costo-transporte').value = cotizacion.costos.transporte;
         document.getElementById('porcentaje-mano-obra').value = cotizacion.costos.manoObraPorcentaje;
@@ -884,6 +993,9 @@ function updateStepUI() {
         cambiarTipoManoObra();
         actualizarVistaPreviaPDF();
         actualizarTooltipPDF();
+        
+        // Forzar recálculo y mostrar desglose
+        calcularTotalCotizacion();
     }
     
     actualizarResumen();
@@ -891,7 +1003,6 @@ function updateStepUI() {
     actualizarBotonFlotantePDF();
     mejorarVisualizacionTotal();
     setTimeout(actualizarVisibilidadBotonesFlotantes, 100);
-    setTimeout(scrollToStepTop, 150);
 }
 
 // ----------------------------------------------------
@@ -979,9 +1090,9 @@ function guardarDatosPaso1() {
     actualizarResumen();
 }
 
-// ----------------------------------------------------
-// FUNCIÓN APLICAR TEMA
-// ----------------------------------------------------
+// ============================================
+// PARTE 2: FUNCIONES DE TEMA Y CONFIGURACIÓN
+// ============================================
 
 function aplicarTema() {
     const tipoEventoSelect = document.getElementById('tipo-evento');
@@ -1120,56 +1231,102 @@ function cambiarTipoServicio() {
 function actualizarUIporTipoServicio() {
     const paso2Title = document.getElementById('titulo-paso-2');
     const tabsContainer = document.getElementById('tabs-container');
-    if (!tabsContainer) return;
+    
+    if (!tabsContainer) {
+        console.error('❌ tabs-container no encontrado');
+        return;
+    }
+    
+    console.log('🔄 Actualizando UI para tipo:', cotizacion.tipoServicio);
+    
+    // Ocultar todos los contenidos de pestañas posibles
+    document.getElementById('tab-paquetes').style.display = 'none';
+    document.getElementById('tab-accesorios').style.display = 'none';
+    document.getElementById('tab-flores').style.display = 'none';
+    document.getElementById('tab-arreglos').style.display = 'none';
+    document.getElementById('tab-manual').style.display = 'none';
     
     if (cotizacion.tipoServicio === 'flores') {
         paso2Title.textContent = "2. Selección de Flores y Arreglos";
+        
         tabsContainer.innerHTML = `
             <button class="tab-button active" data-tab="flores" onclick="switchTab('flores')">🌹 Flores por Unidad</button>
             <button class="tab-button" data-tab="arreglos" onclick="switchTab('arreglos')">💐 Arreglos Florales</button>
             <button class="tab-button" data-tab="manual" onclick="switchTab('manual')">✍️ Artículo Manual</button>
         `;
-        document.getElementById('tab-paquetes').style.display = 'none';
-        document.getElementById('tab-accesorios').style.display = 'none';
+        
         document.getElementById('tab-flores').style.display = 'block';
-        document.getElementById('tab-arreglos').style.display = 'none';
-        document.getElementById('tab-manual').style.display = 'none';
-        renderizarArticulos('flores');
+        
+        setTimeout(() => {
+            renderizarArticulos('flores');
+            switchTab('flores');
+        }, 50);
+        
     } else if (cotizacion.tipoServicio === 'decoracion') {
         paso2Title.textContent = "2. Selección de Artículos";
+        
         tabsContainer.innerHTML = `
             <button class="tab-button active" data-tab="paquetes" onclick="switchTab('paquetes')">🎈 Globos y Paquetes</button>
             <button class="tab-button" data-tab="accesorios" onclick="switchTab('accesorios')">🛋️ Accesorios</button>
             <button class="tab-button" data-tab="manual" onclick="switchTab('manual')">✍️ Artículo Manual</button>
         `;
-        document.getElementById('tab-flores').style.display = 'none';
-        document.getElementById('tab-arreglos').style.display = 'none';
+        
         document.getElementById('tab-paquetes').style.display = 'block';
-        document.getElementById('tab-accesorios').style.display = 'none';
-        document.getElementById('tab-manual').style.display = 'none';
-        renderizarArticulos('paquetes');
+        
+        setTimeout(() => {
+            renderizarArticulos('paquetes');
+            switchTab('paquetes');
+        }, 50);
     }
+    
     actualizarResumen();
 }
-// PARTE 3 - PASO 2: SELECCIÓN DE ARTÍCULOS Y CONFIGURACIÓN
-
-// PARTE 3 - PASO 2: SELECCIÓN DE ARTÍCULOS Y CONFIGURACIÓN
 
 function switchTab(tabName) {
-    document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
-    document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+    console.log('🎯 switchTab llamado:', tabName);
+    
+    const targetTab = document.getElementById(`tab-${tabName}`);
+    if (!targetTab) {
+        console.warn(`⚠️ Tab ${tabName} no existe, usando default`);
+        tabName = cotizacion.tipoServicio === 'flores' ? 'flores' : 'paquetes';
+    }
+    
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.style.display = 'none';
+    });
+    
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active');
+    });
 
     const activeContent = document.getElementById(`tab-${tabName}`);
     const activeBtn = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
-    if (activeContent) activeContent.style.display = 'block';
-    if (activeBtn) activeBtn.classList.add('active');
+    
+    if (activeContent) {
+        activeContent.style.display = 'block';
+        console.log('✅ Mostrando tab:', tabName);
+    } else {
+        console.error('❌ No se encontró tab-' + tabName);
+    }
+    
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
     
     if (tabName === 'paquetes' || tabName === 'accesorios' || tabName === 'flores' || tabName === 'arreglos') {
         renderizarArticulos(tabName);
     } else if (tabName === 'manual') {
         renderizarArticulosManuales();
     }
-    scrollToTabs();
+    
+    if (window.innerWidth <= 768) {
+        setTimeout(() => {
+            const tabsContainer = document.getElementById('tabs-container');
+            if (tabsContainer) {
+                tabsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
+    }
 }
 
 function renderizarArticulos(tipo) {
@@ -1184,7 +1341,11 @@ function renderizarArticulos(tipo) {
     }
     
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container) {
+        console.warn(`⚠️ Container ${containerId} no encontrado`);
+        return;
+    }
+    
     container.innerHTML = '';
     
     listaArticulos.forEach(articulo => {
@@ -1196,7 +1357,7 @@ function renderizarArticulos(tipo) {
         card.innerHTML = `
             <div class="item-details" onclick="toggleArticulo('${tipo}', ${articulo.id})">
                 <h4>${articulo.emoji || '📦'} ${articulo.nombre}</h4>
-                <p>Costo unitario: ${formatoMonedaRD(articulo.precio)}</p>
+                <p>Precio por ${articulo.unidad || 'unidad'}: ${formatoMonedaRD(articulo.precio)}</p>
                 ${infoExtra}
             </div>
             <div class="item-footer">
@@ -1233,7 +1394,7 @@ function filtrarFloresPorColor() {
         card.innerHTML = `
             <div class="item-details" onclick="toggleArticulo('flores', ${articulo.id})">
                 <h4>${articulo.emoji || '🌹'} ${articulo.nombre}</h4>
-                <p>Costo unitario: ${formatoMonedaRD(articulo.precio)}</p>
+                <p>Precio por ${articulo.unidad || 'unidad'}: ${formatoMonedaRD(articulo.precio)}</p>
                 <p>Color: ${articulo.color}</p>
             </div>
             <div class="item-footer">
@@ -1313,6 +1474,13 @@ function renderizarArticulosManuales() {
     const container = document.getElementById('manual-items-container');
     if (!container) return;
     container.innerHTML = '';
+    
+    const tituloManual = document.getElementById('titulo-manual');
+    if (tituloManual) {
+        tituloManual.textContent = cotizacion.tipoServicio === 'flores' 
+            ? '✍️ Artículos Florales Personalizados' 
+            : '✍️ Artículos de Decoración Personalizados';
+    }
     
     cotizacion.articulos.manuales.forEach(item => {
         const div = document.createElement('div');
@@ -1484,9 +1652,9 @@ function actualizarTooltipPDF() {
     }
 }
 
-// ====================================================
-// FUNCIONES DE CONFIGURACIÓN
-// ====================================================
+// ============================================
+// PARTE 3: CONFIGURACIÓN
+// ============================================
 
 function createConfigItemHTML(tipo, item, index) {
     if (tipo === 'tipo-evento' || tipo === 'tematica-evento') {
@@ -1513,16 +1681,19 @@ function createConfigItemHTML(tipo, item, index) {
                     <input type="text" placeholder="Ej: Globo Azul" value="${item.nombre || ''}" 
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'nombre', this.value)">
                 </div>
+                
                 <div class="config-input-group">
                     <div class="config-label">Precio Venta</div>
                     <input type="number" placeholder="RD$" value="${item.precio || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'precio', this.value)">
                 </div>
+                
                 <div class="config-input-group">
                     <div class="config-label">Costo Real</div>
                     <input type="number" placeholder="RD$" value="${item.costo || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'costo', this.value)">
                 </div>
+                
                 <button class="btn-remove" onclick="eliminarConfigItemPorId('${tipo}', ${item.id})">×</button>
             </div>
         `;
@@ -1536,21 +1707,25 @@ function createConfigItemHTML(tipo, item, index) {
                     <input type="text" placeholder="Ej: Rosas Rojas" value="${item.nombre || ''}" 
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'nombre', this.value)">
                 </div>
+                
                 <div class="config-input-group">
                     <div class="config-label">Precio Venta</div>
                     <input type="number" placeholder="RD$" value="${item.precio || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'precio', this.value)">
                 </div>
+                
                 <div class="config-input-group">
                     <div class="config-label">Costo Real</div>
                     <input type="number" placeholder="RD$" value="${item.costo || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'costo', this.value)">
                 </div>
+                
                 <div class="config-input-group">
                     <div class="config-label">Color</div>
                     <input type="text" placeholder="Ej: Rojo" value="${item.color || 'Mixto'}" 
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'color', this.value)">
                 </div>
+                
                 <button class="btn-remove" onclick="eliminarConfigItemPorId('${tipo}', ${item.id})">×</button>
             </div>
         `;
@@ -1564,77 +1739,25 @@ function createConfigItemHTML(tipo, item, index) {
                     <input type="text" placeholder="Ej: Ramo Pequeño" value="${item.nombre || ''}" 
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'nombre', this.value)">
                 </div>
+                
                 <div class="config-input-group">
                     <div class="config-label">Precio Venta</div>
                     <input type="number" placeholder="RD$" value="${item.precio || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'precio', this.value)">
                 </div>
+                
                 <div class="config-input-group">
                     <div class="config-label">Costo Real</div>
                     <input type="number" placeholder="RD$" value="${item.costo || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'costo', this.value)">
                 </div>
+                
                 <button class="btn-remove" onclick="eliminarConfigItemPorId('${tipo}', ${item.id})">×</button>
             </div>
         `;
     }
     
     return '';
-}
-
-function guardarCategoria(categoria) {
-    const configToSave = {
-        tiposEvento: configuracion.tiposEvento,
-        tematicasEvento: configuracion.tematicasEvento,
-        paquetes: configuracion.paquetes.map(({ id, nombre, precio, costo, emoji }) => ({ id, nombre, precio, costo, emoji: emoji || '🎈' })),
-        accesorios: configuracion.accesorios.map(({ id, nombre, precio, costo, emoji }) => ({ id, nombre, precio, costo, emoji: emoji || '✨' })),
-        flores: configuracion.flores.map(({ id, nombre, precio, costo, emoji, color }) => ({ id, nombre, precio, costo, emoji: emoji || '🌹', color: color || 'Mixto' })),
-        arreglosFlorales: configuracion.arreglosFlorales.map(({ id, nombre, precio, costo, emoji }) => ({ id, nombre, precio, costo, emoji: emoji || '💐' })),
-        manoObraPorcentaje: configuracion.manoObraPorcentaje
-    };
-    localStorage.setItem('arteyevents_config', JSON.stringify(configToSave));
-
-    const nombres = {
-        'tipos': 'Tipos de Evento',
-        'tematicas': 'Temáticas',
-        'paquetes': 'Globos',
-        'accesorios': 'Accesorios',
-        'flores': 'Flores',
-        'arreglos': 'Arreglos Florales'
-    };
-    mostrarNotificacion(`✅ ${nombres[categoria] || 'Categoría'} guardada`);
-    cargarConfiguracion();
-    renderizarArticulos('paquetes');
-    actualizarResumen();
-}
-
-function inyectarBotonesGuardar() {
-    const secciones = [
-        { onclickFn: 'agregarTipoEvento',      categoria: 'tipos' },
-        { onclickFn: 'agregarTematicaEvento',  categoria: 'tematicas' },
-        { onclickFn: 'agregarPaquete',         categoria: 'paquetes' },
-        { onclickFn: 'agregarAccesorio',       categoria: 'accesorios' },
-        { onclickFn: 'agregarFlor',            categoria: 'flores' },
-        { onclickFn: 'agregarArreglo',         categoria: 'arreglos' }
-    ];
-
-    secciones.forEach(({ onclickFn, categoria }) => {
-        const guardadorId = `btn-guardar-cat-${categoria}`;
-        if (document.getElementById(guardadorId)) return;
-
-        const btnAgregar = Array.from(document.querySelectorAll('button')).find(b =>
-            b.getAttribute('onclick') && b.getAttribute('onclick').includes(onclickFn)
-        );
-        if (!btnAgregar) return;
-
-        const btnGuardar = document.createElement('button');
-        btnGuardar.id = guardadorId;
-        btnGuardar.className = btnAgregar.className;
-        btnGuardar.style.cssText = 'background:#28a745 !important;color:#fff !important;border-color:#28a745 !important;margin-left:6px;';
-        btnGuardar.textContent = '💾 Guardar';
-        btnGuardar.onclick = () => guardarCategoria(categoria);
-        btnAgregar.insertAdjacentElement('afterend', btnGuardar);
-    });
 }
 
 function renderizarConfiguracion() {
@@ -1679,8 +1802,6 @@ function renderizarConfiguracion() {
     configuracion.arreglosFlorales.forEach(item => {
         if (configArreglosContainer) configArreglosContainer.innerHTML += createConfigItemHTML('arreglo', item);
     });
-
-    inyectarBotonesGuardar();
 }
 
 function actualizarConfigItem(tipo, index, campo, valor) {
@@ -1699,6 +1820,7 @@ function actualizarConfigItem(tipo, index, campo, valor) {
 
 function actualizarConfigItemPorId(tipo, id, campo, valor) {
     let lista;
+    
     switch(tipo) {
         case 'paquete': lista = configuracion.paquetes; break;
         case 'accesorio': lista = configuracion.accesorios; break;
@@ -1707,6 +1829,7 @@ function actualizarConfigItemPorId(tipo, id, campo, valor) {
         case 'arreglo': lista = configuracion.arreglosFlorales; break;
         default: return;
     }
+    
     const item = lista.find(a => a.id === parseInt(id));
     if (item) {
         if (campo === 'nombre') item.nombre = valor;
@@ -1733,6 +1856,7 @@ function eliminarConfigItem(tipo, index) {
 
 function eliminarConfigItemPorId(tipo, id) {
     const idNum = parseInt(id);
+    
     switch(tipo) {
         case 'paquete': 
             configuracion.paquetes = configuracion.paquetes.filter(a => a.id !== idNum); 
@@ -1752,6 +1876,7 @@ function eliminarConfigItemPorId(tipo, id) {
             mostrarNotificacion('✅ Arreglo eliminado');
             break;
     }
+    
     renderizarConfiguracion();
 }
 
@@ -1760,12 +1885,16 @@ function agregarTipoEvento() {
     renderizarConfiguracion();
     actualizarTiposEvento();
     mostrarNotificacion('✅ Nuevo tipo de evento agregado');
+    
     setTimeout(() => {
         const configItems = document.querySelectorAll('#config-tipos-evento .config-item');
         if (configItems.length > 0) {
             const lastItem = configItems[configItems.length - 1];
             const input = lastItem.querySelector('input[type="text"]');
-            if (input) { input.focus(); input.select(); }
+            if (input) {
+                input.focus();
+                input.select();
+            }
         }
     }, 100);
 }
@@ -1775,154 +1904,157 @@ function agregarTematicaEvento() {
     renderizarConfiguracion();
     actualizarTematicasEvento();
     mostrarNotificacion('✅ Nueva temática agregada');
+    
     setTimeout(() => {
         const configItems = document.querySelectorAll('#config-tematicas-evento .config-item');
         if (configItems.length > 0) {
             const lastItem = configItems[configItems.length - 1];
             const input = lastItem.querySelector('input[type="text"]');
-            if (input) { input.focus(); input.select(); }
+            if (input) {
+                input.focus();
+                input.select();
+            }
         }
     }, 100);
 }
 
 function agregarPaquete() {
     const newId = configIdCounter++;
-    configuracion.paquetes.push({ id: newId, nombre: `Nuevo Globo ${newId}`, precio: 0, costo: 0, emoji: '🎈', cantidad: 0, tipo: 'decoracion' });
+    configuracion.paquetes.push({ 
+        id: newId, 
+        nombre: `Nuevo Globo ${newId}`, 
+        precio: 0, 
+        costo: 0, 
+        emoji: '🎈', 
+        cantidad: 0, 
+        tipo: 'decoracion' 
+    });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nuevo globo agregado');
 }
 
 function agregarAccesorio() {
     const newId = configIdCounter++;
-    configuracion.accesorios.push({ id: newId, nombre: `Nuevo Accesorio ${newId}`, precio: 0, costo: 0, emoji: '✨', cantidad: 0, tipo: 'decoracion' });
+    configuracion.accesorios.push({ 
+        id: newId, 
+        nombre: `Nuevo Accesorio ${newId}`, 
+        precio: 0, 
+        costo: 0, 
+        emoji: '✨', 
+        cantidad: 0, 
+        tipo: 'decoracion' 
+    });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nuevo accesorio agregado');
 }
 
 function agregarFlor() {
     const newId = configIdCounter++;
-    configuracion.flores.push({ id: newId, nombre: `Nueva Flor ${newId}`, precio: 0, costo: 0, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Mixto' });
+    configuracion.flores.push({ 
+        id: newId, 
+        nombre: `Nueva Flor ${newId}`, 
+        precio: 0, 
+        costo: 0, 
+        emoji: '🌹', 
+        cantidad: 0, 
+        tipo: 'flores', 
+        color: 'Mixto' 
+    });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nueva flor agregada');
 }
 
 function agregarArreglo() {
     const newId = configIdCounter++;
-    configuracion.arreglosFlorales.push({ id: newId, nombre: `Nuevo Arreglo ${newId}`, precio: 0, costo: 0, emoji: '💐', cantidad: 0, tipo: 'flores' });
+    configuracion.arreglosFlorales.push({ 
+        id: newId, 
+        nombre: `Nuevo Arreglo ${newId}`, 
+        precio: 0, 
+        costo: 0, 
+        emoji: '💐', 
+        cantidad: 0, 
+        tipo: 'flores' 
+    });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nuevo arreglo agregado');
 }
 
+// ============================================
+// FUNCIÓN CARGAR CONFIGURACIÓN CORREGIDA
+// ============================================
 function cargarConfiguracion() {
     const configGuardada = localStorage.getItem('arteyevents_config');
     if (configGuardada) {
         try {
             const configCargada = JSON.parse(configGuardada);
             
-            configuracion.tiposEvento = configCargada.tiposEvento || ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower'];
-            configuracion.tematicasEvento = configCargada.tematicasEvento || ['Clásica', 'Moderno', 'Vintage', 'Rústico'];
+            configuracion.tiposEvento = configCargada.tiposEvento || ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower', 'Graduaciones', 'Aniversarios', 'Flores'];
+            configuracion.tematicasEvento = configCargada.tematicasEvento || ['Clásica', 'Moderno', 'Vintage', 'Rústica', 'Minimalista', 'Bohemia', 'Elegante', 'Divertida'];
             
+            // Preservar las unidades al cargar configuración guardada
             configuracion.paquetes = (configCargada.paquetes || configuracion.paquetes).map(p => ({
                 ...p,
                 costo: p.costo !== undefined ? p.costo : p.precio * 0.3,
-                cantidad: 0
+                cantidad: 0,
+                unidad: p.unidad || 'paquete' // Asegurar que tenga unidad
             }));
             
             configuracion.accesorios = (configCargada.accesorios || configuracion.accesorios).map(a => ({
                 ...a,
                 costo: a.costo !== undefined ? a.costo : a.precio * 0.3,
-                cantidad: 0
+                cantidad: 0,
+                unidad: a.unidad || 'unidad'
             }));
             
             configuracion.flores = (configCargada.flores || configuracion.flores).map(f => ({
                 ...f,
                 costo: f.costo !== undefined ? f.costo : f.precio * 0.3,
-                cantidad: 0
+                cantidad: 0,
+                unidad: f.unidad || 'flor'
             }));
             
             configuracion.arreglosFlorales = (configCargada.arreglosFlorales || configuracion.arreglosFlorales).map(af => ({
                 ...af,
                 costo: af.costo !== undefined ? af.costo : af.precio * 0.3,
-                cantidad: 0
+                cantidad: 0,
+                unidad: af.unidad || (af.nombre.includes('Ramo') ? 'ramo' : 
+                                   af.nombre.includes('Centro') ? 'centro' :
+                                   af.nombre.includes('Arco') ? 'arco' : 'unidad')
             }));
             
             configuracion.manoObraPorcentaje = configCargada.manoObraPorcentaje || 30;
             
-            cotizacion.articulos.paquetes = [...configuracion.paquetes];
-            cotizacion.articulos.accesorios = [...configuracion.accesorios];
-            cotizacion.articulos.flores = [...configuracion.flores];
-            cotizacion.articulos.arreglosFlorales = [...configuracion.arreglosFlorales];
-            
-            cotizacion.costos.manoObraPorcentaje = configuracion.manoObraPorcentaje;
-            
         } catch (e) {
             console.error('Error al cargar configuración:', e);
             mostrarNotificacion('❌ Error al cargar configuración guardada', 'error');
-            restaurarConfiguracionPorDefecto();
         }
-    } else {
-        restaurarConfiguracionPorDefecto();
     }
+    
+    // ===== SIEMPRE CARGAR LOS ARTÍCULOS DESDE LA CONFIGURACIÓN =====
+    cotizacion.articulos.paquetes = configuracion.paquetes.map(p => ({...p, cantidad: 0}));
+    cotizacion.articulos.accesorios = configuracion.accesorios.map(a => ({...a, cantidad: 0}));
+    cotizacion.articulos.flores = configuracion.flores.map(f => ({...f, cantidad: 0}));
+    cotizacion.articulos.arreglosFlorales = configuracion.arreglosFlorales.map(af => ({...af, cantidad: 0}));
+    cotizacion.costos.manoObraPorcentaje = configuracion.manoObraPorcentaje;
     
     actualizarTiposEvento();
     actualizarTematicasEvento();
     actualizarResumen();
 }
 
-function restaurarConfiguracionPorDefecto() {
-    configuracion = {
-        tiposEvento: ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower', 'Graduaciones', 'Aniversarios', 'Flores'],
-        tematicasEvento: ['Clásica', 'Moderno', 'Vintage', 'Rústica', 'Minimalista', 'Bohemia', 'Elegante', 'Divertida'],
-        paquetes: [
-            { id: 1, nombre: "Globo Azul", precio: 1200, costo: 400, emoji: '💙', cantidad: 0, tipo: 'decoracion' },
-            { id: 2, nombre: "Globo Dorado", precio: 1500, costo: 500, emoji: '✨', cantidad: 0, tipo: 'decoracion' },
-            { id: 3, nombre: "Globo Blanco", precio: 1000, costo: 300, emoji: '☁️', cantidad: 0, tipo: 'decoracion' },
-            { id: 4, nombre: "Globo Rosa", precio: 1300, costo: 450, emoji: '💖', cantidad: 0, tipo: 'decoracion' }
-        ],
-        accesorios: [
-            { id: 1, nombre: "Mampara Circular", precio: 800, costo: 300, emoji: '🖼️', cantidad: 0, tipo: 'decoracion' },
-            { id: 2, nombre: "Cilindro Decorativo", precio: 400, costo: 150, emoji: '🏺', cantidad: 0, tipo: 'decoracion' },
-            { id: 3, nombre: "Mesa Principal", precio: 300, costo: 100, emoji: '🪑', cantidad: 0, tipo: 'decoracion' },
-            { id: 4, nombre: "Sillas Tiffany (x10)", precio: 1500, costo: 600, emoji: '🪑', cantidad: 0, tipo: 'decoracion' },
-            { id: 5, nombre: "Alfombra Roja", precio: 600, costo: 200, emoji: '🟥', cantidad: 0, tipo: 'decoracion' }
-        ],
-        flores: [
-            { id: 100, nombre: "Rosas Rojas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rojo' },
-            { id: 101, nombre: "Rosas Blancas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Blanco' },
-            { id: 102, nombre: "Rosas Rosadas", precio: 250, costo: 80, emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Rosa' },
-            { id: 103, nombre: "Girasoles", precio: 300, costo: 100, emoji: '🌻', cantidad: 0, tipo: 'flores', color: 'Amarillo' },
-            { id: 104, nombre: "Lirios Blancos", precio: 350, costo: 120, emoji: '⚜️', cantidad: 0, tipo: 'flores', color: 'Blanco' },
-            { id: 105, nombre: "Orquídeas", precio: 500, costo: 200, emoji: '💮', cantidad: 0, tipo: 'flores', color: 'Morado' },
-            { id: 106, nombre: "Tulipanes", precio: 400, costo: 150, emoji: '🌷', cantidad: 0, tipo: 'flores', color: 'Multicolor' },
-            { id: 107, nombre: "Flores Silvestres", precio: 200, costo: 60, emoji: '🌸', cantidad: 0, tipo: 'flores', color: 'Mixto' }
-        ],
-        arreglosFlorales: [
-            { id: 200, nombre: "Ramo Pequeño (12 flores)", precio: 3000, costo: 1200, emoji: '💐', cantidad: 0, tipo: 'flores' },
-            { id: 201, nombre: "Ramo Mediano (24 flores)", precio: 5500, costo: 2200, emoji: '💐', cantidad: 0, tipo: 'flores' },
-            { id: 202, nombre: "Ramo Grande (36 flores)", precio: 8000, costo: 3200, emoji: '💐', cantidad: 0, tipo: 'flores' },
-            { id: 203, nombre: "Centro de Mesa", precio: 4500, costo: 1800, emoji: '🏺', cantidad: 0, tipo: 'flores' },
-            { id: 204, nombre: "Arco Floral", precio: 12000, costo: 5000, emoji: '🎀', cantidad: 0, tipo: 'flores' },
-            { id: 205, nombre: "Guirnalda Floral", precio: 7500, costo: 3000, emoji: '🌿', cantidad: 0, tipo: 'flores' }
-        ],
-        manoObraPorcentaje: 30
-    };
-    
-    cotizacion.articulos.paquetes = [...configuracion.paquetes];
-    cotizacion.articulos.accesorios = [...configuracion.accesorios];
-    cotizacion.articulos.flores = [...configuracion.flores];
-    cotizacion.articulos.arreglosFlorales = [...configuracion.arreglosFlorales];
-}
-
+// ============================================
+// FUNCIÓN GUARDAR CONFIGURACIÓN MODIFICADA
+// ============================================
 function guardarConfiguracion() {
     configuracion.manoObraPorcentaje = parseFloat(document.getElementById('porcentaje-mano-obra').value) || 0;
     
     const configToSave = {
         tiposEvento: configuracion.tiposEvento,
         tematicasEvento: configuracion.tematicasEvento,
-        paquetes: configuracion.paquetes.map(({ id, nombre, precio, costo, emoji }) => ({ id, nombre, precio, costo, emoji: emoji || '🎈' })),
-        accesorios: configuracion.accesorios.map(({ id, nombre, precio, costo, emoji }) => ({ id, nombre, precio, costo, emoji: emoji || '✨' })),
-        flores: configuracion.flores.map(({ id, nombre, precio, costo, emoji, color }) => ({ id, nombre, precio, costo, emoji: emoji || '🌹', color: color || 'Mixto' })),
-        arreglosFlorales: configuracion.arreglosFlorales.map(({ id, nombre, precio, costo, emoji }) => ({ id, nombre, precio, costo, emoji: emoji || '💐' })),
+        paquetes: configuracion.paquetes.map(({ id, nombre, precio, costo, emoji, unidad }) => ({ id, nombre, precio, costo, emoji: emoji || '🎈', unidad })),
+        accesorios: configuracion.accesorios.map(({ id, nombre, precio, costo, emoji, unidad }) => ({ id, nombre, precio, costo, emoji: emoji || '✨', unidad })),
+        flores: configuracion.flores.map(({ id, nombre, precio, costo, emoji, color, unidad }) => ({ id, nombre, precio, costo, emoji: emoji || '🌹', color: color || 'Mixto', unidad })),
+        arreglosFlorales: configuracion.arreglosFlorales.map(({ id, nombre, precio, costo, emoji, unidad }) => ({ id, nombre, precio, costo, emoji: emoji || '💐', unidad })),
         manoObraPorcentaje: configuracion.manoObraPorcentaje
     };
     
@@ -1930,14 +2062,100 @@ function guardarConfiguracion() {
     mostrarNotificacion('✅ Configuración guardada con éxito. Los costos reales se han guardado.');
     toggleConfig();
     
+    // Recargar la configuración para actualizar la cotización
     cargarConfiguracion();
     renderizarArticulos('paquetes');
     actualizarResumen();
 }
 
-// ----------------------------------------------------
-// PDF GENERATION
-// ----------------------------------------------------
+// ============================================
+// FUNCIONES PARA GUARDAR POR CATEGORÍA
+// ============================================
+
+function guardarTiposEvento() {
+    guardarCategoria('tiposEvento', configuracion.tiposEvento);
+    mostrarNotificacion('✅ Tipos de evento guardados', 'success');
+}
+
+function guardarTematicasEvento() {
+    guardarCategoria('tematicasEvento', configuracion.tematicasEvento);
+    mostrarNotificacion('✅ Temáticas guardadas', 'success');
+}
+
+function guardarPaquetes() {
+    guardarCategoria('paquetes', configuracion.paquetes);
+    mostrarNotificacion('✅ Globos guardados', 'success');
+}
+
+function guardarAccesorios() {
+    guardarCategoria('accesorios', configuracion.accesorios);
+    mostrarNotificacion('✅ Accesorios guardados', 'success');
+}
+
+function guardarFlores() {
+    guardarCategoria('flores', configuracion.flores);
+    mostrarNotificacion('✅ Flores guardadas', 'success');
+}
+
+function guardarArreglos() {
+    guardarCategoria('arreglosFlorales', configuracion.arreglosFlorales);
+    mostrarNotificacion('✅ Arreglos guardados', 'success');
+}
+
+// Función auxiliar para guardar una categoría específica
+function guardarCategoria(categoria, datos) {
+    // Obtener la configuración actual guardada
+    let configGuardada = {};
+    try {
+        configGuardada = JSON.parse(localStorage.getItem('arteyevents_config')) || {};
+    } catch (e) {
+        configGuardada = {};
+    }
+    
+    // Actualizar solo la categoría específica
+    configGuardada[categoria] = datos;
+    
+    // Guardar en localStorage
+    localStorage.setItem('arteyevents_config', JSON.stringify(configGuardada));
+    
+    // Actualizar la configuración actual
+    if (categoria === 'tiposEvento') {
+        configuracion.tiposEvento = datos;
+        actualizarTiposEvento();
+    } else if (categoria === 'tematicasEvento') {
+        configuracion.tematicasEvento = datos;
+        actualizarTematicasEvento();
+    } else if (categoria === 'paquetes') {
+        configuracion.paquetes = datos;
+        renderizarArticulos('paquetes');
+    } else if (categoria === 'accesorios') {
+        configuracion.accesorios = datos;
+        renderizarArticulos('accesorios');
+    } else if (categoria === 'flores') {
+        configuracion.flores = datos;
+        renderizarArticulos('flores');
+    } else if (categoria === 'arreglosFlorales') {
+        configuracion.arreglosFlorales = datos;
+        renderizarArticulos('arreglos');
+    }
+    
+    // Sincronizar cotización
+    sincronizarCotizacionConConfiguracion();
+    actualizarResumen();
+}
+
+function sincronizarCotizacionConConfiguracion() {
+    cotizacion.articulos.paquetes = configuracion.paquetes.map(p => ({...p, cantidad: 0}));
+    cotizacion.articulos.accesorios = configuracion.accesorios.map(a => ({...a, cantidad: 0}));
+    cotizacion.articulos.flores = configuracion.flores.map(f => ({...f, cantidad: 0}));
+    cotizacion.articulos.arreglosFlorales = configuracion.arreglosFlorales.map(af => ({...af, cantidad: 0}));
+    cotizacion.costos.manoObraPorcentaje = configuracion.manoObraPorcentaje;
+    document.getElementById('porcentaje-mano-obra').value = configuracion.manoObraPorcentaje;
+}
+
+// ============================================
+// PARTE 4: GENERACIÓN DE PDF
+// ============================================
 
 async function generarCotizacionPDF() {
     if (!window.jspdf || !window.jspdf.jsPDF) {
@@ -1946,8 +2164,6 @@ async function generarCotizacionPDF() {
         return;
     }
 
-    const { jsPDF } = window.jspdf;
-    
     const total = cotizacion.costos.total || 0;
     if (total === 0) {
         mostrarNotificacion('❌ Error: No hay artículos seleccionados para generar el PDF.', 'error');
@@ -1975,7 +2191,7 @@ async function generarCotizacionPDF() {
     mostrarEstadoCargaPDF(true);
     
     try {
-        const doc = new jsPDF();
+        const doc = new window.jspdf.jsPDF();
         
         if (!doc || typeof doc.addPage !== 'function') {
             throw new Error('Error al crear documento PDF');
@@ -2195,17 +2411,21 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
             const nombre = item.nombre;
             const cantidad = item.cantidad || 1;
             const esManual = item.tipo === 'manual';
-            if (cotizacion.tipoServicio === 'decoracion') {
-                let textoIzq = `• ${nombre}`;
-                if (esManual) textoIzq += ' [Artículo manual]';
-                const textoDer = `${cantidad} unidad${cantidad !== 1 ? 'es' : ''}`;
-                doc.text(textoIzq, margin + 2, yPos + 4);
-                doc.text(textoDer, pageWidth - margin - 2, yPos + 4, { align: 'right' });
-            } else {
-                let textoItem = `• ${nombre} - ${cantidad} unidad${cantidad !== 1 ? 'es' : ''}`;
-                if (esManual) textoItem += ' [Artículo manual]';
-                doc.text(textoItem, margin + 2, yPos + 4);
-            }
+            
+            // Usar la unidad del artículo o determinar por nombre
+            let unidad = item.unidad || 'unidad';
+            if (item.nombre.includes('Globo')) unidad = 'paquete';
+            else if (item.tipo === 'flores' && !item.nombre.includes('Ramo') && !item.nombre.includes('Arreglo')) unidad = 'flor';
+            else if (item.nombre.includes('Ramo')) unidad = 'ramo';
+            else if (item.nombre.includes('Sillas')) unidad = 'juego';
+            else if (item.nombre.includes('Arco')) unidad = 'arco';
+            else if (item.nombre.includes('Centro')) unidad = 'centro';
+            else if (item.nombre.includes('Guirnalda')) unidad = 'guirnalda';
+            
+            let textoItem = `• ${nombre} - ${cantidad} ${unidad}${cantidad !== 1 ? 's' : ''}`;
+            if (esManual) textoItem += ' [Artículo manual]';
+            // En modo simple NO se muestra ningún precio
+            doc.text(textoItem, margin + 2, yPos + 4);
             yPos += 6;
         });
 
@@ -2220,152 +2440,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     yPos += 8;
     
     const xCostos = pageWidth - margin - 5;
-    
-    yPos += 8;
-    
-    doc.setDrawColor(138, 43, 226);
-    doc.setLineWidth(0.5);
-    doc.line(pageWidth / 2, yPos, pageWidth - margin, yPos);
-    yPos += 1;
-    doc.line(pageWidth / 2, yPos, pageWidth - margin, yPos);
-    yPos += 8;
-
-    doc.setFillColor(245, 245, 245);
-    doc.rect(pageWidth / 2 - 10, yPos - 5, pageWidth / 2 - margin + 10, 12, 'F');
-    
-    doc.setFontSize(14);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(138, 43, 226);
-    doc.text("TOTAL COTIZADO:", pageWidth / 2, yPos, { align: "left" });
-    doc.text(formatoMonedaRD(total), xCostos, yPos, { align: "right" });
-    yPos += 15;
-    
-    if (cotizacion.cliente.notas) {
-        checkPageBreak(20);
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(0, 0, 0);
-        doc.text("Notas Adicionales:", margin, yPos);
-        yPos += 4;
-        
-        doc.setFontSize(9);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(80, 80, 80);
-        const textLines = doc.splitTextToSize(cotizacion.cliente.notas, pageWidth - 2 * margin);
-        doc.text(textLines, margin, yPos);
-        yPos += textLines.length * 4;
-    }
-    
-    checkPageBreak(20);
-    doc.setFillColor(245, 245, 245);
-    doc.rect(0, pageHeight - 20, pageWidth, 20, 'F');
-    
-    doc.setFontSize(8);
-    doc.setFont("helvetica", "italic");
-    doc.setTextColor(150, 150, 150);
-    
-    doc.text("Arte y Events - Decoración Profesional", pageWidth / 2, pageHeight - 10, { align: "center" });
-}
-
-async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
-    const margin = 15;
-    let yPos = margin + 5;
-    const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-    const maxY = pageHeight - margin - 10;
-    
-    function checkPageBreak(neededSpace) {
-        if (yPos + neededSpace > maxY) {
-            doc.addPage();
-            yPos = margin;
-        }
-    }
-
-    await generarEncabezadoPDF(doc);
-    yPos = 55;
-
-    doc.setFontSize(9);
-    doc.setTextColor(100, 100, 100);
-    doc.text(`Fecha de Creación: ${new Date().toLocaleDateString('es-DO')}`, pageWidth - margin, yPos + 10, { align: "right" });
-    yPos += 10;
-
-    yPos = generarInformacionClientePDF(doc, yPos);
-
-    if (configPDF.mostrarDetalleMateriales && itemsSeleccionados.length > 0) {
-        checkPageBreak(50);
-
-        doc.setFontSize(12);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(138, 43, 226);
-        doc.text("Detalle de Artículos y Servicios", margin, yPos);
-        yPos += 7;
-
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(50, 50, 50);
-        doc.setFontSize(9);
-
-        itemsSeleccionados.forEach(item => {
-            checkPageBreak(6);
-            const nombre = item.nombre;
-            const cantidad = item.cantidad || 1;
-            const esManual = item.tipo === 'manual';
-            let precioUnitario;
-            if (esManual) precioUnitario = item.precioUnitario;
-            else precioUnitario = item.precio;
-
-            const precioTotalItem = precioUnitario * cantidad;
-            if (cotizacion.tipoServicio === 'decoracion') {
-                let textoIzq = `• ${nombre}`;
-                if (esManual) textoIzq += ' [Artículo manual]';
-                const cantidadTexto = `${cantidad} unidad${cantidad !== 1 ? 'es' : ''}`;
-                doc.text(textoIzq, margin + 2, yPos + 4);
-                if (configPDF.mostrarCostoMateriales) {
-                    doc.text(`${cantidadTexto} (${formatoMonedaRD(precioTotalItem)})`, pageWidth - margin - 2, yPos + 4, { align: 'right' });
-                } else {
-                    doc.text(cantidadTexto, pageWidth - margin - 2, yPos + 4, { align: 'right' });
-                }
-            } else {
-                let textoItem = `• ${nombre} - ${cantidad} unidad${cantidad !== 1 ? 'es' : ''}`;
-                if (esManual) textoItem += ' [Artículo manual]';
-                if (configPDF.mostrarCostoMateriales) textoItem += ` (${formatoMonedaRD(precioTotalItem)})`;
-                doc.text(textoItem, margin + 2, yPos + 4);
-            }
-            yPos += 6;
-        });
-
-        yPos += 10;
-    }
-
-    checkPageBreak(50);
-    
-    doc.setDrawColor(138, 43, 226);
-    doc.setLineWidth(0.3);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 8;
-    
-    const xCostos = pageWidth - margin - 5;
-    
-    doc.setFontSize(10);
-    
-    if (cotizacion.tipoServicio === 'decoracion') {
-        if (configPDF.mostrarCostoMateriales) {
-            doc.text("Costo de Materiales:", pageWidth / 2, yPos, { align: "left" });
-            doc.text(formatoMonedaRD(cotizacion.costos.materiales), xCostos, yPos, { align: "right" });
-            yPos += 5;
-        }
-
-        if (configPDF.mostrarManoObra && cotizacion.costos.manoObra > 0) {
-            doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
-            doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
-            yPos += 5;
-        }
-        
-        if (configPDF.mostrarTransporte && cotizacion.costos.transporte > 0) {
-            doc.text("Transporte:", pageWidth / 2, yPos, { align: "left" });
-            doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
-            yPos += 5;
-        }
-    }
     
     yPos += 8;
     
@@ -2419,9 +2493,163 @@ function formatearFecha(fechaISO) {
     return fecha.toLocaleDateString('es-DO', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-// ----------------------------------------------------
-// LIMPIEZA DE COTIZACIÓN
-// ----------------------------------------------------
+async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
+    const margin = 15;
+    let yPos = margin + 5;
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const maxY = pageHeight - margin - 10;
+    
+    function checkPageBreak(neededSpace) {
+        if (yPos + neededSpace > maxY) {
+            doc.addPage();
+            yPos = margin;
+        }
+    }
+
+    await generarEncabezadoPDF(doc);
+    yPos = 55;
+
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Fecha de Creación: ${new Date().toLocaleDateString('es-DO')}`, pageWidth - margin, yPos + 10, { align: "right" });
+    yPos += 10;
+
+    yPos = generarInformacionClientePDF(doc, yPos);
+
+    // Detalle de artículos
+    if (itemsSeleccionados.length > 0) {
+        checkPageBreak(50);
+
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(138, 43, 226);
+        doc.text("Detalle de Artículos y Servicios", margin, yPos);
+        yPos += 7;
+
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(50, 50, 50);
+        doc.setFontSize(9);
+
+        itemsSeleccionados.forEach(item => {
+            checkPageBreak(6);
+            const nombre = item.nombre;
+            const cantidad = item.cantidad || 1;
+            const esManual = item.tipo === 'manual';
+            
+            // Usar la unidad del artículo o determinar por nombre
+            let unidad = item.unidad || 'unidad';
+            if (item.nombre.includes('Globo')) unidad = 'paquete';
+            else if (item.tipo === 'flores' && !item.nombre.includes('Ramo') && !item.nombre.includes('Arreglo')) unidad = 'flor';
+            else if (item.nombre.includes('Ramo')) unidad = 'ramo';
+            else if (item.nombre.includes('Sillas')) unidad = 'juego';
+            else if (item.nombre.includes('Arco')) unidad = 'arco';
+            else if (item.nombre.includes('Centro')) unidad = 'centro';
+            else if (item.nombre.includes('Guirnalda')) unidad = 'guirnalda';
+            
+            let textoItem = `• ${nombre} - ${cantidad} ${unidad}${cantidad !== 1 ? 's' : ''}`;
+            if (esManual) textoItem += ' [Artículo manual]';
+            
+            // SOLO mostrar precio si está activado mostrarDetalleMateriales
+            if (configPDF.mostrarDetalleMateriales) {
+                let precioUnitario;
+                if (esManual) precioUnitario = item.precioUnitario;
+                else precioUnitario = item.precio;
+                const precioTotalItem = precioUnitario * cantidad;
+                textoItem += ` (${formatoMonedaRD(precioTotalItem)})`;
+            }
+            
+            doc.text(textoItem, margin + 2, yPos + 4);
+            yPos += 6;
+        });
+
+        yPos += 10;
+    }
+
+    checkPageBreak(50);
+    
+    doc.setDrawColor(138, 43, 226);
+    doc.setLineWidth(0.3);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 8;
+    
+    const xCostos = pageWidth - margin - 5;
+    
+    doc.setFontSize(10);
+    
+    // SOLO para decoración
+    if (cotizacion.tipoServicio === 'decoracion') {
+        // Costo de materiales - SOLO si está activado
+        if (configPDF.mostrarCostoMateriales) {
+            doc.text("Costo de Materiales:", pageWidth / 2, yPos, { align: "left" });
+            doc.text(formatoMonedaRD(cotizacion.costos.materiales), xCostos, yPos, { align: "right" });
+            yPos += 5;
+        }
+
+        // Mano de obra - SOLO si está activado y hay monto
+        if (configPDF.mostrarManoObra && cotizacion.costos.manoObra > 0) {
+            doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
+            doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
+            yPos += 5;
+        }
+        
+        // Transporte - SOLO si está activado y hay monto
+        if (configPDF.mostrarTransporte && cotizacion.costos.transporte > 0) {
+            doc.text("Transporte:", pageWidth / 2, yPos, { align: "left" });
+            doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
+            yPos += 5;
+        }
+    }
+    
+    yPos += 8;
+    
+    doc.setDrawColor(138, 43, 226);
+    doc.setLineWidth(0.5);
+    doc.line(pageWidth / 2, yPos, pageWidth - margin, yPos);
+    yPos += 1;
+    doc.line(pageWidth / 2, yPos, pageWidth - margin, yPos);
+    yPos += 8;
+
+    doc.setFillColor(245, 245, 245);
+    doc.rect(pageWidth / 2 - 10, yPos - 5, pageWidth / 2 - margin + 10, 12, 'F');
+    
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(138, 43, 226);
+    doc.text("TOTAL COTIZADO:", pageWidth / 2, yPos, { align: "left" });
+    doc.text(formatoMonedaRD(total), xCostos, yPos, { align: "right" });
+    yPos += 15;
+    
+    if (cotizacion.cliente.notas) {
+        checkPageBreak(20);
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(0, 0, 0);
+        doc.text("Notas Adicionales:", margin, yPos);
+        yPos += 4;
+        
+        doc.setFontSize(9);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(80, 80, 80);
+        const textLines = doc.splitTextToSize(cotizacion.cliente.notas, pageWidth - 2 * margin);
+        doc.text(textLines, margin, yPos);
+        yPos += textLines.length * 4;
+    }
+    
+    checkPageBreak(20);
+    doc.setFillColor(245, 245, 245);
+    doc.rect(0, pageHeight - 20, pageWidth, 20, 'F');
+    
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(150, 150, 150);
+    
+    doc.text("Arte y Events - Decoración Profesional", pageWidth / 2, pageHeight - 10, { align: "center" });
+}
+
+// ============================================
+// PARTE 5: LIMPIEZA Y UTILIDADES
+// ============================================
 
 function confirmarLimpiarCotizacion() {
     document.getElementById('confirmModal').style.display = 'flex';
@@ -2505,9 +2733,9 @@ function limpiarCamposCotizacion() {
     renderizarArticulos('arreglos');
     renderizarArticulosManuales();
     
-    const container = document.querySelector('.form-group.full-width');
-    if (container) {
-        const existingDesglose = container.querySelector('#desglose-ganancia');
+    const paso3 = document.getElementById('step-3');
+    if (paso3) {
+        const existingDesglose = paso3.querySelector('#desglose-ganancia-paso3');
         if (existingDesglose) existingDesglose.remove();
     }
     
@@ -2554,10 +2782,6 @@ function limpiarCamposCotizacion() {
     }, 100);
 }
 
-// ----------------------------------------------------
-// NOTIFICACIONES
-// ----------------------------------------------------
-
 function mostrarNotificacion(mensaje, tipo = 'success') {
     const notification = document.getElementById('notification');
     const messageElement = document.getElementById('notification-message');
@@ -2582,10 +2806,6 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
         notification.classList.remove('show');
     }, 3000);
 }
-
-// ----------------------------------------------------
-// UTILIDADES
-// ----------------------------------------------------
 
 function toggleConfig() {
     document.getElementById('configPanel').classList.toggle('active');
@@ -2613,107 +2833,28 @@ function actualizarBotonFlotantePDF() {
 }
 
 // PWA Support
-let deferredPrompt = null;
-let installButton = null;
-
-// Detectar cuando el navegador quiere mostrar el prompt de instalación
+let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    
-    // Mostrar botón de instalación personalizado
-    installButton = document.getElementById('install-pwa-button');
-    if (installButton) {
-        installButton.style.display = 'block';
-        installButton.addEventListener('click', handleInstallClick);
-    }
-    
-    console.log('PWA installation available');
 });
 
-// Manejar clic en botón de instalación
-function handleInstallClick() {
-    if (!deferredPrompt) {
-        console.log('No installation prompt available');
-        return;
-    }
-    
-    deferredPrompt.prompt();
-    
-    deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the PWA installation');
-            mostrarNotificacion('✅ Aplicación instalada con éxito', 'success');
-        } else {
-            console.log('User dismissed the PWA installation');
-        }
-        
-        deferredPrompt = null;
-        if (installButton) {
-            installButton.style.display = 'none';
-            installButton.removeEventListener('click', handleInstallClick);
-        }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').then(registration => {
+      console.log('ServiceWorker registrado con éxito:', registration.scope);
+    }).catch(registrationError => {
+      console.log('Error al registrar ServiceWorker:', registrationError);
     });
+  });
 }
 
-// Registrar Service Worker
-function registerServiceWorker() {
-    if (!('serviceWorker' in navigator)) {
-        console.log('Service workers not supported');
-        return;
-    }
-    
-    window.addEventListener('load', () => {
-        const swUrl = './service-worker.js';
-        
-        navigator.serviceWorker.register(swUrl)
-            .then(registration => {
-                console.log('Service Worker registered with scope:', registration.scope);
-                
-                // Manejar actualizaciones
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    
-                    newWorker.addEventListener('statechange', () => {
-                        switch (newWorker.state) {
-                            case 'installed':
-                                if (navigator.serviceWorker.controller) {
-                                    console.log('New content available; please refresh.');
-                                    // Mostrar notificación de actualización
-                                    mostrarNotificacion('📦 Nueva versión disponible. Recarga para actualizar.', 'info');
-                                }
-                                break;
-                        }
-                    });
-                });
-            })
-            .catch(error => {
-                console.error('Service Worker registration failed:', error);
-                
-                // Si falla, intentar sin cache
-                if (error.toString().includes('MIME type')) {
-                    console.warn('Trying without Service Worker due to MIME type issues');
-                }
-            });
-            
-        // Recargar cuando hay nuevo controlador
-        let refreshing = false;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-            if (!refreshing) {
-                refreshing = true;
-                window.location.reload();
-            }
-        });
-    });
-}
-
-// Detectar si la app está en modo standalone (ya instalada)
-window.addEventListener('DOMContentLoaded', () => {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        console.log('App running in standalone mode');
-        document.body.classList.add('pwa-installed');
-    }
-});
-
-// Iniciar todo
-registerServiceWorker();
+// ============================================
+// CONFIRMACIÓN DE CARGA FINAL
+// ============================================
+console.log('✅ Script COMPLETO cargado correctamente - Versión con unidades corregidas');
+console.log('📱 Optimizado para móvil');
+console.log('🔧 Correcciones aplicadas:');
+console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
+console.log('   ✓ Botones Guardar por categoría');
+console.log('   ✓ Desglose movido al paso 3');
