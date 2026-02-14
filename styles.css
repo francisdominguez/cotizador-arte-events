@@ -68,6 +68,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth !important;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -75,6 +79,8 @@ body {
     color: var(--dark);
     padding: 20px;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
 }
 
 .container {
@@ -288,6 +294,13 @@ header > p {
 .form-group textarea.error {
     border-color: var(--danger) !important;
     background-color: rgba(255, 107, 107, 0.05);
+}
+
+input[readonly] {
+    background-color: #e9ecef !important;
+    cursor: not-allowed;
+    opacity: 0.8;
+    border: 1px solid #ced4da;
 }
 
 .validation-error {
@@ -920,10 +933,6 @@ textarea {
     width: 100%;
 }
 
-/* =============================================
-   ESTILOS UNIFICADOS PARA CONFIG-ITEM
-   ============================================= */
-
 .config-item {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -984,7 +993,6 @@ textarea {
     font-size: 0.85em;
 }
 
-/* Estilo especial para costo real */
 .config-item input[type="number"][placeholder="RD$"] {
     border-left: 3px solid var(--success);
     background-color: #f8fff8;
@@ -1013,7 +1021,6 @@ textarea {
     transform: scale(1.1);
 }
 
-/* Para los tipos de evento y temáticas (solo 2 columnas) */
 .config-item[data-tipo="tipo-evento"],
 .config-item[data-tipo="tematica-evento"] {
     grid-template-columns: 1fr auto;
@@ -1023,8 +1030,6 @@ textarea {
 .config-item[data-tipo="tematica-evento"] .config-input-group {
     grid-column: 1;
 }
-
-/* Fin de estilos unificados para config-item */
 
 .notification {
     position: fixed;
@@ -1059,6 +1064,11 @@ textarea {
 
 .notification.error {
     background: var(--danger);
+    color: white;
+}
+
+.notification.info {
+    background: #2196f3;
     color: white;
 }
 
@@ -1443,11 +1453,6 @@ textarea {
     font-size: 20px;
 }
 
-.floating-text {
-    font-size: 14px;
-    text-align: left;
-}
-
 .floating-button.back-to-top {
     bottom: 80px;
     right: 20px;
@@ -1482,9 +1487,6 @@ textarea {
     }
 }
 
-/* =============================================
-   INDICADOR DE PASO ACTUAL - MEJORADO
-   ============================================= */
 .step-indicator-badge {
     position: fixed;
     top: 130px;
@@ -1521,6 +1523,7 @@ textarea {
     font-size: 14px;
     font-weight: 800;
     box-shadow: 0 3px 8px rgba(138, 43, 226, 0.3);
+    animation: pulseStep 2s infinite;
 }
 
 .step-indicator-badge .step-name {
@@ -1529,7 +1532,6 @@ textarea {
     color: var(--dark);
 }
 
-/* Diferentes colores según el paso */
 .step-indicator-badge[data-step="1"] {
     border-color: #4ecdc4;
 }
@@ -1554,7 +1556,6 @@ textarea {
     background: var(--success);
 }
 
-/* Animación de pulso para el paso actual */
 @keyframes pulseStep {
     0% {
         box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.4);
@@ -1567,11 +1568,6 @@ textarea {
     }
 }
 
-.step-indicator-badge .step-number {
-    animation: pulseStep 2s infinite;
-}
-
-/* Responsive */
 @media (max-width: 1200px) {
     .app-container {
         grid-template-columns: 1fr;
@@ -1593,516 +1589,317 @@ textarea {
     }
 }
 
+/* ============================================
+   ✅ CORRECCIONES CRÍTICAS PARA MÓVIL
+   ============================================ */
+
 @media (max-width: 768px) {
     body {
-        padding: 10px;
+        overflow-x: hidden !important;
+        padding: 10px !important;
     }
     
     .container {
-        border-radius: 15px;
-    }
-    
-    header {
-        padding: 15px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        text-align: center;
-    }
-    
-    .logo {
-        justify-content: center;
-        width: 100%;
-    }
-    
-    .logo-icon {
-        font-size: 2em;
-    }
-    
-    .logo-text h1 {
-        font-size: 1.5em;
-    }
-    
-    header > p {
-        text-align: center;
-        width: 100%;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border-radius: 15px !important;
     }
     
     .app-container {
-        padding: 15px;
+        padding: 15px !important;
+        overflow-x: hidden !important;
         gap: 15px;
     }
     
-    .step-section h2 {
-        font-size: 1.4em;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .required-hint {
-        align-self: flex-start;
-    }
-    
-    .tabs {
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-    
-    .tab-button {
-        padding: 10px 15px;
-        font-size: 0.95em;
-    }
-    
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-grid.two-columns {
-        grid-template-columns: 1fr;
-    }
-    
-    .options-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-    
-    .manual-item {
-        grid-template-columns: 1fr;
-        gap: 8px;
-    }
-    
-    .nav-buttons {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .nav-buttons button {
-        width: 100%;
-    }
-    
-    .config-panel {
-        width: 100%;
-        right: -100%;
-    }
-    
-    .config-item {
-        grid-template-columns: 1fr;
-        gap: 8px;
-    }
-    
-    .config-item .btn-remove {
-        width: 100%;
-        border-radius: 6px;
-        height: 36px;
-        margin-top: 5px;
-    }
-    
-    .filtros-flores {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .filtros-flores select {
-        width: 100%;
-        margin-top: 10px;
-    }
-    
-    .progress-steps {
-        gap: 5px;
-    }
-    
-    .step-label {
-        font-size: 0.7em;
-    }
-    
-    .step-number {
-        width: 28px;
-        height: 28px;
-        font-size: 0.9em;
-    }
-    
-    .floating-button {
-        bottom: 15px;
-        right: 15px;
-        padding: 12px 20px;
-        font-size: 14px;
-    }
-    
-    .floating-button.back-to-top {
-        bottom: 70px;
-        right: 15px;
-        width: 45px;
-        height: 45px;
-        font-size: 20px;
-    }
-    
-    .floating-text {
-        display: none;
-    }
-    
-    .floating-button .floating-icon {
-        margin-right: 0;
-        font-size: 18px;
-    }
-    
-    .step-indicator-badge {
-        top: 80px;
-        font-size: 12px;
-        padding: 8px 15px;
-    }
-    
-    .total-display {
-        top: -35px;
-        font-size: 12px;
-        min-width: 130px;
-        padding: 6px 12px;
-    }
-    
-    .total-display .total-amount {
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 5px;
-    }
-    
-    .container {
-        border-radius: 10px;
-    }
-    
-    .app-container {
-        padding: 10px;
-    }
-    
-    .options-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .item-card {
-        padding: 12px;
-    }
-    
-    .resumen-panel {
-        padding: 15px;
-    }
-    
-    .step-section h2 {
-        font-size: 1.3em;
-    }
-    
-    .tab-button {
-        padding: 8px 12px;
-        font-size: 0.9em;
-        min-width: auto;
-    }
-    
-    .btn-primary, .btn-secondary, .btn-add {
-        padding: 10px 15px;
-        font-size: 0.95em;
-    }
-    
-    .modal {
-        padding: 20px;
-        width: 95%;
-    }
-    
-    .modal-buttons {
-        flex-direction: column;
-    }
-    
-    .notification {
-        padding: 12px 20px;
-        font-size: 0.9em;
-        max-width: 95%;
-    }
-    
-    .config-toggle {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2em;
-        top: 10px;
-        right: 10px;
-    }
-    
-    .progress-steps {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .step-indicator {
-        flex-direction: row;
-        width: 100%;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .step-number {
-        margin-bottom: 0;
-    }
-    
-    .step-label {
-        font-size: 0.85em;
-    }
-    
-    .tooltip-icon {
-        width: 16px;
-        height: 16px;
-        font-size: 0.7em;
-    }
-    
-    .floating-button {
-        bottom: 10px;
-        right: 10px;
-        padding: 10px 15px;
-    }
-    
-    .floating-button.back-to-top {
-        bottom: 60px;
-        right: 10px;
-        width: 40px;
-        height: 40px;
-    }
-    
-    .step-indicator-badge {
-        top: 70px;
-        font-size: 11px;
-        padding: 6px 12px;
-    }
-    
-    .step-indicator-badge .step-number {
-        width: 20px;
-        height: 20px;
-        font-size: 10px;
-    }
-    
-    .total-display {
-        top: -30px;
-        font-size: 11px;
-        min-width: 120px;
-    }
-    
-    .total-display .total-amount {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 360px) {
-    body {
-        padding: 2px;
-        font-size: 14px;
-    }
-    
-    .container {
-        border-radius: 8px;
-    }
-    
     header {
-        padding: 10px;
+        padding: 15px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        text-align: center !important;
+    }
+    
+    .logo {
+        justify-content: center !important;
+        width: 100% !important;
     }
     
     .logo-icon {
-        font-size: 1.8em;
+        font-size: 2em !important;
     }
     
     .logo-text h1 {
-        font-size: 1.3em;
+        font-size: 1.5em !important;
     }
     
-    .logo-text p {
-        font-size: 0.8em;
-    }
-    
-    .app-container {
-        padding: 8px;
-        gap: 10px;
+    header > p {
+        text-align: center !important;
+        width: 100% !important;
     }
     
     .step-section h2 {
-        font-size: 1.2em;
-    }
-    
-    .tab-button {
-        padding: 6px 8px;
-        font-size: 0.8em;
-        white-space: normal;
-        text-align: center;
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        padding: 10px;
-        font-size: 0.9em;
-    }
-    
-    .item-details h4 {
-        font-size: 1em;
-    }
-    
-    .item-details p {
-        font-size: 0.8em;
-    }
-    
-    .resumen-panel h3 {
-        font-size: 1.2em;
-    }
-    
-    .resumen-item {
-        font-size: 0.85em;
-    }
-    
-    .resumen-total {
-        font-size: 1.2em;
-    }
-    
-    .button-group {
-        gap: 8px;
-    }
-    
-    .modal {
-        padding: 15px;
-    }
-    
-    .notification {
-        padding: 10px 15px;
-        font-size: 0.85em;
-        border-radius: 20px;
-    }
-}
-
-/* CORRECCIÓN: Paso 3 en móvil */
-@media (max-width: 768px) {
-    #step-3 {
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-        overflow-x: hidden !important;
-        box-sizing: border-box !important;
-    }
-    
-    #step-3 .form-section {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        width: 100% !important;
-    }
-    
-    #step-3 .form-group.full-width {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 10px !important;
-        box-sizing: border-box !important;
-    }
-    
-    /* Ajustar grids del resumen de costos */
-    #step-3 .form-group.full-width > div {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 10px !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-    }
-    
-    #step-3 .form-group.full-width > div > div[style*="grid-template-columns"] {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px !important;
-        padding: 0 !important;
-        margin: 0 0 10px 0 !important;
-        width: 100% !important;
-    }
-    
-    /* Segunda fila del resumen */
-    #step-3 .form-group.full-width > div > div[style*="grid-template-columns"]:nth-child(2) {
-        margin-top: 8px !important;
-    }
-    
-    /* Ajustar botones de navegación */
-    .nav-buttons {
-        position: fixed !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        background: white !important;
-        padding: 10px 15px !important;
-        margin: 0 !important;
-        z-index: 1000 !important;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
-        border-top: 2px solid var(--light-gray) !important;
-        display: flex !important;
+        font-size: 1.4em !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
         gap: 10px !important;
-        box-sizing: border-box !important;
     }
     
-    /* Añadir espacio en el fondo para los botones */
-    #step-3 {
-        padding-bottom: 80px !important;
+    .required-hint {
+        align-self: flex-start !important;
     }
     
-    /* Ajustar checkboxes y labels */
-    #step-3 .form-group label {
-        font-size: 14px;
-        white-space: normal;
-        word-wrap: break-word;
-        line-height: 1.3;
-    }
-    
-    /* Ajustar vista previa PDF */
-    #pdf-preview {
-        margin: 10px 0 !important;
-        padding: 15px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-    
-    /* Ajustar inputs */
-    #step-3 input[type="number"],
-    #step-3 input[type="text"],
-    #step-3 select {
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-    }
-}
-
-@media (max-width: 480px) {
-    #step-3 .form-group.full-width > div > div[style*="grid-template-columns"] {
+    .form-grid {
         grid-template-columns: 1fr !important;
     }
     
-    #step-3 .form-group.full-width > div > div[style*="text-align: center"] {
-        padding: 10px !important;
-        min-height: auto !important;
+    .form-grid.two-columns {
+        grid-template-columns: 1fr !important;
     }
     
-    #step-3 .form-group.full-width > div > div[style*="font-size: 1.2em"] {
-        font-size: 1.1em !important;
+    .manual-item {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
     }
     
-    #display-total-final {
-        font-size: 1.4em !important;
-        padding: 12px 10px !important;
+    .config-panel {
+        width: 100% !important;
+        right: -100% !important;
     }
-}
+    
+    .config-panel.active {
+        right: 0 !important;
+    }
+    
+    .config-item {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+    
+    .config-item .btn-remove {
+        width: 100% !important;
+        border-radius: 6px !important;
+        height: 36px !important;
+        margin-top: 5px !important;
+    }
+    
+    .filtros-flores {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    
+    .filtros-flores select {
+        width: 100% !important;
+        margin-top: 10px !important;
+    }
+    
+    .progress-steps {
+        gap: 5px !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+    }
+    
+    .step-indicator {
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+    
+    .step-label {
+        font-size: 0.7em !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    
+    .step-number {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.9em !important;
+    }
+    
+    .floating-button {
+        bottom: 20px !important;
+        right: 15px !important;
+        padding: 12px 18px !important;
+        font-size: 14px !important;
+    }
+    
+    .floating-button.back-to-top {
+        bottom: 80px !important;
+        right: 15px !important;
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 20px !important;
+    }
+    
+   .floating-text {
+    display: inline !important;
+    font-size: 14px !important;
+    text-align: left !important;
+    margin-left: 8px !important;
 
-/* Mejorar espacios en grids de opciones en móvil */
-@media (max-width: 768px) {
+    }
+    
+    .floating-button .floating-icon {
+        margin-right: 0 !important;
+        font-size: 18px !important;
+    }
+    
+    .step-indicator-badge {
+        top: 80px !important;
+        font-size: 13px !important;
+        padding: 8px 16px !important;
+        z-index: 100 !important;
+        display: flex !important;
+    }
+    
+    .total-display {
+        top: -35px !important;
+        font-size: 12px !important;
+        min-width: 130px !important;
+        padding: 6px 12px !important;
+    }
+    
+    .total-display .total-amount {
+        font-size: 16px !important;
+    }
+    
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+        font-size: 16px !important;
+        padding: 12px !important;
+        min-height: 44px !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    input[type="checkbox"] {
+        width: 24px !important;
+        height: 24px !important;
+        min-width: 24px !important;
+        min-height: 24px !important;
+    }
+    
+    select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 10px center !important;
+        padding-right: 35px !important;
+    }
+    
+    .notification {
+        bottom: 80px !important;
+        max-width: calc(100% - 30px) !important;
+        padding: 12px 20px !important;
+        font-size: 14px !important;
+    }
+    
+    .modal {
+        width: 95% !important;
+        max-width: 400px !important;
+        padding: 20px !important;
+        margin: 15px !important;
+    }
+    
+    .modal-buttons {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    .modal-buttons button {
+        width: 100% !important;
+        min-height: 48px !important;
+    }
+    
+    .resumen-panel {
+        position: relative !important;
+        top: auto !important;
+        width: 100% !important;
+        margin-top: 20px !important;
+        padding: 15px !important;
+    }
+    
+    button, .btn-primary, .btn-secondary, .tab-button {
+        min-height: 44px !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1) !important;
+        cursor: pointer !important;
+    }
+    
+    #tabs-container {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    #paquetes-container,
+    #accesorios-container,
+    #flores-container,
+    #arreglos-container,
+    #manual-items-container {
+        min-height: 100px !important;
+        width: 100% !important;
+    }
+    
+    .tabs {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 10px 5px !important;
+        margin-bottom: 15px !important;
+        gap: 8px !important;
+        background: var(--light) !important;
+        border-radius: 10px !important;
+    }
+    
+    .tab-button {
+        flex-shrink: 0 !important;
+        padding: 12px 20px !important;
+        font-size: 14px !important;
+        white-space: nowrap !important;
+        min-width: auto !important;
+        border: 2px solid var(--light-gray) !important;
+        border-radius: 8px !important;
+        background: white !important;
+        min-height: 44px !important;
+        touch-action: manipulation !important;
+    }
+    
+    .tab-button.active {
+        background: var(--primary) !important;
+        color: white !important;
+        border-color: var(--primary) !important;
+    }
+    
+    .tab-content {
+        display: none !important;
+        width: 100% !important;
+        padding: 10px 0 !important;
+    }
+    
+    .tab-content.active {
+        display: block !important;
+    }
+    
     .options-grid {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 10px;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        padding: 5px !important;
     }
     
     .item-card {
-        padding: 12px;
-        min-height: 140px;
+        padding: 12px !important;
+        min-height: 160px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
     }
     
     .item-details h4 {
@@ -2116,28 +1913,431 @@ textarea {
         padding-top: 8px;
     }
     
-    .quantity-control {
-        width: 100%;
-    }
-    
     .quantity-control button {
-        min-width: 35px;
-        padding: 5px 10px;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        font-size: 20px !important;
     }
     
-    /* Ajustar tabs en móvil */
-    .tabs {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 5px;
-        margin-bottom: 15px;
+    .quantity-control input {
+        min-width: 50px !important;
+        min-height: 44px !important;
+        font-size: 16px !important;
+    }
+    
+    #step-3 {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+    
+    #step-3 .form-section {
+        padding: 10px !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+    
+    #step-3 .form-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+    
+    /* Estilos para el desglose de ganancia en móvil */
+    #step-3 [id="desglose-ganancia-paso3"] {
+        margin: 10px 0 !important;
+        padding: 12px !important;
+    }
+    
+    #step-3 [id="desglose-ganancia-paso3"] > div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 6px !important;
+    }
+    
+    #step-3 [id="desglose-ganancia-paso3"] > div[style*="grid-template-columns: 1fr 1fr"] > div {
+        padding: 3px 0 !important;
+    }
+    
+    #display-total-final {
+        font-size: 1.6em !important;
+        padding: 15px !important;
+    }
+    
+    .nav-buttons {
+        position: relative !important;
+        bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+        background: white !important;
+        padding: 15px 10px !important;
+        margin: 20px 0 10px 0 !important;
+        z-index: 10 !important;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+        border-top: 2px solid var(--light-gray) !important;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+    }
+    
+    .nav-buttons button {
+        flex: 1 !important;
+        padding: 14px 20px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        min-height: 48px !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1) !important;
+    }
+    
+    #step-1, #step-2, #step-3 {
+        padding-bottom: 10px !important;
+        margin-bottom: 10px !important;
+    }
+}
+
+/* ============================================
+   ✅ MÓVILES MUY PEQUEÑOS (< 480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+    body {
+        padding: 5px !important;
+    }
+    
+    .container {
+        border-radius: 10px !important;
+    }
+    
+    .app-container {
+        padding: 10px !important;
+    }
+    
+    .options-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .item-card {
+        padding: 12px !important;
+    }
+    
+    .resumen-panel {
+        padding: 15px !important;
+    }
+    
+    .step-section h2 {
+        font-size: 1.3em !important;
     }
     
     .tab-button {
-        flex-shrink: 0;
-        padding: 10px 15px;
-        font-size: 0.9em;
-        white-space: nowrap;
+        padding: 8px 12px !important;
+        font-size: 0.9em !important;
     }
+    
+    .btn-primary, .btn-secondary, .btn-add {
+        padding: 10px 15px !important;
+        font-size: 0.95em !important;
+    }
+    
+    .modal {
+        padding: 20px !important;
+        width: 95% !important;
+    }
+    
+    .notification {
+        padding: 12px 20px !important;
+        font-size: 0.9em !important;
+        max-width: 95% !important;
+    }
+    
+    .config-toggle {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 1.2em !important;
+        top: 10px !important;
+        right: 10px !important;
+    }
+    
+    .tooltip-icon {
+        width: 16px !important;
+        height: 16px !important;
+        font-size: 0.7em !important;
+    }
+    
+    .floating-button {
+        bottom: 15px !important;
+        right: 15px !important;
+        padding: 10px 15px !important;
+    }
+    
+    .floating-button.back-to-top {
+        bottom: 70px !important;
+        right: 15px !important;
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 20px !important;
+    }
+    
+    .step-indicator-badge {
+        top: 70px !important;
+        font-size: 12px !important;
+        padding: 6px 12px !important;
+    }
+    
+    .step-indicator-badge .step-number {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+    }
+    
+    .total-display {
+        top: -30px !important;
+        font-size: 11px !important;
+        min-width: 120px !important;
+    }
+    
+    .total-display .total-amount {
+        font-size: 14px !important;
+    }
+    
+    /* Desglose en 1 columna para muy pequeños */
+    #step-3 [id="desglose-ganancia-paso3"] > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+    
+    #display-total-final {
+        font-size: 1.4em !important;
+        padding: 12px 10px !important;
+    }
+}
+
+/* ============================================
+   ✅ MÓVILES EXTRA PEQUEÑOS (< 360px)
+   ============================================ */
+
+@media (max-width: 360px) {
+    body {
+        padding: 2px !important;
+        font-size: 14px !important;
+    }
+    
+    .container {
+        border-radius: 8px !important;
+    }
+    
+    header {
+        padding: 10px !important;
+    }
+    
+    .logo-icon {
+        font-size: 1.8em !important;
+    }
+    
+    .logo-text h1 {
+        font-size: 1.3em !important;
+    }
+    
+    .logo-text p {
+        font-size: 0.8em !important;
+    }
+    
+    .app-container {
+        padding: 8px !important;
+        gap: 10px !important;
+    }
+    
+    .step-section h2 {
+        font-size: 1.2em !important;
+    }
+    
+    .tab-button {
+        padding: 6px 8px !important;
+        font-size: 0.8em !important;
+        white-space: normal !important;
+        text-align: center !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px !important;
+        font-size: 0.9em !important;
+    }
+    
+    .item-details h4 {
+        font-size: 1em !important;
+    }
+    
+    .item-details p {
+        font-size: 0.8em !important;
+    }
+    
+    .resumen-panel h3 {
+        font-size: 1.2em !important;
+    }
+    
+    .resumen-item {
+        font-size: 0.85em !important;
+    }
+    
+    .resumen-total {
+        font-size: 1.2em !important;
+    }
+}
+
+/* ============================================
+   ✅ SAFE AREA INSETS (iPhone X+)
+   ============================================ */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+    @media (max-width: 768px) {
+        .nav-buttons {
+            padding-bottom: calc(15px + env(safe-area-inset-bottom)) !important;
+        }
+        
+        .floating-button {
+            bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+        }
+        
+        .floating-button.back-to-top {
+            bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+        }
+    }
+}
+
+/* Botones de guardar en configuración -  */
+.config-section .btn-primary.btn-guardar {
+    padding: 12px 12px !important;
+    font-size: 0.9em !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: var(--success) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3) !important;
+}
+
+.config-section .btn-primary.btn-guardar:hover {
+    background: #008f71 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(0, 184, 148, 0.4) !important;
+}
+
+.config-section .btn-add {
+    height: 44px !important;
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px 16px !important;
+}
+/* Alinear botones horizontalmente */
+.config-section > div[style*="display: flex"] {
+    align-items: center !important;
+}
+
+/* Botón Agregar */
+.config-section .btn-add {
+    height: 44px !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 16px !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+}
+
+/* Botón Guardar */
+.config-section .btn-primary.btn-guardar {
+    height: 44px !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 12px !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    background: var(--success) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+}
+
+/* Asegurar que el contenedor de los botones tenga la misma altura */
+.config-section > div[style*="display: flex"] {
+    min-height: 44px !important;
+}
+/* Contenedor de botones de navegación */
+.nav-buttons {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    margin-top: 25px !important;
+    padding-top: 20px !important;
+    border-top: 1px solid var(--light-gray) !important;
+    width: 100% !important;
+    min-height: 60px !important;
+    align-items: center !important;
+}
+
+/* Ambos botones - MISMA ALTURA y ALINEACIÓN */
+.nav-buttons button {
+    height: 48px !important;
+    min-height: 48px !important;
+    width: 48% !important;
+    padding: 0 20px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Botón Anterior */
+#prev-btn {
+    background: var(--light-gray) !important;
+    color: var(--dark) !important;
+    border: 1px solid var(--gray) !important;
+}
+
+#prev-btn:hover {
+    background: var(--gray) !important;
+    color: white !important;
+}
+
+/* Botón Siguiente */
+#next-btn {
+    background: var(--primary) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3) !important;
+}
+
+#next-btn:hover {
+    background: var(--primary-dark) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Cuando el botón anterior está oculto, el siguiente ocupa todo el ancho */
+#next-btn:only-child {
+    width: 100% !important;
+    margin-left: auto !important;
 }
