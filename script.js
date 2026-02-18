@@ -301,19 +301,40 @@ document.addEventListener('DOMContentLoaded', function() {
 function sincronizarEventoServicio() {
     const tipoEvento = document.getElementById('tipo-evento').value;
     const tipoServicioSelect = document.getElementById('tipo-servicio');
+    const tipoServicioTexto = document.getElementById('tipo-servicio-texto');
+    
+    let nuevoServicio = '';
     
     if (tipoEvento === 'Flores') {
-        tipoServicioSelect.value = 'flores';
-        cotizacion.tipoServicio = 'flores';
-        limpiarError('tipo-servicio');
-    } else if (tipoEvento !== '' && tipoEvento !== 'Flores') {
-        tipoServicioSelect.value = 'decoracion';
-        cotizacion.tipoServicio = 'decoracion';
-        limpiarError('tipo-servicio');
+        nuevoServicio = 'flores';
+    } else if (tipoEvento !== '') {
+        nuevoServicio = 'decoracion';
     }
     
-    // Cambio programatico no dispara change, actualizar manualmente
-    cambiarTipoServicio();
+    if (nuevoServicio) {
+        // 1. Actualizar el objeto cotizacion PRIMERO
+        cotizacion.tipoServicio = nuevoServicio;
+        // 2. Actualizar el select oculto
+        if (tipoServicioSelect) tipoServicioSelect.value = nuevoServicio;
+        // 3. Actualizar el texto visible
+        if (tipoServicioTexto) {
+            if (nuevoServicio === 'flores') {
+                tipoServicioTexto.textContent = '🌸 Flores Externas';
+                tipoServicioTexto.style.color = '#e91e63';
+                tipoServicioTexto.style.fontWeight = '600';
+            } else {
+                tipoServicioTexto.textContent = '🎨 Decoración';
+                tipoServicioTexto.style.color = '#8a2be2';
+                tipoServicioTexto.style.fontWeight = '600';
+            }
+        }
+        limpiarError('tipo-servicio');
+        // 4. Actualizar UI sin volver a leer el DOM
+        if (cotizacion.currentStep === 2) actualizarUIporTipoServicio();
+        actualizarResumen();
+    }
+    
+    // 5. Guardar — ahora cotizacion.tipoServicio ya tiene el valor correcto
     guardarDatosPaso1();
 }
 
@@ -635,7 +656,7 @@ function inicializarEventListeners() {
             aplicarTema();
             limpiarError('tipo-evento');
             validarCampo('tipo-evento', this.value);
-            sincronizarEventoServicio(); // sincronizar primero, luego guardar
+            sincronizarEventoServicio();
             
            
             
@@ -1087,7 +1108,10 @@ function guardarDatosPaso1() {
         cotizacion.tematicaEvento = document.getElementById('otra-tematica').value.trim();
     } else cotizacion.tematicaEvento = tematicaEvento;
     
-    cotizacion.tipoServicio = document.getElementById('tipo-servicio').value;
+    // tipoServicio se maneja por sincronizarEventoServicio(), no leer del DOM aqui
+    if (!cotizacion.tipoServicio && document.getElementById('tipo-servicio').value) {
+        cotizacion.tipoServicio = document.getElementById('tipo-servicio').value;
+    }
     aplicarTema();
     actualizarResumen();
 }
