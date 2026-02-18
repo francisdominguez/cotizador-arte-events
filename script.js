@@ -316,7 +316,7 @@ function sincronizarEventoServicio() {
     const tipoServicioTexto = document.getElementById('tipo-servicio-texto');
     debugLog('▶ sincronizar tipoEvento=' + tipoEvento);
 
-  if (tipoEvento === 'VALOR_REAL_DEL_SELECT') {
+if (tipoEvento === 'Flores') {
         cotizacion.tipoServicio = 'flores';
         debugLog('✅ SET flores');
         if (tipoServicioSelect) tipoServicioSelect.value = 'flores';
@@ -2893,5 +2893,6 @@ console.log('🔧 Correcciones aplicadas:');
 console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
 console.log('   ✓ Botones Guardar por categoría');
 console.log('   ✓ Desglose movido al paso 3');
+
 
 
