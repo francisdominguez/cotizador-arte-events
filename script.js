@@ -304,13 +304,16 @@ function sincronizarEventoServicio() {
     
     if (tipoEvento === 'Flores') {
         tipoServicioSelect.value = 'flores';
+        cotizacion.tipoServicio = 'flores';
         limpiarError('tipo-servicio');
     } else if (tipoEvento !== '' && tipoEvento !== 'Flores') {
         tipoServicioSelect.value = 'decoracion';
+        cotizacion.tipoServicio = 'decoracion';
         limpiarError('tipo-servicio');
     }
     
-    if (cotizacion.currentStep === 2) actualizarUIporTipoServicio();
+    // Cambio programatico no dispara change, actualizar manualmente
+    cambiarTipoServicio();
     guardarDatosPaso1();
 }
 
@@ -592,7 +595,7 @@ function mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMat
 }
 
 function inicializarEventListeners() {
-    const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tipo-servicio', 'otro-evento', 'otra-tematica'];
+    const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'tipo-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tipo-servicio', 'otro-evento', 'otra-tematica'];
     
     inputsPaso1.forEach(id => {
         const element = document.getElementById(id);
