@@ -1069,11 +1069,8 @@ function validarPaso1() {
         limpiarError('otro-evento');
     }
     
-    const servicio = document.getElementById('tipo-servicio').value;
-    if (!servicio) {
-        mostrarError('tipo-servicio', 'El tipo de servicio es obligatorio');
-        valido = false;
-    } else if (!validarConsistenciaEventoServicio()) {
+    if (!cotizacion.tipoServicio) {
+        mostrarError('tipo-servicio', 'Seleccione un tipo de evento primero');
         valido = false;
     } else limpiarError('tipo-servicio');
     
