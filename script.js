@@ -592,7 +592,7 @@ function mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMat
 }
 
 function inicializarEventListeners() {
-    const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'tipo-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tipo-servicio', 'otro-evento', 'otra-tematica'];
+    const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tipo-servicio', 'otro-evento', 'otra-tematica'];
     
     inputsPaso1.forEach(id => {
         const element = document.getElementById(id);
@@ -2858,5 +2858,22 @@ console.log('🔧 Correcciones aplicadas:');
 console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
 console.log('   ✓ Botones Guardar por categoría');
 console.log('   ✓ Desglose movido al paso 3');
-
-
+// Fix para móvil - Forzar cambio en tipo de evento
+document.addEventListener('DOMContentLoaded', function() {
+    const tipoEvento = document.getElementById('tipo-evento');
+    if (tipoEvento) {
+        // Evento para móvil
+        tipoEvento.addEventListener('touchend', function(e) {
+            setTimeout(() => {
+                aplicarTema();
+                sincronizarEventoServicio();
+            }, 50);
+        });
+        
+        // Evento para cambio normal
+        tipoEvento.addEventListener('change', function() {
+            aplicarTema();
+            sincronizarEventoServicio();
+        });
+    }
+});
