@@ -924,6 +924,8 @@ function nextStep() {
         
         if (totalArticulos === 0) {
             mostrarNotificacion('⚠️ Debes agregar al menos un artículo antes de continuar', 'warning');
+            // Scroll arriba para que vea la notificación en móvil
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
         }
     }
@@ -978,6 +980,12 @@ function updateStepUI() {
     
     if (prevBtn) prevBtn.style.display = cotizacion.currentStep > 1 ? 'inline-flex' : 'none';
     
+    // Ocultar panel de resumen en el paso 1, mostrarlo desde paso 2
+    const resumenPanel = document.querySelector('.resumen-panel');
+    if (resumenPanel) {
+        resumenPanel.style.display = cotizacion.currentStep === 1 ? 'none' : 'block';
+    }
+    
     if (nextBtn) {
         if (cotizacion.currentStep === 3) {
             nextBtn.style.display = 'none';
@@ -987,14 +995,7 @@ function updateStepUI() {
         }
     }
     
-    // En móvil: si anterior está oculto, siguiente ocupa todo el ancho
-    if (nextBtn && prevBtn) {
-        if (cotizacion.currentStep === 1) {
-            nextBtn.style.width = '100%';
-        } else {
-            nextBtn.style.width = '';
-        }
-    }
+
     
     if (generarBtn) {
         generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
