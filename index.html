@@ -2377,8 +2377,8 @@
                     Tipo de Evento <span class="required-star">*</span>
                     <span class="tooltip-icon" title="Seleccione el tipo de evento o especifique uno personalizado">?</span>
                 </label>
-                <select id="tipo-evento" oninput="aplicarTema(); sincronizarEventoServicio()" onchange="aplicarTema(); sincronizarEventoServicio()">
-                    <option value="">Seleccione un tipo</option>
+                <select id="tipo-evento" onchange="aplicarTema(); sincronizarEventoServicio()" onclick="aplicarTema(); sincronizarEventoServicio()">
+    <option value="">Seleccione un tipo</option>
                 </select>
                 <div class="validation-error" id="error-tipo-evento"></div>
             </div>
