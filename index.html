@@ -2330,107 +2330,107 @@
                 </div>
 
                 <div class="steps-container">
-                    <div class="step-section" id="step-1">
-                        <h2>1. Información del Cliente y Evento <span class="required-hint">(* Campos obligatorios)</span></h2>
-                        <div class="form-section">
-                            <div class="form-grid two-columns">
-                                <div class="form-group">
-                                    <label for="cliente-nombre" class="required-label">
-                                        Nombre del Cliente <span class="required-star">*</span>
-                                        <span class="tooltip-icon" title="Nombre completo del cliente o empresa">?</span>
-                                    </label>
-                                    <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
-                                    <div class="validation-error" id="error-cliente-nombre"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="cliente-telefono" class="optional-label">
-                                        Teléfono
-                                        <span class="tooltip-icon" title="Teléfono de contacto para consultas">?</span>
-                                    </label>
-                                    <input type="tel" id="cliente-telefono" placeholder="Ej: 809-555-1234">
-                                </div>
-                                <div class="form-group">
-                                    <label for="cliente-email" class="optional-label">
-                                        Email
-                                        <span class="tooltip-icon" title="Email para enviar la cotización">?</span>
-                                    </label>
-                                    <input type="email" id="cliente-email" placeholder="Ej: correo@ejemplo.com">
-                                    <div class="validation-error" id="error-cliente-email"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="fecha-evento" class="required-label">
-                                        Fecha del Evento <span class="required-star">*</span>
-                                        <span class="tooltip-icon" title="Fecha en la que se realizará el evento">?</span>
-                                    </label>
-                                    <input type="date" id="fecha-evento">
-                                    <div class="validation-error" id="error-fecha-evento"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lugar-evento" class="optional-label">
-                                        Lugar/Dirección del Evento
-                                        <span class="tooltip-icon" title="Dirección completa del lugar del evento">?</span>
-                                    </label>
-                                    <input type="text" id="lugar-evento" placeholder="Ej: Salón de Eventos Bella Vista">
-                                </div>
-                                <div class="form-group">
-                                    <label for="tipo-evento" class="required-label">
-                                        Tipo de Evento <span class="required-star">*</span>
-                                        <span class="tooltip-icon" title="Seleccione el tipo de evento o especifique uno personalizado">?</span>
-                                    </label>
-                                    <select id="tipo-evento" onchange="aplicarTema(); sincronizarEventoServicio()">
-                                        <option value="">Seleccione un tipo</option>
-                                    </select>
-                                    <div class="validation-error" id="error-tipo-evento"></div>
-                                </div>
-                                <div class="form-group" id="otro-evento-container" style="display: none;">
-                                    <label for="otro-evento" class="required-label">
-                                        Especificar Evento <span class="required-star">*</span>
-                                        <span class="tooltip-icon" title="Escriba el nombre del evento personalizado">?</span>
-                                    </label>
-                                    <input type="text" id="otro-evento" placeholder="Ej: Bautizo, Quinceañera, etc.">
-                                    <div class="validation-error" id="error-otro-evento"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-grid two-columns">
-                                <div class="form-group">
-                                    <label for="tipo-servicio" class="required-label">
-                                        Tipo de Servicio <span class="required-star">*</span>
-                                        <span class="tooltip-icon" title="Seleccione si requiere decoración o solo flores">?</span>
-                                    </label>
-                                    <select id="tipo-servicio" onchange="cambiarTipoServicio()">
-                                        <option value="">Seleccione servicio</option>
-                                        <option value="decoracion">Decoración</option>
-                                        <option value="flores">Flores Externas</option>
-                                    </select>
-                                    <div class="validation-error" id="error-tipo-servicio"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="tematica-evento" class="optional-label">
-                                        Temática del Evento
-                                        <span class="tooltip-icon" title="Estilo o temática principal del evento">?</span>
-                                    </label>
-                                    <select id="tematica-evento" onchange="cambiarTematicaEvento()">
-                                        <option value="">Seleccione una temática</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" id="otra-tematica-container" style="display: none;">
-                                    <label for="otra-tematica" class="optional-label">
-                                        Especificar Temática
-                                        <span class="tooltip-icon" title="Describa la temática personalizada">?</span>
-                                    </label>
-                                    <input type="text" id="otra-tematica" placeholder="Ej: Barbie, Patrulla Canina, Superhéroes, etc.">
-                                </div>
-                                <div class="form-group full-width">
-                                    <label for="cliente-notas" class="optional-label">
-                                        Notas Adicionales
-                                        <span class="tooltip-icon" title="Detalles especiales, preferencias de color, requerimientos específicos">?</span>
-                                    </label>
-                                    <textarea id="cliente-notas" rows="3" placeholder="Detalles especiales, colores, temáticas, etc."></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   <div class="step-section" id="step-1">
+    <h2>1. Información del Cliente y Evento <span class="required-hint">(* Campos obligatorios)</span></h2>
+    <div class="form-section">
+        <div class="form-grid two-columns">
+            <div class="form-group">
+                <label for="cliente-nombre" class="required-label">
+                    Nombre del Cliente <span class="required-star">*</span>
+                    <span class="tooltip-icon" title="Nombre completo del cliente o empresa">?</span>
+                </label>
+                <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
+                <div class="validation-error" id="error-cliente-nombre"></div>
+            </div>
+            <div class="form-group">
+                <label for="cliente-telefono" class="optional-label">
+                    Teléfono
+                    <span class="tooltip-icon" title="Teléfono de contacto para consultas">?</span>
+                </label>
+                <input type="tel" id="cliente-telefono" placeholder="Ej: 809-555-1234">
+            </div>
+            <div class="form-group">
+                <label for="cliente-email" class="optional-label">
+                    Email
+                    <span class="tooltip-icon" title="Email para enviar la cotización">?</span>
+                </label>
+                <input type="email" id="cliente-email" placeholder="Ej: correo@ejemplo.com">
+                <div class="validation-error" id="error-cliente-email"></div>
+            </div>
+            <div class="form-group">
+                <label for="fecha-evento" class="required-label">
+                    Fecha del Evento <span class="required-star">*</span>
+                    <span class="tooltip-icon" title="Fecha en la que se realizará el evento">?</span>
+                </label>
+                <input type="date" id="fecha-evento">
+                <div class="validation-error" id="error-fecha-evento"></div>
+            </div>
+            <div class="form-group">
+                <label for="lugar-evento" class="optional-label">
+                    Lugar/Dirección del Evento
+                    <span class="tooltip-icon" title="Dirección completa del lugar del evento">?</span>
+                </label>
+                <input type="text" id="lugar-evento" placeholder="Ej: Salón de Eventos Bella Vista">
+            </div>
+            <div class="form-group">
+                <label for="tipo-evento" class="required-label">
+                    Tipo de Evento <span class="required-star">*</span>
+                    <span class="tooltip-icon" title="Seleccione el tipo de evento o especifique uno personalizado">?</span>
+                </label>
+                <select id="tipo-evento" onchange="aplicarTema(); sincronizarEventoServicio()">
+                    <option value="">Seleccione un tipo</option>
+                </select>
+                <div class="validation-error" id="error-tipo-evento"></div>
+            </div>
+            <div class="form-group" id="otro-evento-container" style="display: none;">
+                <label for="otro-evento" class="required-label">
+                    Especificar Evento <span class="required-star">*</span>
+                    <span class="tooltip-icon" title="Escriba el nombre del evento personalizado">?</span>
+                </label>
+                <input type="text" id="otro-evento" placeholder="Ej: Bautizo, Quinceañera, etc.">
+                <div class="validation-error" id="error-otro-evento"></div>
+            </div>
+        </div>
+        
+        <div class="form-grid two-columns">
+            <div class="form-group">
+                <label for="tipo-servicio" class="required-label">
+                    Tipo de Servicio <span class="required-star">*</span>
+                    <span class="tooltip-icon" title="Seleccione si requiere decoración o solo flores">?</span>
+                </label>
+                <select id="tipo-servicio" onchange="cambiarTipoServicio()">
+                    <option value="">Seleccione servicio</option>
+                    <option value="decoracion">Decoración</option>
+                    <option value="flores">Flores Externas</option>
+                </select>
+                <div class="validation-error" id="error-tipo-servicio"></div>
+            </div>
+            <div class="form-group">
+                <label for="tematica-evento" class="optional-label">
+                    Temática del Evento
+                    <span class="tooltip-icon" title="Estilo o temática principal del evento">?</span>
+                </label>
+                <select id="tematica-evento" onchange="cambiarTematicaEvento()">
+                    <option value="">Seleccione una temática</option>
+                </select>
+            </div>
+            <div class="form-group" id="otra-tematica-container" style="display: none;">
+                <label for="otra-tematica" class="optional-label">
+                    Especificar Temática
+                    <span class="tooltip-icon" title="Describa la temática personalizada">?</span>
+                </label>
+                <input type="text" id="otra-tematica" placeholder="Ej: Barbie, Patrulla Canina, Superhéroes, etc.">
+            </div>
+            <div class="form-group full-width">
+                <label for="cliente-notas" class="optional-label">
+                    Notas Adicionales
+                    <span class="tooltip-icon" title="Detalles especiales, preferencias de color, requerimientos específicos">?</span>
+                </label>
+                <textarea id="cliente-notas" rows="3" placeholder="Detalles especiales, colores, temáticas, etc."></textarea>
+            </div>
+        </div>
+    </div>
+</div>
 
                     <div class="step-section" id="step-2" style="display: none;">
                         <h2 id="titulo-paso-2">2. Selección de Artículos</h2>
@@ -2694,7 +2694,7 @@
         <span>✅</span> <span id="notification-message">¡Cotización generada con éxito!</span>
     </div>
 
-       <!-- Confirmación para limpiar -->
+    <!-- Confirmación para limpiar -->
     <div class="modal-overlay" id="confirmModal" style="display: none;">
         <div class="modal">
             <h3>⚠️ Confirmar Limpieza</h3>
