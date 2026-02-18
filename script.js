@@ -2861,22 +2861,4 @@ console.log('🔧 Correcciones aplicadas:');
 console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
 console.log('   ✓ Botones Guardar por categoría');
 console.log('   ✓ Desglose movido al paso 3');
-// Fix para móvil - Forzar cambio en tipo de evento
-document.addEventListener('DOMContentLoaded', function() {
-    const tipoEvento = document.getElementById('tipo-evento');
-    if (tipoEvento) {
-        // Evento para móvil
-        tipoEvento.addEventListener('touchend', function(e) {
-            setTimeout(() => {
-                aplicarTema();
-                sincronizarEventoServicio();
-            }, 50);
-        });
-        
-        // Evento para cambio normal
-        tipoEvento.addEventListener('change', function() {
-            aplicarTema();
-            sincronizarEventoServicio();
-        });
-    }
-});
+
