@@ -2377,7 +2377,7 @@
                     Tipo de Evento <span class="required-star">*</span>
                     <span class="tooltip-icon" title="Seleccione el tipo de evento o especifique uno personalizado">?</span>
                 </label>
-                <select id="tipo-evento" onchange="aplicarTema(); sincronizarEventoServicio()">
+                <select id="tipo-evento" onchange="aplicarTema(); sincronizarEventoServicio()" onclick="aplicarTema(); sincronizarEventoServicio()">
     <option value="">Seleccione un tipo</option>
                 </select>
                 <div class="validation-error" id="error-tipo-evento"></div>
@@ -2394,11 +2394,14 @@
         
         <div class="form-grid two-columns">
             <div class="form-group">
-                <label for="tipo-servicio" class="required-label">
+                <label class="required-label">
                     Tipo de Servicio <span class="required-star">*</span>
-                    <span class="tooltip-icon" title="Seleccione si requiere decoración o solo flores">?</span>
                 </label>
-                <select id="tipo-servicio" onchange="cambiarTipoServicio()">
+                <div id="tipo-servicio-display" style="padding: 10px 14px; background: #f5f5f5; border: 1px solid #dfe6e9; border-radius: 8px; color: #2d3436; font-size: 1em; min-height: 42px; display: flex; align-items: center;">
+                    <span id="tipo-servicio-texto" style="color: #999;">Se seleccionará según el tipo de evento</span>
+                </div>
+                <!-- Campo oculto para mantener compatibilidad con el resto del JS -->
+                <select id="tipo-servicio" style="display:none;" onchange="cambiarTipoServicio()">
                     <option value="">Seleccione servicio</option>
                     <option value="decoracion">Decoración</option>
                     <option value="flores">Flores Externas</option>
