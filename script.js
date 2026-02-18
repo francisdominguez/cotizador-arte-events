@@ -298,27 +298,16 @@ document.addEventListener('DOMContentLoaded', function() {
 // SINCRONIZACIÓN EVENTO-SERVICIO
 // ----------------------------------------------------
 
-function debugLog(msg) {
-    let dbg = document.getElementById('debug-panel');
-    if (!dbg) {
-        dbg = document.createElement('div');
-        dbg.id = 'debug-panel';
-        dbg.style = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.85);color:#0f0;font-size:11px;padding:8px;z-index:99999;max-height:180px;overflow-y:auto;font-family:monospace;';
-        document.body.appendChild(dbg);
-    }
-    dbg.innerHTML += '<div>' + new Date().toLocaleTimeString() + ' ' + msg + '</div>';
-    dbg.scrollTop = dbg.scrollHeight;
-}
-
-function sincronizarEventoServicio() {
-    const tipoEvento = document.getElementById('tipo-evento').value;
+function sincronizarEventoServicio(valorEvento) {
+    const tipoEvento = (valorEvento !== undefined ? valorEvento : document.getElementById('tipo-evento').value).trim();
     const tipoServicioSelect = document.getElementById('tipo-servicio');
     const tipoServicioTexto = document.getElementById('tipo-servicio-texto');
-    debugLog('▶ sincronizar tipoEvento=' + tipoEvento);
 
-if (tipoEvento === 'Flores') {
+    // Comparar en minusculas para evitar problemas de mayusculas/espacios
+    const esFlores = tipoEvento.toLowerCase() === 'flores';
+
+    if (esFlores) {
         cotizacion.tipoServicio = 'flores';
-        debugLog('✅ SET flores');
         if (tipoServicioSelect) tipoServicioSelect.value = 'flores';
         if (tipoServicioTexto) {
             tipoServicioTexto.textContent = '🌸 Flores Externas';
@@ -328,7 +317,6 @@ if (tipoEvento === 'Flores') {
         limpiarError('tipo-servicio');
     } else if (tipoEvento !== '') {
         cotizacion.tipoServicio = 'decoracion';
-        debugLog('⚠️ SET decoracion');
         if (tipoServicioSelect) tipoServicioSelect.value = 'decoracion';
         if (tipoServicioTexto) {
             tipoServicioTexto.textContent = '🎨 Decoración';
@@ -337,6 +325,7 @@ if (tipoEvento === 'Flores') {
         }
         limpiarError('tipo-servicio');
     } else {
+        cotizacion.tipoServicio = '';
         if (tipoServicioTexto) {
             tipoServicioTexto.textContent = 'Se asignará según el tipo de evento';
             tipoServicioTexto.style.color = '#999';
@@ -666,7 +655,7 @@ function inicializarEventListeners() {
             aplicarTema();
             limpiarError('tipo-evento');
             validarCampo('tipo-evento', this.value);
-            sincronizarEventoServicio();
+            sincronizarEventoServicio(this.value);
             
            
             
@@ -1102,7 +1091,6 @@ function validarPaso1() {
 }
 
 function guardarDatosPaso1() {
-    debugLog('💾 guardar - tipoServicio=' + cotizacion.tipoServicio);
     cotizacion.cliente.nombre = document.getElementById('cliente-nombre').value.trim();
     cotizacion.cliente.telefono = document.getElementById('cliente-telefono').value.trim();
     cotizacion.cliente.email = document.getElementById('cliente-email').value.trim();
@@ -1257,7 +1245,6 @@ function actualizarTematicasEvento() {
 }
 
 function cambiarTipoServicio() {
-    debugLog('🔄 cambiar - tipoServicio=' + cotizacion.tipoServicio);
     // Usar cotizacion.tipoServicio directamente, no releer del DOM
     actualizarResumen();
     if (cotizacion.currentStep === 2) actualizarUIporTipoServicio();
@@ -2893,6 +2880,4 @@ console.log('🔧 Correcciones aplicadas:');
 console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
 console.log('   ✓ Botones Guardar por categoría');
 console.log('   ✓ Desglose movido al paso 3');
-
-
 
