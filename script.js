@@ -987,6 +987,15 @@ function updateStepUI() {
         }
     }
     
+    // En móvil: si anterior está oculto, siguiente ocupa todo el ancho
+    if (nextBtn && prevBtn) {
+        if (cotizacion.currentStep === 1) {
+            nextBtn.style.width = '100%';
+        } else {
+            nextBtn.style.width = '';
+        }
+    }
+    
     if (generarBtn) {
         generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
     }
