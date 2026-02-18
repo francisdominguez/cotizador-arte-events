@@ -301,32 +301,15 @@ document.addEventListener('DOMContentLoaded', function() {
 function sincronizarEventoServicio() {
     const tipoEvento = document.getElementById('tipo-evento').value;
     const tipoServicioSelect = document.getElementById('tipo-servicio');
-    const tipoServicioTexto = document.getElementById('tipo-servicio-texto');
     
     if (tipoEvento === 'Flores') {
         tipoServicioSelect.value = 'flores';
         cotizacion.tipoServicio = 'flores';
-        if (tipoServicioTexto) {
-            tipoServicioTexto.textContent = '🌸 Flores Externas';
-            tipoServicioTexto.style.color = '#e91e63';
-            tipoServicioTexto.style.fontWeight = '600';
-        }
         limpiarError('tipo-servicio');
     } else if (tipoEvento !== '' && tipoEvento !== 'Flores') {
         tipoServicioSelect.value = 'decoracion';
         cotizacion.tipoServicio = 'decoracion';
-        if (tipoServicioTexto) {
-            tipoServicioTexto.textContent = '🎨 Decoración';
-            tipoServicioTexto.style.color = '#8a2be2';
-            tipoServicioTexto.style.fontWeight = '600';
-        }
         limpiarError('tipo-servicio');
-    } else {
-        if (tipoServicioTexto) {
-            tipoServicioTexto.textContent = 'Se seleccionará según el tipo de evento';
-            tipoServicioTexto.style.color = '#999';
-            tipoServicioTexto.style.fontWeight = 'normal';
-        }
     }
     
     // Cambio programatico no dispara change, actualizar manualmente
@@ -612,7 +595,7 @@ function mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMat
 }
 
 function inicializarEventListeners() {
-    const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'tipo-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tipo-servicio', 'otro-evento', 'otra-tematica'];
+    const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tipo-servicio', 'otro-evento', 'otra-tematica'];
     
     inputsPaso1.forEach(id => {
         const element = document.getElementById(id);
@@ -650,10 +633,9 @@ function inicializarEventListeners() {
             }
             
             aplicarTema();
-            guardarDatosPaso1();
             limpiarError('tipo-evento');
             validarCampo('tipo-evento', this.value);
-            sincronizarEventoServicio();
+            sincronizarEventoServicio(); // sincronizar primero, luego guardar
             
            
             
