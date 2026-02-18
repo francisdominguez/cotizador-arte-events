@@ -301,18 +301,34 @@ document.addEventListener('DOMContentLoaded', function() {
 function sincronizarEventoServicio() {
     const tipoEvento = document.getElementById('tipo-evento').value;
     const tipoServicioSelect = document.getElementById('tipo-servicio');
-    
+    const tipoServicioTexto = document.getElementById('tipo-servicio-texto');
+
     if (tipoEvento === 'Flores') {
-        tipoServicioSelect.value = 'flores';
         cotizacion.tipoServicio = 'flores';
+        if (tipoServicioSelect) tipoServicioSelect.value = 'flores';
+        if (tipoServicioTexto) {
+            tipoServicioTexto.textContent = '🌸 Flores Externas';
+            tipoServicioTexto.style.color = '#e91e63';
+            tipoServicioTexto.style.fontWeight = '600';
+        }
         limpiarError('tipo-servicio');
-    } else if (tipoEvento !== '' && tipoEvento !== 'Flores') {
-        tipoServicioSelect.value = 'decoracion';
+    } else if (tipoEvento !== '') {
         cotizacion.tipoServicio = 'decoracion';
+        if (tipoServicioSelect) tipoServicioSelect.value = 'decoracion';
+        if (tipoServicioTexto) {
+            tipoServicioTexto.textContent = '🎨 Decoración';
+            tipoServicioTexto.style.color = '#8a2be2';
+            tipoServicioTexto.style.fontWeight = '600';
+        }
         limpiarError('tipo-servicio');
+    } else {
+        if (tipoServicioTexto) {
+            tipoServicioTexto.textContent = 'Se asignará según el tipo de evento';
+            tipoServicioTexto.style.color = '#999';
+            tipoServicioTexto.style.fontWeight = 'normal';
+        }
     }
-    
-    // Cambio programatico no dispara change, actualizar manualmente
+
     cambiarTipoServicio();
     guardarDatosPaso1();
 }
