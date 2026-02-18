@@ -595,7 +595,7 @@ function mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMat
 }
 
 function inicializarEventListeners() {
-    const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'tipo-servicio', 'otro-evento', 'otra-tematica'];
+    const inputsPaso1 = ['cliente-nombre', 'fecha-evento', 'cliente-notas', 'lugar-evento', 'cliente-telefono', 'cliente-email', 'otro-evento', 'otra-tematica'];
     
     inputsPaso1.forEach(id => {
         const element = document.getElementById(id);
