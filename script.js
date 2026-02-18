@@ -657,6 +657,7 @@ function inicializarEventListeners() {
     const tipoServicioSelect = document.getElementById('tipo-servicio');
     if (tipoServicioSelect) {
         tipoServicioSelect.addEventListener('change', function() {
+            cotizacion.tipoServicio = this.value;
             if (validarConsistenciaEventoServicio()) cambiarTipoServicio();
         });
     }
@@ -1087,9 +1088,7 @@ function guardarDatosPaso1() {
         cotizacion.tematicaEvento = document.getElementById('otra-tematica').value.trim();
     } else cotizacion.tematicaEvento = tematicaEvento;
     
-    // No leer tipo-servicio del DOM - ya lo maneja sincronizarEventoServicio
-    const tsDOM = document.getElementById('tipo-servicio').value;
-    if (tsDOM) cotizacion.tipoServicio = tsDOM;
+    // NO leer tipo-servicio del DOM aqui - sincronizarEventoServicio lo maneja directamente
     aplicarTema();
     actualizarResumen();
 }
@@ -1226,8 +1225,7 @@ function actualizarTematicasEvento() {
 }
 
 function cambiarTipoServicio() {
-    const tipoServicio = document.getElementById('tipo-servicio').value;
-    cotizacion.tipoServicio = tipoServicio;
+    // Usar cotizacion.tipoServicio directamente, no releer del DOM
     actualizarResumen();
     if (cotizacion.currentStep === 2) actualizarUIporTipoServicio();
 }
