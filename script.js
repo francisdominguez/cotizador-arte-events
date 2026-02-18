@@ -298,15 +298,12 @@ document.addEventListener('DOMContentLoaded', function() {
 // SINCRONIZACIÓN EVENTO-SERVICIO
 // ----------------------------------------------------
 
-function sincronizarEventoServicio(valorEvento) {
-    const tipoEvento = (valorEvento !== undefined ? valorEvento : document.getElementById('tipo-evento').value).trim();
+function sincronizarEventoServicio() {
+    const tipoEvento = document.getElementById('tipo-evento').value;
     const tipoServicioSelect = document.getElementById('tipo-servicio');
     const tipoServicioTexto = document.getElementById('tipo-servicio-texto');
 
-    // Comparar en minusculas para evitar problemas de mayusculas/espacios
-    const esFlores = tipoEvento.toLowerCase() === 'flores';
-
-    if (esFlores) {
+    if (tipoEvento === 'Flores') {
         cotizacion.tipoServicio = 'flores';
         if (tipoServicioSelect) tipoServicioSelect.value = 'flores';
         if (tipoServicioTexto) {
@@ -325,7 +322,6 @@ function sincronizarEventoServicio(valorEvento) {
         }
         limpiarError('tipo-servicio');
     } else {
-        cotizacion.tipoServicio = '';
         if (tipoServicioTexto) {
             tipoServicioTexto.textContent = 'Se asignará según el tipo de evento';
             tipoServicioTexto.style.color = '#999';
@@ -655,7 +651,7 @@ function inicializarEventListeners() {
             aplicarTema();
             limpiarError('tipo-evento');
             validarCampo('tipo-evento', this.value);
-            sincronizarEventoServicio(this.value);
+            sincronizarEventoServicio();
             
            
             
@@ -916,6 +912,20 @@ function nextStep() {
         }
         guardarDatosPaso1();
         console.log('✅ Paso 1 validado correctamente');
+    }
+    
+    if (cotizacion.currentStep === 2) {
+        const totalArticulos = 
+            cotizacion.articulos.paquetes.reduce((s, i) => s + i.cantidad, 0) +
+            cotizacion.articulos.accesorios.reduce((s, i) => s + i.cantidad, 0) +
+            cotizacion.articulos.flores.reduce((s, i) => s + i.cantidad, 0) +
+            cotizacion.articulos.arreglosFlorales.reduce((s, i) => s + i.cantidad, 0) +
+            cotizacion.articulos.manuales.reduce((s, i) => s + i.cantidad, 0);
+        
+        if (totalArticulos === 0) {
+            mostrarNotificacion('⚠️ Debes agregar al menos un artículo antes de continuar', 'warning');
+            return;
+        }
     }
     
     if (cotizacion.currentStep < 3) {
