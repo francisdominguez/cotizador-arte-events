@@ -691,8 +691,17 @@ textarea {
     background: var(--primary);
     color: white;
     box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+    width: auto;
+    margin-top: 0;
+}
+
+/* Botones que deben ocupar ancho completo en su contenedor */
+.button-group .btn-primary,
+.button-group .btn-secondary,
+#generar-cotizacion,
+#limpiar-cotizacion {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 0;
 }
 
 .btn-primary:hover {
@@ -761,11 +770,6 @@ textarea {
     flex-direction: column;
     gap: 10px;
     width: 100%;
-}
-
-.button-group .btn-primary,
-.button-group .btn-secondary {
-    margin-top: 0;
 }
 
 .resumen-panel {
