@@ -1357,10 +1357,13 @@ textarea {
     border-radius: 10px !important;
     box-sizing: border-box !important;
     margin: 0 !important;
+    margin-top: 0 !important;
     border: none !important;
     cursor: pointer !important;
     transition: all 0.3s ease !important;
     white-space: nowrap !important;
+    position: static !important;
+    transform: none;
 }
 
 /* Botón Anterior */
@@ -1384,7 +1387,7 @@ textarea {
 
 #next-btn:hover {
     background: var(--primary-dark) !important;
-    transform: translateY(-2px) !important;
+    transform: none !important;
 }
 
 /* Cuando el botón anterior está oculto, el siguiente ocupa todo el ancho */
