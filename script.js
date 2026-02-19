@@ -1035,16 +1035,15 @@ function updateStepUI() {
         calcularTotalCotizacion();
     }
     
-    // Ocultar el panel de resumen en el paso 1, mostrarlo en pasos 2 y 3
+    // En paso 1: ocultar panel y usar 1 columna. En pasos 2-3: mostrar panel y volver a 2 columnas
     const resumenPanel = document.querySelector('.resumen-panel');
-    if (resumenPanel) {
-        if (cotizacion.currentStep === 1) {
-            resumenPanel.style.visibility = 'hidden';
-            resumenPanel.style.opacity = '0';
-        } else {
-            resumenPanel.style.visibility = 'visible';
-            resumenPanel.style.opacity = '1';
-        }
+    const appContainer = document.querySelector('.app-container');
+    if (cotizacion.currentStep === 1) {
+        if (resumenPanel) resumenPanel.style.display = 'none';
+        if (appContainer) appContainer.style.gridTemplateColumns = '1fr';
+    } else {
+        if (resumenPanel) resumenPanel.style.display = '';
+        if (appContainer) appContainer.style.gridTemplateColumns = '';
     }
 
     actualizarResumen();
