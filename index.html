@@ -446,6 +446,7 @@
             text-align: center;
             min-width: 120px;
             border: 2px solid white;
+            pointer-events: none;
         }
 
         .total-display.visible {
@@ -713,13 +714,21 @@
         #generar-cotizacion,
         #limpiar-cotizacion {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 0;
         }
 
         .btn-primary:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        /* Sin transform en botones dentro de flex containers - evita desplazamiento del área de click */
+        .nav-buttons .btn-primary:hover,
+        .nav-buttons .btn-secondary:hover,
+        .btn-guardar:hover,
+        .btn-add:hover {
+            transform: none;
         }
 
         .btn-primary:disabled {
