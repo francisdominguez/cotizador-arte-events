@@ -703,8 +703,17 @@
             background: var(--primary);
             color: white;
             box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+            width: auto;
+            margin-top: 0;
+        }
+
+        /* Botones que sí deben ser ancho completo */
+        .button-group .btn-primary,
+        .button-group .btn-secondary,
+        #generar-cotizacion,
+        #limpiar-cotizacion {
             width: 100%;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .btn-primary:hover {
@@ -1346,6 +1355,9 @@
             min-width: 0;
             padding: 12px;
             font-size: 1em;
+            width: auto !important;
+            margin-top: 0 !important;
+            box-sizing: border-box;
         }
 
         .pdf-config-checkbox {
