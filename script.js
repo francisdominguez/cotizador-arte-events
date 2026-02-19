@@ -979,6 +979,12 @@ function updateStepUI() {
     });
     
     if (prevBtn) prevBtn.style.display = cotizacion.currentStep > 1 ? 'inline-flex' : 'none';
+
+    // Ocultar panel de resumen en el paso 1, mostrarlo desde paso 2
+    const resumenPanel = document.querySelector('.resumen-panel');
+    if (resumenPanel) {
+        resumenPanel.style.display = cotizacion.currentStep === 1 ? 'none' : 'block';
+    }
     
     if (nextBtn) {
         if (cotizacion.currentStep === 3) {
@@ -2894,6 +2900,4 @@ console.log('🔧 Correcciones aplicadas:');
 console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
 console.log('   ✓ Botones Guardar por categoría');
 console.log('   ✓ Desglose movido al paso 3');
-
-
 
