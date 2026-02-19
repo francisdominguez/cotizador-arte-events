@@ -978,7 +978,15 @@ function updateStepUI() {
         }
     });
     
-    if (prevBtn) prevBtn.style.display = cotizacion.currentStep > 1 ? 'inline-flex' : 'none';
+    if (prevBtn) {
+        if (cotizacion.currentStep > 1) {
+            prevBtn.classList.remove('hidden');
+            prevBtn.style.display = 'inline-flex';
+        } else {
+            prevBtn.classList.add('hidden');
+            prevBtn.style.display = '';
+        }
+    }
     
     if (nextBtn) {
         if (cotizacion.currentStep === 3) {
