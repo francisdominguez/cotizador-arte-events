@@ -979,12 +979,6 @@ function updateStepUI() {
     });
     
     if (prevBtn) prevBtn.style.display = cotizacion.currentStep > 1 ? 'inline-flex' : 'none';
-
-    // Ocultar panel de resumen en el paso 1, mostrarlo desde paso 2
-    const resumenPanel = document.querySelector('.resumen-panel');
-    if (resumenPanel) {
-        resumenPanel.style.display = cotizacion.currentStep === 1 ? 'none' : 'block';
-    }
     
     if (nextBtn) {
         if (cotizacion.currentStep === 3) {
