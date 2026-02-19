@@ -1035,6 +1035,12 @@ function updateStepUI() {
         calcularTotalCotizacion();
     }
     
+    // Ocultar el panel de resumen en el paso 1, mostrarlo en pasos 2 y 3
+    const resumenPanel = document.querySelector('.resumen-panel');
+    if (resumenPanel) {
+        resumenPanel.style.display = cotizacion.currentStep === 1 ? 'none' : '';
+    }
+
     actualizarResumen();
     actualizarIndicadorPasoActual();
     actualizarBotonFlotantePDF();
