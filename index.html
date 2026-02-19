@@ -1339,7 +1339,6 @@
             padding-top: 20px;
             border-top: 1px solid var(--light-gray);
             width: 100%;
-            gap: 10px;
         }
 
         .nav-buttons button {
@@ -1347,38 +1346,6 @@
             min-width: 0;
             padding: 12px;
             font-size: 1em;
-            margin-top: 0 !important;
-            width: auto !important;
-        }
-
-        .nav-buttons .btn-primary {
-            width: auto;
-            margin-top: 0;
-        }
-
-        .nav-buttons .btn-secondary {
-            width: auto;
-        }
-
-        /* Cuando el botón Anterior está oculto, el Siguiente toma todo el ancho */
-        #prev-btn[style*="display: none"],
-        #prev-btn[style*="display:none"] {
-            display: none !important;
-            flex: 0 !important;
-            width: 0 !important;
-            min-width: 0 !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            overflow: hidden !important;
-        }
-
-        .btn-guardar {
-            flex: 1 !important;
-            margin-top: 0 !important;
-            padding: 12px 16px !important;
-            min-height: 44px !important;
-            white-space: nowrap;
-            width: auto !important;
         }
 
         .pdf-config-checkbox {
@@ -2032,19 +1999,12 @@
                 touch-action: manipulation !important;
                 -webkit-tap-highlight-color: rgba(0,0,0,0.1) !important;
                 box-sizing: border-box !important;
-                margin-top: 0 !important;
             }
-
-            #prev-btn[style*="display: none"],
-            #prev-btn[style*="display:none"] {
-                display: none !important;
-                flex: 0 !important;
-                width: 0 !important;
-                min-width: 0 !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                min-height: 0 !important;
-                overflow: hidden !important;
+            
+            #prev-btn[style*="display: none"] ~ #next-btn,
+            #prev-btn[style*="display:none"] ~ #next-btn {
+                flex: 1 !important;
+                width: 100% !important;
             }
             
             #step-1, #step-2, #step-3 {
@@ -2655,7 +2615,7 @@
                 </div>
             </div>
 
-            <div class="resumen-panel" style="display: none;">
+            <div class="resumen-panel">
                 <h3>📋 Detalles de la Cotización</h3>
                 <div class="resumen-details">
                     <div class="resumen-item">
