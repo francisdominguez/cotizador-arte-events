@@ -1360,6 +1360,12 @@
             box-sizing: border-box;
         }
 
+        /* Cuando prev-btn está oculto, next-btn ocupa todo el ancho */
+        #prev-btn[style*="display: none"] ~ #next-btn,
+        #prev-btn[style*="display:none"] ~ #next-btn {
+            flex: 1 1 100% !important;
+        }
+
         .pdf-config-checkbox {
             margin-right: 10px;
             width: 18px;
@@ -2253,7 +2259,7 @@
             <h3>Tipos de Evento</h3>
             <div class="config-grid" id="config-tipos-evento"></div>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarTipoEvento()" style="flex: 2;">+ Agregar Tipo de Evento</button>
+                <button class="btn-add" onclick="agregarTipoEvento()" style="flex: 1;">+ Agregar Tipo de Evento</button>
                 <button class="btn-primary btn-guardar" onclick="guardarTiposEvento()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
             </div>
         </div>
@@ -2263,7 +2269,7 @@
             <h3>Temáticas de Evento</h3>
             <div class="config-grid" id="config-tematicas-evento"></div>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarTematicaEvento()" style="flex: 2;">+ Agregar Temática</button>
+                <button class="btn-add" onclick="agregarTematicaEvento()" style="flex: 1;">+ Agregar Temática</button>
                 <button class="btn-primary btn-guardar" onclick="guardarTematicasEvento()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
             </div>
         </div>
@@ -2273,7 +2279,7 @@
             <h3>Globos por Color</h3>
             <div class="config-grid" id="config-paquetes"></div>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarPaquete()" style="flex: 2;">+ Agregar Globo</button>
+                <button class="btn-add" onclick="agregarPaquete()" style="flex: 1;">+ Agregar Globo</button>
                 <button class="btn-primary btn-guardar" onclick="guardarPaquetes()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
             </div>
         </div>
@@ -2283,7 +2289,7 @@
             <h3>Accesorios y Mobiliario</h3>
             <div class="config-grid" id="config-accesorios"></div>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarAccesorio()" style="flex: 2;">+ Agregar Accesorio</button>
+                <button class="btn-add" onclick="agregarAccesorio()" style="flex: 1;">+ Agregar Accesorio</button>
                 <button class="btn-primary btn-guardar" onclick="guardarAccesorios()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
             </div>
         </div>
@@ -2293,7 +2299,7 @@
             <h3>Flores por Unidad</h3>
             <div class="config-grid" id="config-flores"></div>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarFlor()" style="flex: 2;">+ Agregar Flor</button>
+                <button class="btn-add" onclick="agregarFlor()" style="flex: 1;">+ Agregar Flor</button>
                 <button class="btn-primary btn-guardar" onclick="guardarFlores()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
             </div>
         </div>
@@ -2303,7 +2309,7 @@
             <h3>Arreglos Florales</h3>
             <div class="config-grid" id="config-arreglos"></div>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarArreglo()" style="flex: 2;">+ Agregar Arreglo</button>
+                <button class="btn-add" onclick="agregarArreglo()" style="flex: 1;">+ Agregar Arreglo</button>
                 <button class="btn-primary btn-guardar" onclick="guardarArreglos()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
             </div>
         </div>
