@@ -1370,8 +1370,7 @@
         }
 
         /* Cuando prev-btn está oculto, colapsar su espacio y next-btn ocupa todo */
-        #prev-btn[style*="display: none"],
-        #prev-btn[style*="display:none"] {
+        #prev-btn.hidden {
             flex: 0 !important;
             width: 0 !important;
             padding: 0 !important;
@@ -1379,11 +1378,12 @@
             overflow: hidden !important;
             min-width: 0 !important;
             min-height: 0 !important;
+            display: none !important;
         }
 
-        #prev-btn[style*="display: none"] ~ #next-btn,
-        #prev-btn[style*="display:none"] ~ #next-btn {
+        #prev-btn.hidden ~ #next-btn {
             flex: 1 1 100% !important;
+            width: 100% !important;
         }
 
         .pdf-config-checkbox {
@@ -2039,8 +2039,7 @@
                 box-sizing: border-box !important;
             }
             
-            #prev-btn[style*="display: none"],
-            #prev-btn[style*="display:none"] {
+            #prev-btn.hidden {
                 flex: 0 !important;
                 width: 0 !important;
                 padding: 0 !important;
@@ -2048,10 +2047,10 @@
                 overflow: hidden !important;
                 min-width: 0 !important;
                 min-height: 0 !important;
+                display: none !important;
             }
 
-            #prev-btn[style*="display: none"] ~ #next-btn,
-            #prev-btn[style*="display:none"] ~ #next-btn {
+            #prev-btn.hidden ~ #next-btn {
                 flex: 1 !important;
                 width: 100% !important;
             }
@@ -2658,7 +2657,7 @@
                     </div>
 
                     <div class="nav-buttons">
-    <button class="btn-secondary" onclick="prevStep()" id="prev-btn" style="display: none;">← Anterior</button>
+    <button class="btn-secondary hidden" onclick="prevStep()" id="prev-btn">← Anterior</button>
     <button class="btn-primary" onclick="nextStep()" id="next-btn">Siguiente →</button>
 </div>
                 </div>
