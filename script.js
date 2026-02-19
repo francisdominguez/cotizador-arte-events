@@ -2894,3 +2894,4 @@ console.log('🔧 Correcciones aplicadas:');
 console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
 console.log('   ✓ Botones Guardar por categoría');
 console.log('   ✓ Desglose movido al paso 3');
+
