@@ -892,15 +892,32 @@ textarea {
     font-size: 1.3em;
 }
 
+/* ===== ESTA ES LA PARTE QUE CAMBIAMOS ===== */
 .config-header .btn-close {
-    background: none;
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
     border: none;
     color: white;
-    font-size: 2em;
     cursor: pointer;
-    line-height: 1;
-    padding: 0 10px;
+    padding: 0;
+    margin: 0;
+    min-width: 36px;
+    min-height: 36px;
+    transition: all 0.2s ease;
 }
+
+.config-header .btn-close:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+/* ========================================== */
 
 .config-content {
     padding: 20px;
@@ -2095,6 +2112,16 @@ textarea {
         font-size: 0.9em !important;
         padding: 0 12px !important;
     }
+    
+    /* ===== CORRECCIÓN BOTÓN X EN MÓVIL ===== */
+    .config-header .btn-close {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 20px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+    }
 }
 
 /* ============================================
@@ -2221,6 +2248,15 @@ textarea {
         flex: 1 !important;
         box-sizing: border-box !important;
     }
+    
+    /* ===== CORRECCIÓN BOTÓN X EN MÓVIL PEQUEÑO ===== */
+    .config-header .btn-close {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 18px !important;
+        min-width: 28px !important;
+        min-height: 28px !important;
+    }
 }
 
 /* ============================================
@@ -2320,71 +2356,3 @@ textarea {
         }
     }
 }
-/* ============================================
-   ✅ CORRECCIÓN FORZADA: BOTÓN X DEL PANEL (VERSIÓN DEFINITIVA)
-   ============================================ */
-
-/* Forzar estilos para el botón X en todas las pantallas */
-div.config-panel.active div.config-header button.btn-close,
-.config-panel .config-header .btn-close,
-button.btn-close {
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 24px !important;
-    line-height: 1 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: rgba(255, 255, 255, 0.25) !important;
-    border-radius: 50% !important;
-    border: none !important;
-    color: white !important;
-    cursor: pointer !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    min-width: 36px !important;
-    min-height: 36px !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
-    transition: all 0.2s ease !important;
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-    float: none !important;
-}
-
-/* Efecto al tocar */
-div.config-panel.active div.config-header button.btn-close:active,
-.config-panel .config-header .btn-close:active,
-button.btn-close:active {
-    background: rgba(255, 255, 255, 0.4) !important;
-    transform: scale(0.95) !important;
-}
-
-/* Responsive para móvil - dentro del media query existente */
-@media (max-width: 768px) {
-    /* Forzar aún más la especificidad en móvil */
-    body div.container div.config-panel.active div.config-header button.btn-close,
-    html body div.config-panel.active .config-header .btn-close,
-    .config-panel .config-header .btn-close {
-        width: 32px !important;
-        height: 32px !important;
-        font-size: 20px !important;
-        min-width: 32px !important;
-        min-height: 32px !important;
-        background: rgba(255, 255, 255, 0.3) !important;
-    }
-}
-
-/* Para móviles muy pequeños */
-@media (max-width: 480px) {
-    body div.container div.config-panel.active div.config-header button.btn-close,
-    html body div.config-panel.active .config-header .btn-close,
-    .config-panel .config-header .btn-close {
-        width: 28px !important;
-        height: 28px !important;
-        font-size: 18px !important;
-        min-width: 28px !important;
-        min-height: 28px !important;
-    }
-}
-
