@@ -2879,39 +2879,11 @@ function actualizarBotonFlotantePDF() {
     actualizarVisibilidadBotonesFlotantes();
 }
 
-// PWA Support
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-});
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').then(registration => {
-      console.log('ServiceWorker registrado con éxito:', registration.scope);
-    }).catch(registrationError => {
-      console.log('Error al registrar ServiceWorker:', registrationError);
-    });
-  });
-}
-
 // ============================================
-// CONFIRMACIÓN DE CARGA FINAL
-// ============================================
-console.log('✅ Script COMPLETO cargado correctamente - Versión con unidades corregidas');
-console.log('📱 Optimizado para móvil');
-console.log('🔧 Correcciones aplicadas:');
-console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
-console.log('   ✓ Botones Guardar por categoría');
-console.log('   ✓ Desglose movido al paso 3');
-
-// ============================================
-// REGISTRO DEL SERVICE WORKER PARA PWA (VERSIÓN CORREGIDA)
+// REGISTRO DEL SERVICE WORKER (VERSIÓN ÚNICA Y CORREGIDA)
 // ============================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    // Usar la ruta RELATIVA en lugar de absoluta
     navigator.serviceWorker.register('service-worker.js')
       .then(function(registration) {
         console.log('✅ Service Worker registrado con éxito:', registration.scope);
@@ -2927,25 +2899,7 @@ let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  console.log('📱 App lista para instalar');
-  
-  // Opcional: Mostrar un botón personalizado para instalar
-  // Puedes descomentar esto si quieres mostrar un botón de instalación manual
-  /*
-  const installBtn = document.getElementById('install-btn');
-  if (installBtn) {
-    installBtn.style.display = 'block';
-    installBtn.addEventListener('click', () => {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('Usuario aceptó la instalación');
-        }
-        deferredPrompt = null;
-      });
-    });
-  }
-  */
+  console.log('📱 App lista para instalar - Busca "Instalar app" en el menú');
 });
 
 // Evento cuando la app se instala
@@ -2953,3 +2907,9 @@ window.addEventListener('appinstalled', (e) => {
   console.log('🎉 App instalada correctamente');
   deferredPrompt = null;
 });
+
+// ============================================
+// CONFIRMACIÓN DE CARGA FINAL (UNA SOLA VEZ)
+// ============================================
+console.log('✅ Script COMPLETO cargado correctamente');
+console.log('📱 Versión optimizada para PWA');
