@@ -896,13 +896,10 @@ textarea {
     background: none;
     border: none;
     color: white;
-    font-size: 0.75em !important;
+    font-size: 2em;
     cursor: pointer;
     line-height: 1;
-    padding: 0 6px !important;
-    min-height: 0 !important;
-    height: auto !important;
-    width: auto !important;
+    padding: 0 10px;
 }
 
 .config-content {
