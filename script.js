@@ -2906,4 +2906,28 @@ console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
 console.log('   ✓ Botones Guardar por categoría');
 console.log('   ✓ Desglose movido al paso 3');
 
+// Registro del Service Worker para PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/cotizador-arte-events/service-worker.js')
+      .then(function(registration) {
+        console.log('Service Worker registrado con éxito:', registration.scope);
+        
+        // Verificar si ya está instalable
+        window.addEventListener('beforeinstallprompt', (e) => {
+          console.log('¡La app es instalable!');
+          // No prevenimos e.preventDefault() para mantener el comportamiento por defecto
+          // El navegador mostrará automáticamente el botón de instalar
+        });
+      })
+      .catch(function(error) {
+        console.log('Error al registrar el Service Worker:', error);
+      });
+      
+    // Verificar si ya está instalada
+    window.addEventListener('appinstalled', (e) => {
+      console.log('¡App instalada correctamente!');
+    });
+  });
+}
 
