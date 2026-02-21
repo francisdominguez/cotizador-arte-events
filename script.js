@@ -2906,28 +2906,60 @@ console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
 console.log('   ✓ Botones Guardar por categoría');
 console.log('   ✓ Desglose movido al paso 3');
 
-// Registro del Service Worker para PWA
+// ============================================
+// CONFIRMACIÓN DE CARGA FINAL
+// ============================================
+console.log('✅ Script COMPLETO cargado correctamente - Versión con unidades corregidas');
+console.log('📱 Optimizado para móvil');
+console.log('🔧 Correcciones aplicadas:');
+console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
+console.log('   ✓ Botones Guardar por categoría');
+console.log('   ✓ Desglose movido al paso 3');
+
+// ============================================
+// REGISTRO DEL SERVICE WORKER PARA PWA (VERSIÓN CORREGIDA)
+// ============================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/cotizador-arte-events/service-worker.js')
+    // Usar la ruta RELATIVA en lugar de absoluta
+    navigator.serviceWorker.register('service-worker.js')
       .then(function(registration) {
-        console.log('Service Worker registrado con éxito:', registration.scope);
-        
-        // Verificar si ya está instalable
-        window.addEventListener('beforeinstallprompt', (e) => {
-          console.log('¡La app es instalable!');
-          // No prevenimos e.preventDefault() para mantener el comportamiento por defecto
-          // El navegador mostrará automáticamente el botón de instalar
-        });
+        console.log('✅ Service Worker registrado con éxito:', registration.scope);
       })
       .catch(function(error) {
-        console.log('Error al registrar el Service Worker:', error);
+        console.log('❌ Error al registrar el Service Worker:', error);
       });
-      
-    // Verificar si ya está instalada
-    window.addEventListener('appinstalled', (e) => {
-      console.log('¡App instalada correctamente!');
-    });
   });
 }
 
+// Manejo del evento beforeinstallprompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  console.log('📱 App lista para instalar');
+  
+  // Opcional: Mostrar un botón personalizado para instalar
+  // Puedes descomentar esto si quieres mostrar un botón de instalación manual
+  /*
+  const installBtn = document.getElementById('install-btn');
+  if (installBtn) {
+    installBtn.style.display = 'block';
+    installBtn.addEventListener('click', () => {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('Usuario aceptó la instalación');
+        }
+        deferredPrompt = null;
+      });
+    });
+  }
+  */
+});
+
+// Evento cuando la app se instala
+window.addEventListener('appinstalled', (e) => {
+  console.log('🎉 App instalada correctamente');
+  deferredPrompt = null;
+});
