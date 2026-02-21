@@ -1,10 +1,12 @@
-const CACHE_NAME = 'cotizador-v3';
+const CACHE_NAME = 'cotizador-v4';
 const urlsToCache = [
   '/cotizador-arte-events/',
   '/cotizador-arte-events/index.html',
   '/cotizador-arte-events/styles.css',
   '/cotizador-arte-events/script.js',
-  '/cotizador-arte-events/manifest.json'
+  '/cotizador-arte-events/manifest.json',
+  '/cotizador-arte-events/icono-192.png',
+  '/cotizador-arte-events/icono-512.png'
 ];
 
 self.addEventListener('install', function(event) {
@@ -14,6 +16,7 @@ self.addEventListener('install', function(event) {
         return cache.addAll(urlsToCache);
       })
   );
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', function(event) {
@@ -28,6 +31,7 @@ self.addEventListener('activate', function(event) {
       );
     })
   );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', function(event) {
