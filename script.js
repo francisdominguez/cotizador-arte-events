@@ -2907,16 +2907,6 @@ console.log('   ✓ Botones Guardar por categoría');
 console.log('   ✓ Desglose movido al paso 3');
 
 // ============================================
-// CONFIRMACIÓN DE CARGA FINAL
-// ============================================
-console.log('✅ Script COMPLETO cargado correctamente - Versión con unidades corregidas');
-console.log('📱 Optimizado para móvil');
-console.log('🔧 Correcciones aplicadas:');
-console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
-console.log('   ✓ Botones Guardar por categoría');
-console.log('   ✓ Desglose movido al paso 3');
-
-// ============================================
 // REGISTRO DEL SERVICE WORKER PARA PWA (VERSIÓN CORREGIDA)
 // ============================================
 if ('serviceWorker' in navigator) {
@@ -2963,3 +2953,4 @@ window.addEventListener('appinstalled', (e) => {
   console.log('🎉 App instalada correctamente');
   deferredPrompt = null;
 });
+
