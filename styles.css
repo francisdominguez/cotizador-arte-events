@@ -896,10 +896,13 @@ textarea {
     background: none;
     border: none;
     color: white;
-    font-size: 0.85em;
+    font-size: 0.75em !important;
     cursor: pointer;
     line-height: 1;
-    padding: 0 6px;
+    padding: 0 6px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    width: auto !important;
 }
 
 .config-content {
@@ -1930,7 +1933,7 @@ textarea {
         padding: 15px !important;
     }
     
-    button:not(.btn-close), .btn-primary, .btn-secondary, .tab-button {
+    button, .btn-primary, .btn-secondary, .tab-button {
         min-height: 44px !important;
         touch-action: manipulation !important;
         -webkit-tap-highlight-color: rgba(0,0,0,0.1) !important;
@@ -2321,15 +2324,3 @@ textarea {
     }
 }
 
-
-/* Forzar X pequeña en móvil */
-@media (max-width: 768px) {
-    .config-header .btn-close {
-        font-size: 0.85em !important;
-        min-height: 0 !important;
-        height: auto !important;
-        width: auto !important;
-        padding: 0 6px !important;
-        line-height: 1 !important;
-    }
-}
