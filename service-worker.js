@@ -2,7 +2,7 @@ const CACHE_NAME = 'cotizador-v2';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/style.css',
+  '/styles.css',
   '/script.js',
   '/manifest.json'
 ];
