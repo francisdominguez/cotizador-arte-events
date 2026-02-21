@@ -2,7 +2,7 @@
   "name": "Cotizador Arte y Eventos",
   "short_name": "Cotizador",
   "description": "Sistema de cotizaciones para decoración de eventos",
-  "start_url": "/",
+  "start_url": "/cotizador-arte-events/",
   "display": "standalone",
   "background_color": "#8a2be2",
   "theme_color": "#8a2be2",
