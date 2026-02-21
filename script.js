@@ -2888,7 +2888,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/cotizador-arte-events/service-worker.js').then(registration => {
+    navigator.serviceWorker.register('/service-worker.js').then(registration => {
       console.log('ServiceWorker registrado con éxito:', registration.scope);
     }).catch(registrationError => {
       console.log('Error al registrar ServiceWorker:', registrationError);
@@ -2953,4 +2953,3 @@ window.addEventListener('appinstalled', (e) => {
   console.log('🎉 App instalada correctamente');
   deferredPrompt = null;
 });
-
