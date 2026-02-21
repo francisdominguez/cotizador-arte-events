@@ -1,10 +1,10 @@
-const CACHE_NAME = 'cotizador-v2';
+const CACHE_NAME = 'cotizador-v3';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/manifest.json'
+  '/cotizador-arte-events/',
+  '/cotizador-arte-events/index.html',
+  '/cotizador-arte-events/styles.css',
+  '/cotizador-arte-events/script.js',
+  '/cotizador-arte-events/manifest.json'
 ];
 
 self.addEventListener('install', function(event) {
