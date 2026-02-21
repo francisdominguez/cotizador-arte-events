@@ -28,11 +28,37 @@
             --light-gray: #dfe6e9;
         }
 
-        /* ===== AQUI VA TODO EL RESTO DE TU CSS EXISTENTE ===== */
-        /* Mantén todo tu CSS exactamente como lo tienes, desde :root hasta el final */
-        /* No borres nada de tu CSS, solo agrega las líneas arriba */
-        
-        /* ... (todo tu CSS actual) ... */
+           /* ============================================
+       ✅ CORRECCIÓN BOTÓN X (DESDE HTML)
+       ============================================ */
+    .config-header .btn-close {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 24px !important;
+        line-height: 1 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(255,255,255,0.25) !important;
+        border-radius: 50% !important;
+        border: none !important;
+        color: white !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+    }
+    
+    @media (max-width: 768px) {
+        .config-header .btn-close {
+            width: 32px !important;
+            height: 32px !important;
+            font-size: 20px !important;
+            min-width: 32px !important;
+            min-height: 32px !important;
+        }
+    }
     </style>
 </head>
 <body>
@@ -561,3 +587,4 @@
     </script>
 </body>
 </html>
+
