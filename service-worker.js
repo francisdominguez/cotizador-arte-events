@@ -1,4 +1,4 @@
-const CACHE_NAME = 'arte-events-cache-v2';
+const CACHE_NAME = 'arte-events-cache-v3';
 const urlsToCache = [
   '/cotizador-arte-events/',
   '/cotizador-arte-events/index.html',
@@ -73,4 +73,5 @@ self.addEventListener('fetch', event => {
       })
   );
 });
+
 
