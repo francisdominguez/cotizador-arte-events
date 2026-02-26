@@ -6,135 +6,73 @@
     <meta name="theme-color" content="#8a2be2">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Arte y Events">
+    <meta name="apple-mobile-web-app-title" content="Cotizador">
     <meta name="description" content="Cotizador profesional para decoración de eventos - Arte y Events">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="styles.css">
     <title>Arte y Events - Cotizador Profesional</title>
-    <style>
-        /* TODO TU CSS EXISTENTE - NO CAMBIES NADA */
-        :root {
-            --primary: #8a2be2;
-            --primary-dark: #7a1fd1;
-            --primary-light: #9d4edd;
-            --secondary: #ff6b6b;
-            --accent: #4ecdc4;
-            --light: #f8f9fa;
-            --dark: #2d3436;
-            --success: #00b894;
-            --warning: #fdcb6e;
-            --danger: #ff6b6b;
-            --gray: #636e72;
-            --light-gray: #dfe6e9;
-        }
-
-           /* ============================================
-       ✅ CORRECCIÓN BOTÓN X (DESDE HTML)
-       ============================================ */
-    .config-header .btn-close {
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 24px !important;
-        line-height: 1 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        background: rgba(255,255,255,0.25) !important;
-        border-radius: 50% !important;
-        border: none !important;
-        color: white !important;
-        cursor: pointer !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        min-width: 36px !important;
-        min-height: 36px !important;
-    }
-    
-    @media (max-width: 768px) {
-        .config-header .btn-close {
-            width: 32px !important;
-            height: 32px !important;
-            font-size: 20px !important;
-            min-width: 32px !important;
-            min-height: 32px !important;
-        }
-    }
-    </style>
 </head>
 <body>
     <div class="config-toggle" onclick="toggleConfig()" title="Panel de Configuración">⚙️</div>
 
     <div class="config-panel" id="configPanel">
-    <div class="config-header">
-        <h2>🛠️ Panel de Configuración</h2>
-        <button class="btn-close" onclick="toggleConfig()" title="Cerrar panel" style="width:36px!important;height:36px!important;font-size:24px!important;line-height:1!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;background:rgba(255,255,255,0.25)!important;border-radius:50%!important;border:none!important;color:white!important;cursor:pointer!important;padding:0!important;margin:0!important;min-width:36px!important;min-height:36px!important;">×</button>
+        <div class="config-header">
+            <h2>🛠️ Panel de Configuración</h2>
+            <button class="btn-close" onclick="toggleConfig()" title="Cerrar panel">×</button>
+        </div>
+        <div class="config-content">
+            <div class="config-section">
+                <h3>Tipos de Evento</h3>
+                <div class="config-grid" id="config-tipos-evento"></div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn-add" onclick="agregarTipoEvento()" style="flex: 1;">+ Agregar Tipo de Evento</button>
+                    <button class="btn-primary btn-guardar" onclick="guardarTiposEvento()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
+                </div>
+            </div>
+            <div class="config-section">
+                <h3>Temáticas de Evento</h3>
+                <div class="config-grid" id="config-tematicas-evento"></div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn-add" onclick="agregarTematicaEvento()" style="flex: 1;">+ Agregar Temática</button>
+                    <button class="btn-primary btn-guardar" onclick="guardarTematicasEvento()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
+                </div>
+            </div>
+            <div class="config-section">
+                <h3>Globos por Color</h3>
+                <div class="config-grid" id="config-paquetes"></div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn-add" onclick="agregarPaquete()" style="flex: 1;">+ Agregar Globo</button>
+                    <button class="btn-primary btn-guardar" onclick="guardarPaquetes()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
+                </div>
+            </div>
+            <div class="config-section">
+                <h3>Accesorios y Mobiliario</h3>
+                <div class="config-grid" id="config-accesorios"></div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn-add" onclick="agregarAccesorio()" style="flex: 1;">+ Agregar Accesorio</button>
+                    <button class="btn-primary btn-guardar" onclick="guardarAccesorios()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
+                </div>
+            </div>
+            <div class="config-section">
+                <h3>Flores por Unidad</h3>
+                <div class="config-grid" id="config-flores"></div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn-add" onclick="agregarFlor()" style="flex: 1;">+ Agregar Flor</button>
+                    <button class="btn-primary btn-guardar" onclick="guardarFlores()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
+                </div>
+            </div>
+            <div class="config-section">
+                <h3>Arreglos Florales</h3>
+                <div class="config-grid" id="config-arreglos"></div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn-add" onclick="agregarArreglo()" style="flex: 1;">+ Agregar Arreglo</button>
+                    <button class="btn-primary btn-guardar" onclick="guardarArreglos()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="guardarConfiguracion()" style="width: 100%;">💾 Guardar Todo</button>
+        </div>
     </div>
-    
-    <div class="config-content">
-        <!-- Tipos de Evento -->
-        <div class="config-section">
-            <h3>Tipos de Evento</h3>
-            <div class="config-grid" id="config-tipos-evento"></div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarTipoEvento()" style="flex: 1;">+ Agregar Tipo de Evento</button>
-                <button class="btn-primary btn-guardar" onclick="guardarTiposEvento()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
-            </div>
-        </div>
-      
-        <!-- Temáticas de Evento -->
-        <div class="config-section">
-            <h3>Temáticas de Evento</h3>
-            <div class="config-grid" id="config-tematicas-evento"></div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarTematicaEvento()" style="flex: 1;">+ Agregar Temática</button>
-                <button class="btn-primary btn-guardar" onclick="guardarTematicasEvento()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
-            </div>
-        </div>
-
-        <!-- Globos por Color -->
-        <div class="config-section">
-            <h3>Globos por Color</h3>
-            <div class="config-grid" id="config-paquetes"></div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarPaquete()" style="flex: 1;">+ Agregar Globo</button>
-                <button class="btn-primary btn-guardar" onclick="guardarPaquetes()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
-            </div>
-        </div>
-
-        <!-- Accesorios y Mobiliario -->
-        <div class="config-section">
-            <h3>Accesorios y Mobiliario</h3>
-            <div class="config-grid" id="config-accesorios"></div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarAccesorio()" style="flex: 1;">+ Agregar Accesorio</button>
-                <button class="btn-primary btn-guardar" onclick="guardarAccesorios()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
-            </div>
-        </div>
-        
-        <!-- Flores por Unidad -->
-        <div class="config-section">
-            <h3>Flores por Unidad</h3>
-            <div class="config-grid" id="config-flores"></div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarFlor()" style="flex: 1;">+ Agregar Flor</button>
-                <button class="btn-primary btn-guardar" onclick="guardarFlores()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
-            </div>
-        </div>
-        
-        <!-- Arreglos Florales -->
-        <div class="config-section">
-            <h3>Arreglos Florales</h3>
-            <div class="config-grid" id="config-arreglos"></div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-add" onclick="agregarArreglo()" style="flex: 1;">+ Agregar Arreglo</button>
-                <button class="btn-primary btn-guardar" onclick="guardarArreglos()" style="flex: 1; margin-top: 0;">💾 Guardar</button>
-            </div>
-        </div>
-        
-        <!-- Botón Guardar Todo -->
-        <button class="btn-primary" onclick="guardarConfiguracion()" style="width: 100%;">💾 Guardar Todo</button>
-    </div>
-</div>
 
     <div class="container">
         <header>
@@ -150,7 +88,6 @@
 
         <div class="app-container">
             <div class="main-panel">
-                <!-- Barra de progreso con indicadores de estado -->
                 <div class="progress-bar-container">
                     <div class="progress-steps">
                         <div class="step-indicator active" data-step="1">
@@ -175,125 +112,88 @@
                 </div>
 
                 <div class="steps-container">
-                   <div class="step-section" id="step-1">
-    <h2>1. Información del Cliente y Evento <span class="required-hint">(* Campos obligatorios)</span></h2>
-    <div class="form-section">
-        <div class="form-grid two-columns">
-            <div class="form-group">
-                <label for="cliente-nombre" class="required-label">
-                    Nombre del Cliente <span class="required-star">*</span>
-                    <span class="tooltip-icon" title="Nombre completo del cliente o empresa">?</span>
-                </label>
-                <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
-                <div class="validation-error" id="error-cliente-nombre"></div>
-            </div>
-            <div class="form-group">
-                <label for="cliente-telefono" class="optional-label">
-                    Teléfono
-                    <span class="tooltip-icon" title="Teléfono de contacto para consultas">?</span>
-                </label>
-                <input type="tel" id="cliente-telefono" placeholder="Ej: 809-555-1234">
-            </div>
-            <div class="form-group">
-                <label for="cliente-email" class="optional-label">
-                    Email
-                    <span class="tooltip-icon" title="Email para enviar la cotización">?</span>
-                </label>
-                <input type="email" id="cliente-email" placeholder="Ej: correo@ejemplo.com">
-                <div class="validation-error" id="error-cliente-email"></div>
-            </div>
-            <div class="form-group">
-                <label for="fecha-evento" class="required-label">
-                    Fecha del Evento <span class="required-star">*</span>
-                    <span class="tooltip-icon" title="Fecha en la que se realizará el evento">?</span>
-                </label>
-                <input type="date" id="fecha-evento">
-                <div class="validation-error" id="error-fecha-evento"></div>
-            </div>
-            <div class="form-group">
-                <label for="lugar-evento" class="optional-label">
-                    Lugar/Dirección del Evento
-                    <span class="tooltip-icon" title="Dirección completa del lugar del evento">?</span>
-                </label>
-                <input type="text" id="lugar-evento" placeholder="Ej: Salón de Eventos Bella Vista">
-            </div>
-            <div class="form-group">
-                <label for="tipo-evento" class="required-label">
-                    Tipo de Evento <span class="required-star">*</span>
-                    <span class="tooltip-icon" title="Seleccione el tipo de evento o especifique uno personalizado">?</span>
-                </label>
-                <select id="tipo-evento">
-    <option value="">Seleccione un tipo</option>
-                </select>
-                <div class="validation-error" id="error-tipo-evento"></div>
-            </div>
-            <div class="form-group" id="otro-evento-container" style="display: none;">
-                <label for="otro-evento" class="required-label">
-                    Especificar Evento <span class="required-star">*</span>
-                    <span class="tooltip-icon" title="Escriba el nombre del evento personalizado">?</span>
-                </label>
-                <input type="text" id="otro-evento" placeholder="Ej: Bautizo, Quinceañera, etc.">
-                <div class="validation-error" id="error-otro-evento"></div>
-            </div>
-        </div>
-        
-        <div class="form-grid two-columns">
-            <div class="form-group">
-                <label class="required-label">
-                    Tipo de Servicio <span class="required-star">*</span>
-                </label>
-                <div id="tipo-servicio-display" style="padding: 10px 14px; background: #f5f5f5; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 1em; min-height: 42px; display: flex; align-items: center;">
-                    <span id="tipo-servicio-texto" style="color: #999;">Se asignará según el tipo de evento</span>
-                </div>
-                <select id="tipo-servicio" style="display:none;">
-                    <option value="">Seleccione servicio</option>
-                    <option value="decoracion">Decoración</option>
-                    <option value="flores">Flores Externas</option>
-                </select>
-                <div class="validation-error" id="error-tipo-servicio"></div>
-            </div>
-            <div class="form-group">
-                <label for="tematica-evento" class="optional-label">
-                    Temática del Evento
-                    <span class="tooltip-icon" title="Estilo o temática principal del evento">?</span>
-                </label>
-                <select id="tematica-evento" onchange="cambiarTematicaEvento()">
-                    <option value="">Seleccione una temática</option>
-                </select>
-            </div>
-            <div class="form-group" id="otra-tematica-container" style="display: none;">
-                <label for="otra-tematica" class="optional-label">
-                    Especificar Temática
-                    <span class="tooltip-icon" title="Describa la temática personalizada">?</span>
-                </label>
-                <input type="text" id="otra-tematica" placeholder="Ej: Barbie, Patrulla Canina, Superhéroes, etc.">
-            </div>
-            <div class="form-group full-width">
-                <label for="cliente-notas" class="optional-label">
-                    Notas Adicionales
-                    <span class="tooltip-icon" title="Detalles especiales, preferencias de color, requerimientos específicos">?</span>
-                </label>
-                <textarea id="cliente-notas" rows="3" placeholder="Detalles especiales, colores, temáticas, etc."></textarea>
-            </div>
-        </div>
-    </div>
-</div>
+                    <!-- PASO 1 -->
+                    <div class="step-section" id="step-1">
+                        <h2>1. Información del Cliente y Evento <span class="required-hint">(* Campos obligatorios)</span></h2>
+                        <div class="form-section">
+                            <div class="form-grid two-columns">
+                                <div class="form-group">
+                                    <label for="cliente-nombre" class="required-label">Nombre del Cliente <span class="required-star">*</span> <span class="tooltip-icon" title="Nombre completo del cliente o empresa">?</span></label>
+                                    <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
+                                    <div class="validation-error" id="error-cliente-nombre"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cliente-telefono" class="optional-label">Teléfono <span class="tooltip-icon" title="Teléfono de contacto para consultas">?</span></label>
+                                    <input type="tel" id="cliente-telefono" placeholder="Ej: 809-555-1234">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cliente-email" class="optional-label">Email <span class="tooltip-icon" title="Email para enviar la cotización">?</span></label>
+                                    <input type="email" id="cliente-email" placeholder="Ej: correo@ejemplo.com">
+                                    <div class="validation-error" id="error-cliente-email"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fecha-evento" class="required-label">Fecha del Evento <span class="required-star">*</span> <span class="tooltip-icon" title="Fecha en la que se realizará el evento">?</span></label>
+                                    <input type="date" id="fecha-evento">
+                                    <div class="validation-error" id="error-fecha-evento"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lugar-evento" class="optional-label">Lugar/Dirección del Evento <span class="tooltip-icon" title="Dirección completa del lugar del evento">?</span></label>
+                                    <input type="text" id="lugar-evento" placeholder="Ej: Salón de Eventos Bella Vista">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo-evento" class="required-label">Tipo de Evento <span class="required-star">*</span> <span class="tooltip-icon" title="Seleccione el tipo de evento o especifique uno personalizado">?</span></label>
+                                    <select id="tipo-evento">
+                                        <option value="">Seleccione un tipo</option>
+                                    </select>
+                                    <div class="validation-error" id="error-tipo-evento"></div>
+                                </div>
+                                <div class="form-group" id="otro-evento-container" style="display: none;">
+                                    <label for="otro-evento" class="required-label">Especificar Evento <span class="required-star">*</span> <span class="tooltip-icon" title="Escriba el nombre del evento personalizado">?</span></label>
+                                    <input type="text" id="otro-evento" placeholder="Ej: Bautizo, Quinceañera, etc.">
+                                    <div class="validation-error" id="error-otro-evento"></div>
+                                </div>
+                            </div>
+                            <div class="form-grid two-columns">
+                                <div class="form-group">
+                                    <label class="required-label">Tipo de Servicio <span class="required-star">*</span></label>
+                                    <div id="tipo-servicio-display" style="padding: 10px 14px; background: #f5f5f5; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 1em; min-height: 42px; display: flex; align-items: center;">
+                                        <span id="tipo-servicio-texto" style="color: #999;">Se asignará según el tipo de evento</span>
+                                    </div>
+                                    <select id="tipo-servicio" style="display:none;">
+                                        <option value="">Seleccione servicio</option>
+                                        <option value="decoracion">Decoración</option>
+                                        <option value="flores">Flores Externas</option>
+                                    </select>
+                                    <div class="validation-error" id="error-tipo-servicio"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tematica-evento" class="optional-label">Temática del Evento <span class="tooltip-icon" title="Estilo o temática principal del evento">?</span></label>
+                                    <select id="tematica-evento" onchange="cambiarTematicaEvento()">
+                                        <option value="">Seleccione una temática</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="otra-tematica-container" style="display: none;">
+                                    <label for="otra-tematica" class="optional-label">Especificar Temática <span class="tooltip-icon" title="Describa la temática personalizada">?</span></label>
+                                    <input type="text" id="otra-tematica" placeholder="Ej: Barbie, Patrulla Canina, Superhéroes, etc.">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="cliente-notas" class="optional-label">Notas Adicionales <span class="tooltip-icon" title="Detalles especiales, preferencias de color, requerimientos específicos">?</span></label>
+                                    <textarea id="cliente-notas" rows="3" placeholder="Detalles especiales, colores, temáticas, etc."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <!-- PASO 2 -->
                     <div class="step-section" id="step-2" style="display: none;">
                         <h2 id="titulo-paso-2">2. Selección de Artículos</h2>
-                        
-                        <div class="tabs" id="tabs-container">
-                            <!-- Los tabs se generan dinámicamente según el tipo de servicio -->
-                        </div>
-
+                        <div class="tabs" id="tabs-container"></div>
                         <div class="tab-content active" id="tab-paquetes">
                             <div class="options-grid" id="paquetes-container"></div>
                         </div>
-
                         <div class="tab-content" id="tab-accesorios" style="display: none;">
                             <div class="options-grid" id="accesorios-container"></div>
                         </div>
-
                         <div class="tab-content" id="tab-flores" style="display: none;">
                             <div class="filtros-flores">
                                 <label>Filtrar por color:</label>
@@ -310,36 +210,26 @@
                             </div>
                             <div class="options-grid" id="flores-container"></div>
                         </div>
-
                         <div class="tab-content" id="tab-arreglos" style="display: none;">
                             <div class="options-grid" id="arreglos-container"></div>
                         </div>
-
                         <div class="tab-content" id="tab-manual" style="display: none;">
                             <div id="titulo-manual"></div>
                             <div id="manual-items-container"></div>
-                            <button class="btn-add" onclick="agregarArticuloManual()" style="margin-top: 20px;">
-                                + Agregar Artículo Manual
-                            </button>
+                            <button class="btn-add" onclick="agregarArticuloManual()" style="margin-top: 20px;">+ Agregar Artículo Manual</button>
                         </div>
                     </div>
 
+                    <!-- PASO 3 -->
                     <div class="step-section" id="step-3" style="display: none;">
                         <h2>3. Costos y Transporte</h2>
-                        
                         <div class="form-section form-grid two-columns">
                             <div class="form-group">
-                                <label for="costo-transporte" class="optional-label">
-                                    Costo de Transporte (RD$)
-                                    <span class="tooltip-icon" title="Costo estimado de transporte e instalación">?</span>
-                                </label>
+                                <label for="costo-transporte" class="optional-label">Costo de Transporte (RD$) <span class="tooltip-icon" title="Costo estimado de transporte e instalación">?</span></label>
                                 <input type="number" id="costo-transporte" value="0" min="0" step="100">
                             </div>
                             <div class="form-group">
-                                <label class="optional-label">
-                                    Mano de Obra
-                                    <span class="tooltip-icon" title="Costo de instalación profesional - Puede ser porcentaje o monto fijo">?</span>
-                                </label>
+                                <label class="optional-label">Mano de Obra <span class="tooltip-icon" title="Costo de instalación profesional - Puede ser porcentaje o monto fijo">?</span></label>
                                 <div style="display: flex; gap: 10px; align-items: center;">
                                     <select id="tipo-mano-obra" onchange="cambiarTipoManoObra()" style="flex: 1;">
                                         <option value="porcentaje">Porcentaje (%)</option>
@@ -348,167 +238,111 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="form-section form-grid two-columns" id="mano-obra-porcentaje-container">
                             <div class="form-group">
-                                <label for="porcentaje-mano-obra" class="optional-label">
-                                    Porcentaje Mano de Obra (%)
-                                    <span class="tooltip-icon" title="Porcentaje aplicado sobre el costo de materiales para calcular mano de obra">?</span>
-                                </label>
+                                <label for="porcentaje-mano-obra" class="optional-label">Porcentaje Mano de Obra (%) <span class="tooltip-icon" title="Porcentaje aplicado sobre el costo de materiales">?</span></label>
                                 <input type="number" id="porcentaje-mano-obra" value="30" min="0" max="100" step="5">
                             </div>
                         </div>
-
                         <div class="form-section form-grid two-columns" id="mano-obra-manual-container" style="display: none;">
                             <div class="form-group">
-                                <label for="monto-mano-obra-manual" class="optional-label">
-                                    Monto Manual Mano de Obra (RD$)
-                                    <span class="tooltip-icon" title="Monto fijo para la instalación profesional">?</span>
-                                </label>
+                                <label for="monto-mano-obra-manual" class="optional-label">Monto Manual Mano de Obra (RD$) <span class="tooltip-icon" title="Monto fijo para la instalación profesional">?</span></label>
                                 <input type="number" id="monto-mano-obra-manual" value="0" min="0" step="100">
                             </div>
                         </div>
-
                         <div class="form-section form-grid two-columns">
                             <div class="form-group">
-                                <label for="costo-materiales" class="optional-label">
-                                    Costo de Materiales (RD$)
-                                    <span class="tooltip-icon" title="Costo real de materiales (se calcula automáticamente)">?</span>
-                                </label>
+                                <label for="costo-materiales" class="optional-label">Costo de Materiales (RD$) <span class="tooltip-icon" title="Costo real de materiales (se calcula automáticamente)">?</span></label>
                                 <input type="number" id="costo-materiales" value="0" min="0" step="100">
                             </div>
                             <div class="form-group">
-                                <label for="porcentaje-ganancia" class="optional-label">
-                                    Margen de Ganancia (%)
-                                    <span class="tooltip-icon" title="Porcentaje de ganancia sobre costo de materiales (se calcula automáticamente)">?</span>
-                                </label>
+                                <label for="porcentaje-ganancia" class="optional-label">Margen de Ganancia (%) <span class="tooltip-icon" title="Se calcula automáticamente">?</span></label>
                                 <input type="number" id="porcentaje-ganancia" value="30" min="0" max="100" step="5" readonly style="background-color: #f5f5f5;">
                                 <small style="color: var(--gray); margin-top: 4px;">(Calculado automáticamente)</small>
                             </div>
                         </div>
-
-                       
-
                         <div class="form-section" style="border-left: 4px solid #4ecdc4; padding-left: 15px; margin: 20px 0;">
                             <h4 style="color: #4ecdc4; margin-bottom: 15px;">📄 Configuración del PDF</h4>
-                            
                             <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                                 <h5 style="color: #8a2be2; margin-bottom: 10px;">🎯 Modo de Cotización</h5>
                                 <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Perfecto para enviar al cliente - Solo muestra artículos y total">
+                                    <label style="display: flex; align-items: center; gap: 8px;">
                                         <input type="checkbox" id="mostrar-presupuesto-simple" class="pdf-config-checkbox" onchange="actualizarConfigPDF()">
                                         <strong>📋 Modo Presupuesto Simple</strong> (Muestra solo artículos y total, sin precios individuales)
                                     </label>
                                 </div>
-                                <p style="font-size: 0.85em; color: #666; margin-top: 5px; padding-left: 28px;">
-                                    <em>Ideal para compartir con el cliente - Oculta precios internos</em>
-                                </p>
+                                <p style="font-size: 0.85em; color: #666; margin-top: 5px; padding-left: 28px;"><em>Ideal para compartir con el cliente - Oculta precios internos</em></p>
                             </div>
-                            
                             <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
                                 <h5 style="color: #8a2be2; margin-bottom: 10px;">🔧 Opciones Detalladas</h5>
                                 <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el costo de instalación profesional">
+                                    <label style="display: flex; align-items: center; gap: 8px;">
                                         <input type="checkbox" id="mostrar-mano-obra" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        👷 Mostrar Mano de Obra (Muestra el costo de instalación)
+                                        👷 Mostrar Mano de Obra
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el costo de envío y logística">
+                                    <label style="display: flex; align-items: center; gap: 8px;">
                                         <input type="checkbox" id="mostrar-transporte" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        🚚 Mostrar Transporte (Muestra el costo de envío/logística)
+                                        🚚 Mostrar Transporte
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra la lista completa de artículos seleccionados">
+                                    <label style="display: flex; align-items: center; gap: 8px;">
                                         <input type="checkbox" id="mostrar-detalle-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        📋 Mostrar Detalle de Materiales (Lista de artículos con cantidades)
+                                        📋 Mostrar Detalle de Materiales
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;" title="Muestra el subtotal de todos los materiales">
+                                    <label style="display: flex; align-items: center; gap: 8px;">
                                         <input type="checkbox" id="mostrar-costo-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        💰 Mostrar Costo de Materiales (Muestra subtotal de materiales)
+                                        💰 Mostrar Costo de Materiales
                                     </label>
                                 </div>
                             </div>
-                            
                             <div id="pdf-preview" style="margin-top: 20px; padding: 15px; background: white; border: 2px dashed #dfe6e9; border-radius: 10px; font-size: 0.9em;">
                                 <h5 style="color: #636e72; margin-bottom: 10px;">👁️ Vista Previa del PDF:</h5>
-                                <div id="preview-content" style="color: #666;">
-                                    Cargando vista previa...
-                                </div>
+                                <div id="preview-content" style="color: #666;">Cargando vista previa...</div>
                             </div>
                         </div>
                         <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 600;">* El resumen de la cotización final se muestra a la derecha.</p>
                     </div>
 
                     <div class="nav-buttons">
-    <button class="btn-secondary" onclick="prevStep()" id="prev-btn" style="display: none;">← Anterior</button>
-    <button class="btn-primary" onclick="nextStep()" id="next-btn">Siguiente →</button>
-</div>
+                        <button class="btn-secondary" onclick="prevStep()" id="prev-btn" style="display: none;">← Anterior</button>
+                        <button class="btn-primary" onclick="nextStep()" id="next-btn">Siguiente →</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- PANEL DE RESUMEN -->
             <div class="resumen-panel">
                 <h3>📋 Detalles de la Cotización</h3>
                 <div class="resumen-details">
-                    <div class="resumen-item">
-                        <span>Cliente:</span>
-                        <span id="resumen-cliente">-</span>
-                    </div>
-                    <div class="resumen-item">
-                        <span>Evento:</span>
-                        <span id="resumen-evento">-</span>
-                    </div>
-                    <div class="resumen-item">
-                        <span>Servicio:</span>
-                        <span id="resumen-servicio">-</span>
-                    </div>
-                    <div class="resumen-item">
-                        <span>Fecha:</span>
-                        <span id="resumen-fecha">-</span>
-                    </div>
+                    <div class="resumen-item"><span>Cliente:</span><span id="resumen-cliente">-</span></div>
+                    <div class="resumen-item"><span>Evento:</span><span id="resumen-evento">-</span></div>
+                    <div class="resumen-item"><span>Servicio:</span><span id="resumen-servicio">-</span></div>
+                    <div class="resumen-item"><span>Fecha:</span><span id="resumen-fecha">-</span></div>
                     <div class="resumen-separator"></div>
-                    <div class="resumen-item">
-                        <span id="resumen-titulo1">Globos:</span>
-                        <span id="resumen-paquetes">-</span>
-                    </div>
-                    <div class="resumen-item">
-                        <span id="resumen-titulo2">Accesorios:</span>
-                        <span id="resumen-accesorios">-</span>
-                    </div>
+                    <div class="resumen-item"><span id="resumen-titulo1">Globos:</span><span id="resumen-paquetes">-</span></div>
+                    <div class="resumen-item"><span id="resumen-titulo2">Accesorios:</span><span id="resumen-accesorios">-</span></div>
                     <div class="resumen-item" style="font-size: 0.9em; color: #4ecdc4; margin-top: 5px;">
-                        <span>📊 Artículos totales:</span>
-                        <span id="total-articulos">0</span>
+                        <span>📊 Artículos totales:</span><span id="total-articulos">0</span>
                     </div>
                 </div>
-
                 <div class="resumen-total-section">
                     <div class="resumen-costs">
-                        <div class="resumen-item">
-                            <span>Subtotal Materiales:</span>
-                            <span id="resumen-materiales">RD$0.00</span>
-                        </div>
-                        <div class="resumen-item">
-                            <span>🛠️ Mano de Obra:</span>
-                            <span id="resumen-mano-obra">RD$0.00</span>
-                        </div>
-                        <div class="resumen-item">
-                            <span>🚚 Transporte:</span>
-                            <span id="resumen-transporte">RD$0.00</span>
-                        </div>
+                        <div class="resumen-item"><span>Subtotal Materiales:</span><span id="resumen-materiales">RD$0.00</span></div>
+                        <div class="resumen-item"><span>🛠️ Mano de Obra:</span><span id="resumen-mano-obra">RD$0.00</span></div>
+                        <div class="resumen-item"><span>🚚 Transporte:</span><span id="resumen-transporte">RD$0.00</span></div>
                         <div class="resumen-separator"></div>
                         <div class="resumen-total">
-                            <span>Total Cotización:</span>
-                            <span id="total-cotizacion">RD$0.00</span>
+                            <span>Total Cotización:</span><span id="total-cotizacion">RD$0.00</span>
                         </div>
                     </div>
-                    
                     <div class="button-group">
-                        <button id="generar-cotizacion" class="btn-primary" onclick="generarCotizacionPDF()" disabled
-                                title="Generar PDF de la cotización">
-                            <span id="pdf-icon">📄</span> 
+                        <button id="generar-cotizacion" class="btn-primary" onclick="generarCotizacionPDF()" disabled title="Generar PDF de la cotización">
+                            <span id="pdf-icon">📄</span>
                             <span id="pdf-text">Generar Cotización PDF</span>
                             <div id="pdf-loading" style="display: none;">
                                 <div class="spinner"></div>
@@ -516,12 +350,10 @@
                             </div>
                             <div id="pdf-mode-indicator" style="font-size: 0.8em; margin-top: 5px; font-weight: normal;"></div>
                         </button>
-                        
                         <button id="limpiar-cotizacion" class="btn-secondary" onclick="confirmarLimpiarCotizacion()" title="Limpiar todos los datos">
                             🗑️ Limpiar Todo
                         </button>
                     </div>
-
                     <div class="info-box">
                         <h4>✅ Esta cotización incluye:</h4>
                         <ul>
@@ -541,7 +373,6 @@
         <span>✅</span> <span id="notification-message">¡Cotización generada con éxito!</span>
     </div>
 
-    <!-- Confirmación para limpiar -->
     <div class="modal-overlay" id="confirmModal" style="display: none;">
         <div class="modal">
             <h3>⚠️ Confirmar Limpieza</h3>
@@ -553,39 +384,9 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
-
-    <!-- Botón de instalación manual (opcional, mejora UX) -->
-    <button id="install-pwa-btn" style="display: none; position: fixed; bottom: 140px; right: 20px; background: var(--primary); color: white; border: none; border-radius: 50px; padding: 12px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000; font-weight: 600; cursor: pointer;" onclick="installPWA()">
-        📲 Instalar App
-    </button>
-
-    <script>
-        // Función para instalar PWA manualmente
-        window.installPWA = function() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('✅ Usuario aceptó instalar la app');
-                    }
-                    deferredPrompt = null;
-                    document.getElementById('install-pwa-btn').style.display = 'none';
-                });
-            }
-        };
-
-        // Mostrar botón de instalación cuando esté disponible
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('install-pwa-btn').style.display = 'flex';
-        });
-    </script>
 </body>
 </html>
-
-
