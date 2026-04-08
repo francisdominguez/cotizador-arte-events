@@ -1330,16 +1330,14 @@ function actualizarUIporTipoServicio() {
 }
 
 function switchTab(tabName) {
-    console.log('🎯 switchTab llamado:', tabName);
-    
     const targetTab = document.getElementById(`tab-${tabName}`);
     if (!targetTab) {
-        console.warn(`⚠️ Tab ${tabName} no existe, usando default`);
         tabName = cotizacion.tipoServicio === 'flores' ? 'flores' : 'paquetes';
     }
     
     document.querySelectorAll('.tab-content').forEach(content => {
         content.style.display = 'none';
+        content.classList.remove('active');  // ← AGREGAR
     });
     
     document.querySelectorAll('.tab-button').forEach(button => {
@@ -1351,16 +1349,14 @@ function switchTab(tabName) {
     
     if (activeContent) {
         activeContent.style.display = 'block';
-        console.log('✅ Mostrando tab:', tabName);
-    } else {
-        console.error('❌ No se encontró tab-' + tabName);
+        activeContent.classList.add('active');  // ← AGREGAR
     }
     
     if (activeBtn) {
         activeBtn.classList.add('active');
     }
     
-    if (tabName === 'paquetes' || tabName === 'accesorios' || tabName === 'flores' || tabName === 'arreglos') {
+    if (['paquetes','accesorios','flores','arreglos'].includes(tabName)) {
         renderizarArticulos(tabName);
     } else if (tabName === 'manual') {
         renderizarArticulosManuales();
@@ -2879,37 +2875,30 @@ function actualizarBotonFlotantePDF() {
     actualizarVisibilidadBotonesFlotantes();
 }
 
-// ============================================
-// REGISTRO DEL SERVICE WORKER (VERSIÓN ÚNICA Y CORREGIDA)
-// ============================================
+// PWA Support
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+});
+
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(function(registration) {
-        console.log('✅ Service Worker registrado con éxito:', registration.scope);
-      })
-      .catch(function(error) {
-        console.log('❌ Error al registrar el Service Worker:', error);
-      });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').then(registration => {
+      console.log('ServiceWorker registrado con éxito:', registration.scope);
+    }).catch(registrationError => {
+      console.log('Error al registrar ServiceWorker:', registrationError);
+    });
   });
 }
 
-// Manejo del evento beforeinstallprompt
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  console.log('📱 App lista para instalar - Busca "Instalar app" en el menú');
-});
-
-// Evento cuando la app se instala
-window.addEventListener('appinstalled', (e) => {
-  console.log('🎉 App instalada correctamente');
-  deferredPrompt = null;
-});
-
 // ============================================
-// CONFIRMACIÓN DE CARGA FINAL (UNA SOLA VEZ)
+// CONFIRMACIÓN DE CARGA FINAL
 // ============================================
-console.log('✅ Script COMPLETO cargado correctamente');
-console.log('📱 Versión optimizada para PWA');
+console.log('✅ Script COMPLETO cargado correctamente - Versión con unidades corregidas');
+console.log('📱 Optimizado para móvil');
+console.log('🔧 Correcciones aplicadas:');
+console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
+console.log('   ✓ Botones Guardar por categoría');
+console.log('   ✓ Desglose movido al paso 3');
+
