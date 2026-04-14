@@ -19,7 +19,7 @@
     --accent: #ff4081;
 }
 
-.theme-cumpleanos {
+.theme-cumpleaños {
     --primary: #ff9800;
     --primary-dark: #f57c00;
     --accent: #ffb74d;
@@ -247,7 +247,9 @@ header > p {
     padding: 8px 12px;
     border-radius: 6px;
     font-size: 0.8em;
-    white-space: nowrap;
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 200px;
     z-index: 1000;
     margin-bottom: 5px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
@@ -891,9 +893,6 @@ textarea {
     font-size: 1.3em;
 }
 
-/* ============================================
-   ✅ BOTÓN X PEQUEÑO - CORRECCIÓN PRINCIPAL
-   ============================================ */
 .config-header .btn-close {
     background: rgba(255, 255, 255, 0.15);
     border: none;
@@ -1354,12 +1353,10 @@ textarea {
 .nav-buttons button {
     height: 48px !important;
     min-height: 48px !important;
-    width: 48% !important;
     padding: 0 20px !important;
     font-size: 16px !important;
     font-weight: 600 !important;
     line-height: 1 !important;
-    display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     border-radius: 10px !important;
@@ -1369,6 +1366,10 @@ textarea {
     cursor: pointer !important;
     transition: all 0.3s ease !important;
     white-space: nowrap !important;
+}
+
+.nav-buttons button[hidden] {
+    display: none !important;
 }
 
 #prev-btn {
@@ -1393,9 +1394,7 @@ textarea {
     transform: translateY(-2px) !important;
 }
 
-#next-btn:only-child,
-#prev-btn[style*="display: none"] ~ #next-btn,
-#prev-btn[style*="display:none"] ~ #next-btn {
+#next-btn:only-child {
     width: 100% !important;
     margin-left: auto !important;
 }
@@ -1650,7 +1649,268 @@ textarea {
     100% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0); }
 }
 
-@media (max-width: 1200px) {
+/* ============================================
+   PASO 3 — DISEÑO DE TARJETAS
+   ============================================ */
+
+.paso3-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid var(--light-gray);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+
+.paso3-card-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 14px 20px;
+    font-size: 1em;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.02em;
+}
+
+.paso3-card-icon {
+    font-size: 1.2em;
+}
+
+.paso3-card-body {
+    padding: 6px 0;
+}
+
+.paso3-field-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    gap: 16px;
+    transition: background 0.15s;
+}
+
+.paso3-field-row:hover {
+    background: #fafafa;
+}
+
+.paso3-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    gap: 16px;
+    transition: background 0.15s;
+}
+
+.paso3-toggle-row:hover {
+    background: #fafafa;
+}
+
+.paso3-sub-field {
+    background: #fdfaff;
+    padding-left: 36px;
+}
+
+.paso3-field-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.paso3-field-icon {
+    font-size: 1.3em;
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+}
+
+.paso3-field-name {
+    font-weight: 600;
+    font-size: 0.95em;
+    color: var(--dark);
+}
+
+.paso3-field-hint {
+    font-size: 0.78em;
+    color: var(--gray);
+    margin-top: 2px;
+}
+
+.paso3-field-input {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    background: var(--light);
+    border: 1.5px solid var(--light-gray);
+    border-radius: 10px;
+    padding: 4px 10px;
+    min-width: 130px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.paso3-field-input:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(138,43,226,0.1);
+    background: white;
+}
+
+.paso3-field-input input,
+.paso3-field-input select {
+    border: none;
+    background: transparent;
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--dark);
+    outline: none;
+    width: 80px;
+    text-align: right;
+    padding: 6px 0;
+    -moz-appearance: textfield;
+}
+
+.paso3-field-input input::-webkit-outer-spin-button,
+.paso3-field-input input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.paso3-field-input select {
+    width: auto;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.paso3-mano-obra-toggle {
+    min-width: 150px;
+}
+
+.paso3-prefix {
+    font-size: 0.85em;
+    color: var(--gray);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.paso3-suffix {
+    font-size: 0.85em;
+    color: var(--gray);
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.paso3-readonly {
+    background: #f0f0f0 !important;
+    border-color: #ddd !important;
+    cursor: not-allowed;
+}
+
+.paso3-readonly input {
+    color: var(--gray) !important;
+    cursor: not-allowed;
+}
+
+.paso3-badge-auto {
+    font-size: 0.65em;
+    font-weight: 700;
+    background: var(--accent);
+    color: white;
+    border-radius: 6px;
+    padding: 2px 6px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+
+.paso3-divider {
+    height: 1px;
+    background: var(--light-gray);
+    margin: 2px 20px;
+}
+
+/* Toggle switch */
+.paso3-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.paso3-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.paso3-switch-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--light-gray);
+    border-radius: 26px;
+    transition: background 0.3s;
+}
+
+.paso3-switch-slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.paso3-switch input:checked + .paso3-switch-slider {
+    background: var(--primary);
+}
+
+.paso3-switch input:checked + .paso3-switch-slider::before {
+    transform: translateX(22px);
+}
+
+.paso3-switch input:disabled + .paso3-switch-slider {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .paso3-field-row, .paso3-toggle-row {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .paso3-field-input {
+        width: 100%;
+        min-width: unset;
+    }
+    .paso3-field-input input {
+        width: 100%;
+        text-align: left;
+    }
+    .paso3-sub-field {
+        padding-left: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .paso3-card-header {
+        font-size: 0.95em;
+        padding: 12px 15px;
+    }
+    .paso3-field-row, .paso3-toggle-row {
+        padding: 12px 15px;
+    }
+}
+
+
     .app-container { grid-template-columns: 1fr; gap: 20px; }
     .resumen-panel { position: static; width: 100%; }
     .config-panel { width: 100%; right: -100%; }
@@ -1717,8 +1977,6 @@ textarea {
     .nav-buttons { gap: 10px !important; }
     .nav-buttons button { height: 44px !important; min-height: 44px !important; font-size: 14px !important; padding: 0 15px !important; width: auto !important; margin-top: 0 !important; flex: 1 !important; box-sizing: border-box !important; }
     .config-section .btn-add, .config-section .btn-primary.btn-guardar { height: 40px !important; min-height: 40px !important; font-size: 0.9em !important; padding: 0 12px !important; }
-
-    /* X más pequeña en móvil también */
     .config-header .btn-close {
         width: 24px !important;
         height: 24px !important;
