@@ -1,4 +1,4 @@
-const CACHE_NAME = 'arte-events-cache-v4';
+const CACHE_NAME = 'arte-events-cache-v5';
 const urlsToCache = [
   '/cotizador-arte-events/',
   '/cotizador-arte-events/index.html',
