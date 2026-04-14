@@ -1911,6 +1911,7 @@ textarea {
 }
 
 
+@media (max-width: 1024px) {
     .app-container { grid-template-columns: 1fr; gap: 20px; }
     .resumen-panel { position: static; width: 100%; }
     .config-panel { width: 100%; right: -100%; }
