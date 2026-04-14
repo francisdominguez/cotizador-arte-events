@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#8a2be2">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -168,7 +168,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tematica-evento" class="optional-label">Temática del Evento <span class="tooltip-icon" title="Estilo o temática principal del evento">?</span></label>
-                                    <select id="tematica-evento" onchange="cambiarTematicaEvento()">
+                                    <select id="tematica-evento">
                                         <option value="">Seleccione una temática</option>
                                     </select>
                                 </div>
@@ -188,7 +188,7 @@
                     <div class="step-section" id="step-2" style="display: none;">
                         <h2 id="titulo-paso-2">2. Selección de Artículos</h2>
                         <div class="tabs" id="tabs-container"></div>
-                        <div class="tab-content active" id="tab-paquetes">
+                        <div class="tab-content" id="tab-paquetes">
                             <div class="options-grid" id="paquetes-container"></div>
                         </div>
                         <div class="tab-content" id="tab-accesorios" style="display: none;">
@@ -222,94 +222,234 @@
 
                     <!-- PASO 3 -->
                     <div class="step-section" id="step-3" style="display: none;">
-                        <h2>3. Costos y Transporte</h2>
-                        <div class="form-section form-grid two-columns">
-                            <div class="form-group">
-                                <label for="costo-transporte" class="optional-label">Costo de Transporte (RD$) <span class="tooltip-icon" title="Costo estimado de transporte e instalación">?</span></label>
-                                <input type="number" id="costo-transporte" value="0" min="0" step="100">
+                        <h2>3. Costos y Configuración</h2>
+
+                        <!-- TARJETA: COSTOS -->
+                        <div class="paso3-card">
+                            <div class="paso3-card-header">
+                                <span class="paso3-card-icon">💰</span>
+                                <span>Costos del Servicio</span>
                             </div>
-                            <div class="form-group">
-                                <label class="optional-label">Mano de Obra <span class="tooltip-icon" title="Costo de instalación profesional - Puede ser porcentaje o monto fijo">?</span></label>
-                                <div style="display: flex; gap: 10px; align-items: center;">
-                                    <select id="tipo-mano-obra" onchange="cambiarTipoManoObra()" style="flex: 1;">
-                                        <option value="porcentaje">Porcentaje (%)</option>
-                                        <option value="manual">Monto Manual</option>
-                                    </select>
+                            <div class="paso3-card-body">
+
+                                <!-- Transporte -->
+                                <div class="paso3-field-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">🚚</span>
+                                        <div>
+                                            <div class="paso3-field-name">Costo de Transporte</div>
+                                            <div class="paso3-field-hint">Traslado e instalación en el lugar</div>
+                                        </div>
+                                    </div>
+                                    <div class="paso3-field-input">
+                                        <span class="paso3-prefix">RD$</span>
+                                        <input type="number" id="costo-transporte" value="0" min="0" step="100" placeholder="0">
+                                    </div>
                                 </div>
+
+                                <div class="paso3-divider"></div>
+
+                                <!-- Mano de obra -->
+                                <div class="paso3-field-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">👷</span>
+                                        <div>
+                                            <div class="paso3-field-name">Instalación y Montaje</div>
+                                            <div class="paso3-field-hint">Instalación profesional</div>
+                                        </div>
+                                    </div>
+                                    <div class="paso3-field-input paso3-mano-obra-toggle">
+                                        <select id="tipo-mano-obra" onchange="cambiarTipoManoObra()">
+                                            <option value="porcentaje">% Porcentaje</option>
+                                            <option value="manual">RD$ Monto Fijo</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Porcentaje mano de obra -->
+                                <div class="paso3-field-row paso3-sub-field" id="mano-obra-porcentaje-container">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon" style="opacity:0.4;">↳</span>
+                                        <div>
+                                            <div class="paso3-field-name">Porcentaje sobre costo de materiales</div>
+                                            <div class="paso3-field-hint"><span id="display-mano-obra-peso" style="font-weight:700; color: var(--primary);">RD$0.00</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="paso3-field-input">
+                                        <input type="number" id="porcentaje-mano-obra" value="30" min="0" max="100" step="5" placeholder="30">
+                                        <span class="paso3-suffix">%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Monto manual mano de obra -->
+                                <div class="paso3-field-row paso3-sub-field" id="mano-obra-manual-container" style="display:none;">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon" style="opacity:0.4;">↳</span>
+                                        <div>
+                                            <div class="paso3-field-name">Monto fijo de Instalación y Montaje</div>
+                                            <div class="paso3-field-hint">Monto específico acordado</div>
+                                        </div>
+                                    </div>
+                                    <div class="paso3-field-input">
+                                        <span class="paso3-prefix">RD$</span>
+                                        <input type="number" id="monto-mano-obra-manual" value="0" min="0" step="100" placeholder="0">
+                                    </div>
+                                </div>
+
+                                <div class="paso3-divider"></div>
+
+                                <!-- Costo materiales (display) -->
+                                <div class="paso3-field-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">📦</span>
+                                        <div>
+                                            <div class="paso3-field-name">Costo Real de Materiales</div>
+                                            <div class="paso3-field-hint">Calculado automáticamente desde los artículos</div>
+                                        </div>
+                                    </div>
+                                    <div class="paso3-field-input paso3-readonly">
+                                        <span class="paso3-prefix">RD$</span>
+                                        <input type="number" id="costo-materiales" value="0" min="0" step="100" readonly tabindex="-1">
+                                        <span class="paso3-badge-auto">AUTO</span>
+                                    </div>
+                                </div>
+
+                                <!-- Precio de venta materiales -->
+                                <div class="paso3-field-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">🏷️</span>
+                                        <div>
+                                            <div class="paso3-field-name">Precio de Venta de Materiales</div>
+                                            <div class="paso3-field-hint">Suma de precios de los artículos seleccionados</div>
+                                        </div>
+                                    </div>
+                                    <div class="paso3-field-input paso3-readonly">
+                                        <span id="display-precio-venta" style="font-weight:700; min-width:90px; text-align:right;">RD$0.00</span>
+                                        <span class="paso3-badge-auto">AUTO</span>
+                                    </div>
+                                </div>
+
+                                <!-- Margen de ganancia -->
+                                <div class="paso3-field-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">📈</span>
+                                        <div>
+                                            <div class="paso3-field-name">Margen de Ganancia</div>
+                                            <div class="paso3-field-hint">Calculado automáticamente</div>
+                                        </div>
+                                    </div>
+                                    <div class="paso3-field-input paso3-readonly">
+                                        <span class="paso3-prefix">RD$</span>
+                                        <input type="number" id="porcentaje-ganancia" value="0" readonly tabindex="-1" style="display:none;">
+                                        <span id="display-porcentaje-ganancia" style="min-width:90px; text-align:right;">0.00</span>
+                                        <span class="paso3-badge-auto">AUTO</span>
+                                    </div>
+                                </div>
+
+                                <div class="paso3-divider"></div>
+
+                                <!-- Total -->
+                                <div class="paso3-field-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">💵</span>
+                                        <div>
+                                            <div class="paso3-field-name" style="font-weight:700;">Total Cotización</div>
+                                            <div class="paso3-field-hint">Materiales + Instalación y Montaje + Transporte</div>
+                                        </div>
+                                    </div>
+                                    <div class="paso3-field-input paso3-readonly">
+                                        <span id="display-total-final" style="font-weight:800; font-size:1.15em; color: var(--primary); min-width:90px; text-align:right;">RD$0.00</span>
+                                        <span class="paso3-badge-auto">AUTO</span>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                        <div class="form-section form-grid two-columns" id="mano-obra-porcentaje-container">
-                            <div class="form-group">
-                                <label for="porcentaje-mano-obra" class="optional-label">Porcentaje Mano de Obra (%) <span class="tooltip-icon" title="Porcentaje aplicado sobre el costo de materiales">?</span></label>
-                                <input type="number" id="porcentaje-mano-obra" value="30" min="0" max="100" step="5">
+
+                        <!-- TARJETA: CONFIGURACIÓN PDF -->
+                        <div class="paso3-card" style="margin-top: 20px;">
+                            <div class="paso3-card-header">
+                                <span class="paso3-card-icon">📄</span>
+                                <span>Configuración del PDF</span>
                             </div>
-                        </div>
-                        <div class="form-section form-grid two-columns" id="mano-obra-manual-container" style="display: none;">
-                            <div class="form-group">
-                                <label for="monto-mano-obra-manual" class="optional-label">Monto Manual Mano de Obra (RD$) <span class="tooltip-icon" title="Monto fijo para la instalación profesional">?</span></label>
-                                <input type="number" id="monto-mano-obra-manual" value="0" min="0" step="100">
-                            </div>
-                        </div>
-                        <div class="form-section form-grid two-columns">
-                            <div class="form-group">
-                                <label for="costo-materiales" class="optional-label">Costo de Materiales (RD$) <span class="tooltip-icon" title="Costo real de materiales (se calcula automáticamente)">?</span></label>
-                                <input type="number" id="costo-materiales" value="0" min="0" step="100">
-                            </div>
-                            <div class="form-group">
-                                <label for="porcentaje-ganancia" class="optional-label">Margen de Ganancia (%) <span class="tooltip-icon" title="Se calcula automáticamente">?</span></label>
-                                <input type="number" id="porcentaje-ganancia" value="30" min="0" max="100" step="5" readonly style="background-color: #f5f5f5;">
-                                <small style="color: var(--gray); margin-top: 4px;">(Calculado automáticamente)</small>
-                            </div>
-                        </div>
-                        <div class="form-section" style="border-left: 4px solid #4ecdc4; padding-left: 15px; margin: 20px 0;">
-                            <h4 style="color: #4ecdc4; margin-bottom: 15px;">📄 Configuración del PDF</h4>
-                            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                                <h5 style="color: #8a2be2; margin-bottom: 10px;">🎯 Modo de Cotización</h5>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;">
+                            <div class="paso3-card-body">
+
+                                <!-- Modo simple -->
+                                <div class="paso3-toggle-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">📋</span>
+                                        <div>
+                                            <div class="paso3-field-name">Modo Presupuesto Simple</div>
+                                            <div class="paso3-field-hint">Solo artículos y total, sin precios individuales — ideal para el cliente</div>
+                                        </div>
+                                    </div>
+                                    <label class="paso3-switch">
                                         <input type="checkbox" id="mostrar-presupuesto-simple" class="pdf-config-checkbox" onchange="actualizarConfigPDF()">
-                                        <strong>📋 Modo Presupuesto Simple</strong> (Muestra solo artículos y total, sin precios individuales)
+                                        <span class="paso3-switch-slider"></span>
                                     </label>
                                 </div>
-                                <p style="font-size: 0.85em; color: #666; margin-top: 5px; padding-left: 28px;"><em>Ideal para compartir con el cliente - Oculta precios internos</em></p>
-                            </div>
-                            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
-                                <h5 style="color: #8a2be2; margin-bottom: 10px;">🔧 Opciones Detalladas</h5>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;">
+
+                                <div class="paso3-divider"></div>
+
+                                <div class="paso3-toggle-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">👷</span>
+                                        <div><div class="paso3-field-name">Mostrar Instalación y Montaje</div></div>
+                                    </div>
+                                    <label class="paso3-switch">
                                         <input type="checkbox" id="mostrar-mano-obra" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        👷 Mostrar Mano de Obra
+                                        <span class="paso3-switch-slider"></span>
                                     </label>
                                 </div>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;">
+
+                                <div class="paso3-toggle-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">🚚</span>
+                                        <div><div class="paso3-field-name">Mostrar Transporte</div></div>
+                                    </div>
+                                    <label class="paso3-switch">
                                         <input type="checkbox" id="mostrar-transporte" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        🚚 Mostrar Transporte
+                                        <span class="paso3-switch-slider"></span>
                                     </label>
                                 </div>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;">
+
+                                <div class="paso3-toggle-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">📋</span>
+                                        <div><div class="paso3-field-name">Mostrar Detalle de Materiales</div></div>
+                                    </div>
+                                    <label class="paso3-switch">
                                         <input type="checkbox" id="mostrar-detalle-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        📋 Mostrar Detalle de Materiales
+                                        <span class="paso3-switch-slider"></span>
                                     </label>
                                 </div>
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 8px;">
+
+                                <div class="paso3-toggle-row">
+                                    <div class="paso3-field-label">
+                                        <span class="paso3-field-icon">💰</span>
+                                        <div><div class="paso3-field-name">Mostrar Costo de Materiales</div></div>
+                                    </div>
+                                    <label class="paso3-switch">
                                         <input type="checkbox" id="mostrar-costo-materiales" class="pdf-config-checkbox" checked onchange="actualizarConfigPDF()">
-                                        💰 Mostrar Costo de Materiales
+                                        <span class="paso3-switch-slider"></span>
                                     </label>
                                 </div>
-                            </div>
-                            <div id="pdf-preview" style="margin-top: 20px; padding: 15px; background: white; border: 2px dashed #dfe6e9; border-radius: 10px; font-size: 0.9em;">
-                                <h5 style="color: #636e72; margin-bottom: 10px;">👁️ Vista Previa del PDF:</h5>
-                                <div id="preview-content" style="color: #666;">Cargando vista previa...</div>
+
+                                <div class="paso3-divider"></div>
+
+                                <div id="pdf-preview" style="margin-top: 10px;">
+                                    <div class="paso3-field-name" style="margin-bottom: 10px; color: var(--gray);">👁️ Vista previa del PDF:</div>
+                                    <div id="preview-content" style="color: #666; font-size: 0.9em;">Cargando vista previa...</div>
+                                </div>
+
                             </div>
                         </div>
-                        <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 600;">* El resumen de la cotización final se muestra a la derecha.</p>
+
+                        <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 600; font-size: 0.9em;">* El resumen y total final se muestran en el panel derecho.</p>
                     </div>
 
                     <div class="nav-buttons">
-                        <button class="btn-secondary" onclick="prevStep()" id="prev-btn" style="display: none;">← Anterior</button>
+                        <button class="btn-secondary" onclick="prevStep()" id="prev-btn" hidden>← Anterior</button>
                         <button class="btn-primary" onclick="nextStep()" id="next-btn">Siguiente →</button>
                     </div>
                 </div>
@@ -333,7 +473,7 @@
                 <div class="resumen-total-section">
                     <div class="resumen-costs">
                         <div class="resumen-item"><span>Subtotal Materiales:</span><span id="resumen-materiales">RD$0.00</span></div>
-                        <div class="resumen-item"><span>🛠️ Mano de Obra:</span><span id="resumen-mano-obra">RD$0.00</span></div>
+                        <div class="resumen-item"><span>🛠️ Instalación y Montaje:</span><span id="resumen-mano-obra">RD$0.00</span></div>
                         <div class="resumen-item"><span>🚚 Transporte:</span><span id="resumen-transporte">RD$0.00</span></div>
                         <div class="resumen-separator"></div>
                         <div class="resumen-total">
