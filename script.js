@@ -1,14 +1,3 @@
-// Cargar jsPDF si no está disponible
-if (!window.jspdf) {
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-    document.head.appendChild(script);
-    
-    const script2 = document.createElement('script');
-    script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-    document.head.appendChild(script2);
-}
-
 let configuracion = {
     tiposEvento: ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower', 'Graduaciones', 'Aniversarios', 'Flores'],
     tematicasEvento: ['Clásica', 'Moderno', 'Vintage', 'Rústica', 'Minimalista', 'Bohemia', 'Elegante', 'Divertida'],
@@ -85,15 +74,10 @@ let manualItemIdCounter = 1;
 let configIdCounter = 1000;
 
 // ----------------------------------------------------
-// FUNCIONES DE SCROLL AUTOMÁTICO
-// ----------------------------------------------------
-
-// ----------------------------------------------------
 // FUNCIONES DE SCROLL MEJORADAS PARA MÓVIL
 // ----------------------------------------------------
 
 function scrollToStepTop() {
-    // Solo hacer scroll si el usuario está más abajo del header
     if (window.scrollY > 150) {
         setTimeout(() => {
             window.scrollTo({ 
@@ -105,12 +89,10 @@ function scrollToStepTop() {
 }
 
 function scrollToTabs() {
-    // Solo en móvil y si los tabs están fuera de vista
     if (window.innerWidth <= 768) {
         const tabsContainer = document.getElementById('tabs-container');
         const tabsPosition = tabsContainer?.getBoundingClientRect().top || 0;
         
-        // Si los tabs están fuera de la vista superior
         if (tabsContainer && tabsPosition < 0) {
             setTimeout(() => {
                 tabsContainer.scrollIntoView({ 
@@ -125,11 +107,9 @@ function scrollToTabs() {
 function scrollToErrorField(fieldId) {
     const fieldElement = document.getElementById(fieldId);
     if (fieldElement) {
-        // Calcular si el campo está visible
         const rect = fieldElement.getBoundingClientRect();
         const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
         
-        // Solo hacer scroll si no está visible
         if (!isVisible) {
             setTimeout(() => {
                 fieldElement.scrollIntoView({ 
@@ -139,11 +119,11 @@ function scrollToErrorField(fieldId) {
                 fieldElement.focus();
             }, 300);
         } else {
-            // Si ya está visible, solo enfocar
             fieldElement.focus();
         }
     }
 }
+
 // ----------------------------------------------------
 // FUNCIONES DE MEJORA UX
 // ----------------------------------------------------
@@ -180,9 +160,7 @@ function actualizarVisibilidadBotonesFlotantes() {
     
     if (!floatingPdfBtn || !backToTopBtn) return;
     
-    // ✅ VERSIÓN SIMPLIFICADA PARA MÓVIL
     if (cotizacion.currentStep === 3) {
-        // Mostrar el botón flotante en el paso 3 (tanto en móvil como desktop)
         floatingPdfBtn.style.display = 'flex';
         floatingPdfBtn.classList.add('visible');
         
@@ -201,12 +179,10 @@ function actualizarVisibilidadBotonesFlotantes() {
             floatingPdfBtn.title = 'No hay artículos seleccionados para generar PDF';
         }
     } else {
-        // Ocultar en otros pasos
         floatingPdfBtn.classList.remove('visible');
         floatingPdfBtn.style.display = 'none';
     }
     
-    // Botón para volver arriba (sin cambios)
     if (window.scrollY > 300) {
         backToTopBtn.classList.add('visible');
         backToTopBtn.style.display = 'flex';
@@ -215,6 +191,7 @@ function actualizarVisibilidadBotonesFlotantes() {
         backToTopBtn.style.display = 'none';
     }
 }
+
 function actualizarIndicadorPasoActual() {
     const indicator = document.getElementById('current-step-indicator');
     if (!indicator) return;
@@ -285,12 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(actualizarVisibilidadBotonesFlotantes, 200);
     window.addEventListener('scroll', actualizarVisibilidadBotonesFlotantes);
     
-    // Prevenir zoom en iOS
-    document.addEventListener('gesturestart', function(e) {
-        e.preventDefault();
-    });
     
-    // Mejorar rendimiento en móvil
     document.addEventListener('touchstart', function() {}, { passive: true });
 });
 
@@ -335,7 +307,7 @@ function sincronizarEventoServicio() {
 
 function validarConsistenciaEventoServicio() {
     const tipoEvento = document.getElementById('tipo-evento').value;
-    const tipoServicio = document.getElementById('tipo-servicio').value;
+    const tipoServicio = cotizacion.tipoServicio;
     
     if (tipoEvento === 'Flores' && tipoServicio !== 'flores') {
         mostrarError('tipo-servicio', 'Para eventos de tipo "Flores", el servicio debe ser "Flores Externas".');
@@ -412,15 +384,16 @@ function calcularTotalesAutomaticos() {
 
     cotizacion.articulos.manuales.forEach(item => {
         precioVentaTotal += (item.precioUnitario * item.cantidad);
-        const costoManual = item.costoReal || (item.precioUnitario * 0.7);
+        const costoManual = item.costoReal || 0;
         costoRealTotal += costoManual * item.cantidad;
     });
 
     cotizacion.costos.materiales = precioVentaTotal;
     cotizacion.costos.costoRealMateriales = costoRealTotal;
-    
+
+    // Solo actualizar el display del campo costo-materiales, no sobreescribir si el usuario lo editó
     const inputCostoMateriales = document.getElementById('costo-materiales');
-    if (inputCostoMateriales) {
+    if (inputCostoMateriales && document.activeElement !== inputCostoMateriales) {
         inputCostoMateriales.value = Math.round(costoRealTotal);
     }
     
@@ -434,16 +407,11 @@ function calcularTotalesAutomaticos() {
 function calcularTotalCotizacion() {
     const { precioVentaTotal, costoRealTotal, diferenciaMateriales } = calcularTotalesAutomaticos();
     
-    const inputCostoMateriales = document.getElementById('costo-materiales');
-    let costoRealMateriales = inputCostoMateriales ? parseFloat(inputCostoMateriales.value) || 0 : 0;
-    
-    if (costoRealMateriales === 0 && costoRealTotal > 0) {
-        costoRealMateriales = costoRealTotal;
-        if (inputCostoMateriales) inputCostoMateriales.value = Math.round(costoRealTotal);
-    }
-    
-    const inputPorcentajeManoObra = document.getElementById('porcentaje-mano-obra');
-    const porcentajeManoObra = inputPorcentajeManoObra ? parseFloat(inputPorcentajeManoObra.value) || 30 : 30;
+    // Siempre usar el costoRealTotal calculado para la mano de obra
+    // El input costo-materiales es solo informativo/display
+    const costoRealMateriales = costoRealTotal;
+
+    const porcentajeManoObra = cotizacion.costos.manoObraPorcentaje || 0;
     
     let manoObra = 0;
     if (cotizacion.tipoServicio === 'decoracion') {
@@ -496,7 +464,7 @@ function actualizarDisplayResumen(costoReal, precioVenta, manoObra, diferenciaMa
     if (displayPrecioVenta) displayPrecioVenta.textContent = formatoMonedaRD(precioVenta);
     if (displayGanancia) displayGanancia.textContent = formatoMonedaRD(gananciaTotal);
     if (displayPorcentajeGanancia) {
-        displayPorcentajeGanancia.textContent = `${Math.round(porcentajeGanancia)}%`;
+        displayPorcentajeGanancia.textContent = formatoMonedaRD(gananciaTotal).replace('RD$', '');
         if (porcentajeGanancia >= 100) {
             displayPorcentajeGanancia.style.color = '#4caf50';
         } else if (porcentajeGanancia >= 50) {
@@ -507,8 +475,11 @@ function actualizarDisplayResumen(costoReal, precioVenta, manoObra, diferenciaMa
     }
     
     if (displayManoObra) displayManoObra.textContent = formatoMonedaRD(manoObra);
+    const displayManoObraPeso = document.getElementById('display-mano-obra-peso');
+    if (displayManoObraPeso) displayManoObraPeso.textContent = formatoMonedaRD(manoObra);
     if (displayPorcentajeManoObra) {
-        const porcentajeManoObra = document.getElementById('porcentaje-mano-obra').value || 30;
+        const inputPMO = document.getElementById('porcentaje-mano-obra');
+        const porcentajeManoObra = inputPMO ? (inputPMO.value || 0) : 0;
         displayPorcentajeManoObra.textContent = porcentajeManoObra;
     }
     if (displayTransporte) displayTransporte.textContent = formatoMonedaRD(transporte);
@@ -516,98 +487,6 @@ function actualizarDisplayResumen(costoReal, precioVenta, manoObra, diferenciaMa
     
     const inputPorcentajeGanancia = document.getElementById('porcentaje-ganancia');
     if (inputPorcentajeGanancia) inputPorcentajeGanancia.value = Math.round(porcentajeGanancia);
-    
-    // Solo mostrar desglose en paso 3
-    if (cotizacion.currentStep === 3) {
-        mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMateriales, 
-                               transporte, totalFinal, gananciaTotal, porcentajeGanancia);
-    }
-}
-
-// Función para mostrar desglose de ganancia SOLO en paso 3
-function mostrarDesgloseGanancia(costoReal, precioVenta, manoObra, diferenciaMateriales, 
-                                transporte, totalFinal, gananciaTotal, porcentajeGanancia) {
-    
-    // Buscar el contenedor correcto en el paso 3
-    const paso3 = document.getElementById('step-3');
-    if (!paso3) return;
-    
-    // Remover desglose existente
-    const existingDesglose = paso3.querySelector('#desglose-ganancia-paso3');
-    if (existingDesglose) existingDesglose.remove();
-    
-    if (costoReal <= 0) return;
-    
-    const esDecoracion = cotizacion.tipoServicio === 'decoracion';
-    const porcentajeManoObra = document.getElementById('porcentaje-mano-obra')?.value || 30;
-    
-    let desgloseHTML = `
-        <div id="desglose-ganancia-paso3" style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; border-left: 4px solid var(--success);">
-            <div style="font-weight: 700; color: var(--success); margin-bottom: 10px; font-size: 1.1em; display: flex; align-items: center; gap: 8px;">💰 DESGLOSE DE GANANCIA (${esDecoracion ? 'DECORACIÓN' : 'FLORES EXTERNAS'})</div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
-                <div style="font-size: 0.9em; color: #666;">Costo Real Materiales:</div>
-                <div style="text-align: right; font-weight: 600;">${formatoMonedaRD(costoReal)}</div>
-                
-                <div style="font-size: 0.9em; color: #666;">Precio Venta Materiales:</div>
-                <div style="text-align: right; font-weight: 600; color: var(--primary);">${formatoMonedaRD(precioVenta)}</div>
-                
-                <div style="font-size: 0.9em; color: #666; border-top: 1px dashed #ddd; padding-top: 5px;"><span style="color: var(--success);">+</span> Diferencia Materiales:</div>
-                <div style="text-align: right; font-weight: 600; color: var(--success); border-top: 1px dashed #ddd; padding-top: 5px;">${formatoMonedaRD(diferenciaMateriales)}</div>`;
-    
-    if (esDecoracion && manoObra > 0) {
-        desgloseHTML += `
-                <div style="font-size: 0.9em; color: #666;"><span style="color: #ff9800;">+</span> Mano de Obra (${porcentajeManoObra}%):</div>
-                <div style="text-align: right; font-weight: 600; color: #ff9800;">${formatoMonedaRD(manoObra)}</div>`;
-    }
-    
-    if (transporte > 0) {
-        desgloseHTML += `
-                <div style="font-size: 0.9em; color: #666;"><span style="color: #2196f3;">+</span> Transporte:</div>
-                <div style="text-align: right; font-weight: 600; color: #2196f3;">${formatoMonedaRD(transporte)}</div>`;
-    }
-    
-    let gananciaCalculada = diferenciaMateriales;
-    let formulaTexto = "Ganancia = Diferencia en Materiales";
-    
-    if (esDecoracion) {
-        gananciaCalculada += manoObra;
-        formulaTexto = "Ganancia = Diferencia en Materiales + Mano de Obra";
-    }
-    
-    if (transporte > 0) {
-        gananciaCalculada += transporte;
-        formulaTexto += " + Transporte";
-    }
-    
-    desgloseHTML += `
-                <div style="font-size: 0.9em; color: #666; border-top: 2px solid var(--primary-dark); padding-top: 8px; font-weight: 700;">GANANCIA TOTAL${esDecoracion ? ' (DECORACIÓN)' : ' (FLORES)'}:</div>
-                <div style="text-align: right; font-weight: 900; color: var(--primary-dark); border-top: 2px solid var(--primary-dark); padding-top: 8px;">${formatoMonedaRD(gananciaCalculada)}</div>
-                
-                <div style="font-size: 0.85em; color: #666; grid-column: 1 / -1; text-align: center; margin-top: 5px; padding: 5px; background: rgba(0, 184, 148, 0.1); border-radius: 5px;">
-                    <span style="font-weight: 700; color: var(--success);">${Math.round(porcentajeGanancia)}%</span> de ganancia sobre costo real
-                </div>
-                
-                <div style="font-size: 1em; color: #fff; background: var(--primary); padding: 10px; border-radius: 8px; grid-column: 1 / -1; margin-top: 10px; text-align: center; font-weight: 700; box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);">
-                    💵 PRECIO FINAL AL CLIENTE: ${formatoMonedaRD(totalFinal)}
-                </div>
-            </div>
-            
-            <div style="font-size: 0.8em; color: #666; font-style: italic; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">💡 <strong>${formulaTexto}</strong></div>
-        </div>
-    `;
-    
-    // Insertar antes del panel de configuración del PDF
-    const configPDFSection = paso3.querySelector('.form-section[style*="border-left: 4px solid #4ecdc4"]');
-    if (configPDFSection) {
-        configPDFSection.insertAdjacentHTML('beforebegin', desgloseHTML);
-    } else {
-        // Si no encuentra el panel de config, insertar al final del formulario
-        const formSections = paso3.querySelectorAll('.form-section');
-        if (formSections.length > 0) {
-            formSections[formSections.length - 1].insertAdjacentHTML('afterend', desgloseHTML);
-        }
-    }
 }
 
 function inicializarEventListeners() {
@@ -652,9 +531,6 @@ function inicializarEventListeners() {
             limpiarError('tipo-evento');
             validarCampo('tipo-evento', this.value);
             sincronizarEventoServicio();
-            
-           
-            
         });
     }
     
@@ -678,40 +554,24 @@ function inicializarEventListeners() {
         });
     }
     
-    const costoTransporteInput = document.getElementById('costo-transporte');
-    if (costoTransporteInput) {
-        costoTransporteInput.addEventListener('input', (e) => {
-            cotizacion.costos.transporte = parseFloat(e.target.value) || 0;
+    // Usar delegación en document para que funcionen aunque el paso esté oculto al inicio
+    document.addEventListener('input', (e) => {
+        if (e.target.id === 'porcentaje-mano-obra') {
+            const val = parseFloat(e.target.value);
+            cotizacion.costos.manoObraPorcentaje = isNaN(val) ? 0 : Math.min(100, Math.max(0, val));
             calcularTotalCotizacion();
-        });
-    }
-    
-    const porcentajeManoObraInput = document.getElementById('porcentaje-mano-obra');
-    if (porcentajeManoObraInput) {
-        porcentajeManoObraInput.addEventListener('input', (e) => {
-            cotizacion.costos.manoObraPorcentaje = Math.min(100, Math.max(0, parseFloat(e.target.value) || 30));
-            calcularTotalCotizacion();
-        });
-    }
-    
-    const montoManoObraManualInput = document.getElementById('monto-mano-obra-manual');
-    if (montoManoObraManualInput) {
-        montoManoObraManualInput.addEventListener('input', (e) => {
+        }
+        if (e.target.id === 'monto-mano-obra-manual') {
             cotizacion.montoManoObraManual = Math.max(0, parseFloat(e.target.value) || 0);
             calcularTotalCotizacion();
-        });
-    }
-    
-    const costoMaterialesInput = document.getElementById('costo-materiales');
-    if (costoMaterialesInput) {
-        costoMaterialesInput.addEventListener('input', calcularTotalCotizacion);
-    }
-    
-    const porcentajeGananciaInput = document.getElementById('porcentaje-ganancia');
-    if (porcentajeGananciaInput) {
-        porcentajeGananciaInput.addEventListener('input', calcularTotalCotizacion);
-    }
-    
+        }
+        if (e.target.id === 'costo-transporte') {
+            cotizacion.costos.transporte = parseFloat(e.target.value) || 0;
+            calcularTotalCotizacion();
+        }
+        setTimeout(actualizarBotonFlotantePDF, 100);
+    });
+
     document.querySelectorAll('.pdf-config-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             actualizarConfigPDF();
@@ -723,10 +583,6 @@ function inicializarEventListeners() {
     if (generarCotizacionBtn) {
         generarCotizacionBtn.addEventListener('mouseover', actualizarTooltipPDF);
     }
-    
-    document.addEventListener('input', function() {
-        setTimeout(actualizarBotonFlotantePDF, 100);
-    });
 }
 
 function cargarPreferenciasUsuario() {
@@ -774,7 +630,6 @@ function actualizarConfigPDF() {
         configPDF.mostrarCostoMateriales = false;
         configPDF.mostrarDetalleMateriales = true;
         configPDF.mostrarPresupuestoSimple = true;
-        mostrarNotificacion('✅ Modo Presupuesto Simple activado. Solo se mostrarán artículos y total.', 'success');
     } else {
         otrosCheckboxes.forEach(id => {
             document.getElementById(id).disabled = false;
@@ -785,7 +640,6 @@ function actualizarConfigPDF() {
         configPDF.mostrarDetalleMateriales = document.getElementById('mostrar-detalle-materiales').checked;
         configPDF.mostrarCostoMateriales = document.getElementById('mostrar-costo-materiales').checked;
         configPDF.mostrarPresupuestoSimple = false;
-        mostrarNotificacion('✅ Modo Detallado activado. Puedes configurar opciones individuales.', 'success');
     }
     
     guardarPreferenciasUsuario();
@@ -924,7 +778,6 @@ function nextStep() {
         
         if (totalArticulos === 0) {
             mostrarNotificacion('⚠️ Debes agregar al menos un artículo antes de continuar', 'warning');
-            // Scroll arriba para que vea la notificación en móvil
             window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
         }
@@ -978,18 +831,30 @@ function updateStepUI() {
         }
     });
     
-    if (prevBtn) prevBtn.style.display = cotizacion.currentStep > 1 ? 'inline-flex' : 'none';
-    
-    if (nextBtn) {
-        if (cotizacion.currentStep === 3) {
-            nextBtn.style.display = 'none';
+    if (prevBtn) {
+        if (cotizacion.currentStep > 1) {
+            prevBtn.removeAttribute('hidden');
+            prevBtn.style.flex = cotizacion.currentStep === 3 ? '1' : '';
+            prevBtn.style.width = cotizacion.currentStep === 3 ? '100%' : '';
         } else {
-            nextBtn.style.display = 'inline-flex';
-            nextBtn.textContent = 'Siguiente →';
+            prevBtn.setAttribute('hidden', '');
+            prevBtn.style.flex = '';
+            prevBtn.style.width = '';
         }
     }
     
-
+    if (nextBtn) {
+        if (cotizacion.currentStep === 3) {
+            nextBtn.setAttribute('hidden', '');
+            nextBtn.style.flex = '';
+            nextBtn.style.width = '';
+        } else {
+            nextBtn.removeAttribute('hidden');
+            nextBtn.textContent = 'Siguiente →';
+            nextBtn.style.flex = cotizacion.currentStep === 1 ? '1' : '';
+            nextBtn.style.width = cotizacion.currentStep === 1 ? '100%' : '';
+        }
+    }
     
     if (generarBtn) {
         generarBtn.disabled = cotizacion.currentStep !== 3 || cotizacion.costos.total === 0;
@@ -1031,11 +896,9 @@ function updateStepUI() {
         actualizarVistaPreviaPDF();
         actualizarTooltipPDF();
         
-        // Forzar recálculo y mostrar desglose
         calcularTotalCotizacion();
     }
     
-    // En paso 1: ocultar panel y usar 1 columna. En pasos 2-3: mostrar panel y volver a 2 columnas
     const resumenPanel = document.querySelector('.resumen-panel');
     const appContainer = document.querySelector('.app-container');
     if (cotizacion.currentStep === 1) {
@@ -1098,7 +961,7 @@ function validarPaso1() {
         limpiarError('otro-evento');
     }
     
-    const servicio = document.getElementById('tipo-servicio').value;
+    const servicio = cotizacion.tipoServicio;
     if (!servicio) {
         mostrarError('tipo-servicio', 'El tipo de servicio es obligatorio');
         valido = false;
@@ -1133,7 +996,6 @@ function guardarDatosPaso1() {
         cotizacion.tematicaEvento = document.getElementById('otra-tematica').value.trim();
     } else cotizacion.tematicaEvento = tematicaEvento;
     
-    // NO leer tipo-servicio del DOM aqui - sincronizarEventoServicio lo maneja directamente
     aplicarTema();
     actualizarResumen();
 }
@@ -1270,7 +1132,6 @@ function actualizarTematicasEvento() {
 }
 
 function cambiarTipoServicio() {
-    // Usar cotizacion.tipoServicio directamente, no releer del DOM
     actualizarResumen();
     if (cotizacion.currentStep === 2) actualizarUIporTipoServicio();
 }
@@ -1286,7 +1147,6 @@ function actualizarUIporTipoServicio() {
     
     console.log('🔄 Actualizando UI para tipo:', cotizacion.tipoServicio);
     
-    // Ocultar todos los contenidos de pestañas posibles
     document.getElementById('tab-paquetes').style.display = 'none';
     document.getElementById('tab-accesorios').style.display = 'none';
     document.getElementById('tab-flores').style.display = 'none';
@@ -1337,7 +1197,7 @@ function switchTab(tabName) {
     
     document.querySelectorAll('.tab-content').forEach(content => {
         content.style.display = 'none';
-        content.classList.remove('active');  // ← AGREGAR
+        content.classList.remove('active');
     });
     
     document.querySelectorAll('.tab-button').forEach(button => {
@@ -1349,7 +1209,7 @@ function switchTab(tabName) {
     
     if (activeContent) {
         activeContent.style.display = 'block';
-        activeContent.classList.add('active');  // ← AGREGAR
+        activeContent.classList.add('active');
     }
     
     if (activeBtn) {
@@ -1381,6 +1241,7 @@ function renderizarArticulos(tipo) {
         case 'accesorios': containerId = 'accesorios-container'; listaArticulos = cotizacion.articulos.accesorios; break;
         case 'flores': containerId = 'flores-container'; listaArticulos = cotizacion.articulos.flores; break;
         case 'arreglos': containerId = 'arreglos-container'; listaArticulos = cotizacion.articulos.arreglosFlorales; break;
+        default: return;
     }
     
     const container = document.getElementById(containerId);
@@ -1683,6 +1544,7 @@ function actualizarVistaPreviaPDF() {
 
 function actualizarTooltipPDF() {
     const btn = document.getElementById('generar-cotizacion');
+    if (!btn) return;
     const modo = configPDF.mostrarPresupuestoSimple ? 'Modo Presupuesto Simple' : 'Modo Detallado';
     const totalArticulos = parseInt(document.getElementById('total-articulos')?.textContent) || 0;
     const total = document.getElementById('total-cotizacion').textContent;
@@ -1970,7 +1832,8 @@ function agregarPaquete() {
         costo: 0, 
         emoji: '🎈', 
         cantidad: 0, 
-        tipo: 'decoracion' 
+        tipo: 'decoracion',
+        unidad: 'paquete'
     });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nuevo globo agregado');
@@ -1985,7 +1848,8 @@ function agregarAccesorio() {
         costo: 0, 
         emoji: '✨', 
         cantidad: 0, 
-        tipo: 'decoracion' 
+        tipo: 'decoracion',
+        unidad: 'unidad'
     });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nuevo accesorio agregado');
@@ -2001,7 +1865,8 @@ function agregarFlor() {
         emoji: '🌹', 
         cantidad: 0, 
         tipo: 'flores', 
-        color: 'Mixto' 
+        color: 'Mixto',
+        unidad: 'flor'
     });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nueva flor agregada');
@@ -2016,7 +1881,8 @@ function agregarArreglo() {
         costo: 0, 
         emoji: '💐', 
         cantidad: 0, 
-        tipo: 'flores' 
+        tipo: 'flores',
+        unidad: 'unidad'
     });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nuevo arreglo agregado');
@@ -2034,12 +1900,11 @@ function cargarConfiguracion() {
             configuracion.tiposEvento = configCargada.tiposEvento || ['Bodas', 'Cumpleaños', 'Corporativo', 'Baby Shower', 'Graduaciones', 'Aniversarios', 'Flores'];
             configuracion.tematicasEvento = configCargada.tematicasEvento || ['Clásica', 'Moderno', 'Vintage', 'Rústica', 'Minimalista', 'Bohemia', 'Elegante', 'Divertida'];
             
-            // Preservar las unidades al cargar configuración guardada
             configuracion.paquetes = (configCargada.paquetes || configuracion.paquetes).map(p => ({
                 ...p,
                 costo: p.costo !== undefined ? p.costo : p.precio * 0.3,
                 cantidad: 0,
-                unidad: p.unidad || 'paquete' // Asegurar que tenga unidad
+                unidad: p.unidad || 'paquete'
             }));
             
             configuracion.accesorios = (configCargada.accesorios || configuracion.accesorios).map(a => ({
@@ -2073,7 +1938,6 @@ function cargarConfiguracion() {
         }
     }
     
-    // ===== SIEMPRE CARGAR LOS ARTÍCULOS DESDE LA CONFIGURACIÓN =====
     cotizacion.articulos.paquetes = configuracion.paquetes.map(p => ({...p, cantidad: 0}));
     cotizacion.articulos.accesorios = configuracion.accesorios.map(a => ({...a, cantidad: 0}));
     cotizacion.articulos.flores = configuracion.flores.map(f => ({...f, cantidad: 0}));
@@ -2105,7 +1969,6 @@ function guardarConfiguracion() {
     mostrarNotificacion('✅ Configuración guardada con éxito. Los costos reales se han guardado.');
     toggleConfig();
     
-    // Recargar la configuración para actualizar la cotización
     cargarConfiguracion();
     renderizarArticulos('paquetes');
     actualizarResumen();
@@ -2145,9 +2008,7 @@ function guardarArreglos() {
     mostrarNotificacion('✅ Arreglos guardados', 'success');
 }
 
-// Función auxiliar para guardar una categoría específica
 function guardarCategoria(categoria, datos) {
-    // Obtener la configuración actual guardada
     let configGuardada = {};
     try {
         configGuardada = JSON.parse(localStorage.getItem('arteyevents_config')) || {};
@@ -2155,13 +2016,10 @@ function guardarCategoria(categoria, datos) {
         configGuardada = {};
     }
     
-    // Actualizar solo la categoría específica
     configGuardada[categoria] = datos;
     
-    // Guardar en localStorage
     localStorage.setItem('arteyevents_config', JSON.stringify(configGuardada));
     
-    // Actualizar la configuración actual
     if (categoria === 'tiposEvento') {
         configuracion.tiposEvento = datos;
         actualizarTiposEvento();
@@ -2182,7 +2040,6 @@ function guardarCategoria(categoria, datos) {
         renderizarArticulos('arreglos');
     }
     
-    // Sincronizar cotización
     sincronizarCotizacionConConfiguracion();
     actualizarResumen();
 }
@@ -2193,7 +2050,8 @@ function sincronizarCotizacionConConfiguracion() {
     cotizacion.articulos.flores = configuracion.flores.map(f => ({...f, cantidad: 0}));
     cotizacion.articulos.arreglosFlorales = configuracion.arreglosFlorales.map(af => ({...af, cantidad: 0}));
     cotizacion.costos.manoObraPorcentaje = configuracion.manoObraPorcentaje;
-    document.getElementById('porcentaje-mano-obra').value = configuracion.manoObraPorcentaje;
+    const inputPMO = document.getElementById('porcentaje-mano-obra');
+    if (inputPMO) inputPMO.value = configuracion.manoObraPorcentaje;
 }
 
 // ============================================
@@ -2455,7 +2313,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
             const cantidad = item.cantidad || 1;
             const esManual = item.tipo === 'manual';
             
-            // Usar la unidad del artículo o determinar por nombre
             let unidad = item.unidad || 'unidad';
             if (item.nombre.includes('Globo')) unidad = 'paquete';
             else if (item.tipo === 'flores' && !item.nombre.includes('Ramo') && !item.nombre.includes('Arreglo')) unidad = 'flor';
@@ -2465,9 +2322,11 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
             else if (item.nombre.includes('Centro')) unidad = 'centro';
             else if (item.nombre.includes('Guirnalda')) unidad = 'guirnalda';
             
-            let textoItem = `• ${nombre} - ${cantidad} ${unidad}${cantidad !== 1 ? 's' : ''}`;
+            const plurales = { 'flor': 'flores', 'paquete': 'paquetes', 'unidad': 'unidades', 'ramo': 'ramos', 'juego': 'juegos', 'arco': 'arcos', 'centro': 'centros', 'guirnalda': 'guirnaldas' };
+            const unidadTexto = cantidad !== 1 ? (plurales[unidad] || unidad + 's') : unidad;
+            
+            let textoItem = `• ${nombre} - ${cantidad} ${unidadTexto}`;
             if (esManual) textoItem += ' [Artículo manual]';
-            // En modo simple NO se muestra ningún precio
             doc.text(textoItem, margin + 2, yPos + 4);
             yPos += 6;
         });
@@ -2560,7 +2419,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
 
     yPos = generarInformacionClientePDF(doc, yPos);
 
-    // Detalle de artículos
     if (itemsSeleccionados.length > 0) {
         checkPageBreak(50);
 
@@ -2580,7 +2438,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
             const cantidad = item.cantidad || 1;
             const esManual = item.tipo === 'manual';
             
-            // Usar la unidad del artículo o determinar por nombre
             let unidad = item.unidad || 'unidad';
             if (item.nombre.includes('Globo')) unidad = 'paquete';
             else if (item.tipo === 'flores' && !item.nombre.includes('Ramo') && !item.nombre.includes('Arreglo')) unidad = 'flor';
@@ -2590,10 +2447,12 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
             else if (item.nombre.includes('Centro')) unidad = 'centro';
             else if (item.nombre.includes('Guirnalda')) unidad = 'guirnalda';
             
-            let textoItem = `• ${nombre} - ${cantidad} ${unidad}${cantidad !== 1 ? 's' : ''}`;
+            const plurales = { 'flor': 'flores', 'paquete': 'paquetes', 'unidad': 'unidades', 'ramo': 'ramos', 'juego': 'juegos', 'arco': 'arcos', 'centro': 'centros', 'guirnalda': 'guirnaldas' };
+            const unidadTexto = cantidad !== 1 ? (plurales[unidad] || unidad + 's') : unidad;
+            
+            let textoItem = `• ${nombre} - ${cantidad} ${unidadTexto}`;
             if (esManual) textoItem += ' [Artículo manual]';
             
-            // SOLO mostrar precio si está activado mostrarDetalleMateriales
             if (configPDF.mostrarDetalleMateriales) {
                 let precioUnitario;
                 if (esManual) precioUnitario = item.precioUnitario;
@@ -2620,23 +2479,19 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     
     doc.setFontSize(10);
     
-    // SOLO para decoración
     if (cotizacion.tipoServicio === 'decoracion') {
-        // Costo de materiales - SOLO si está activado
         if (configPDF.mostrarCostoMateriales) {
             doc.text("Costo de Materiales:", pageWidth / 2, yPos, { align: "left" });
             doc.text(formatoMonedaRD(cotizacion.costos.materiales), xCostos, yPos, { align: "right" });
             yPos += 5;
         }
 
-        // Mano de obra - SOLO si está activado y hay monto
         if (configPDF.mostrarManoObra && cotizacion.costos.manoObra > 0) {
-            doc.text("Mano de Obra:", pageWidth / 2, yPos, { align: "left" });
+            doc.text("Instalación y Montaje:", pageWidth / 2, yPos, { align: "left" });
             doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
             yPos += 5;
         }
         
-        // Transporte - SOLO si está activado y hay monto
         if (configPDF.mostrarTransporte && cotizacion.costos.transporte > 0) {
             doc.text("Transporte:", pageWidth / 2, yPos, { align: "left" });
             doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
@@ -2716,7 +2571,6 @@ function limpiarCamposCotizacion() {
     document.getElementById('tematica-evento').value = '';
     document.getElementById('otra-tematica').value = '';
     document.getElementById('otra-tematica-container').style.display = 'none';
-    document.getElementById('tipo-servicio').value = '';
     
     document.querySelectorAll('.validation-error').forEach(el => el.textContent = '');
     document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
@@ -2776,12 +2630,6 @@ function limpiarCamposCotizacion() {
     renderizarArticulos('arreglos');
     renderizarArticulosManuales();
     
-    const paso3 = document.getElementById('step-3');
-    if (paso3) {
-        const existingDesglose = paso3.querySelector('#desglose-ganancia-paso3');
-        if (existingDesglose) existingDesglose.remove();
-    }
-    
     cotizacion.currentStep = 1;
     updateStepUI();
     
@@ -2809,7 +2657,7 @@ function limpiarCamposCotizacion() {
         const element = document.getElementById(id);
         if (element) {
             if (id === 'display-porcentaje-ganancia') {
-                element.textContent = '0%';
+                element.textContent = '0.00';
                 element.style.color = '#e91e63';
             } else {
                 element.textContent = 'RD$0.00';
@@ -2892,13 +2740,4 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// ============================================
-// CONFIRMACIÓN DE CARGA FINAL
-// ============================================
-console.log('✅ Script COMPLETO cargado correctamente - Versión con unidades corregidas');
-console.log('📱 Optimizado para móvil');
-console.log('🔧 Correcciones aplicadas:');
-console.log('   ✓ Unidades: paquete, flor, ramo, juego, etc.');
-console.log('   ✓ Botones Guardar por categoría');
-console.log('   ✓ Desglose movido al paso 3');
-
+console.log('✅ Script COMPLETO cargado correctamente - Versión sin desglose de ganancia');
