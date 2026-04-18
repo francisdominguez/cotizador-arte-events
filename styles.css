@@ -69,6 +69,8 @@
 
 html {
     scroll-behavior: smooth !important;
+    overflow-x: hidden;
+    max-width: 100%;
 }
 
 body {
@@ -80,6 +82,9 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
+    overflow-x: hidden;
+    max-width: 100%;
+    position: relative;
 }
 
 .container {
@@ -88,7 +93,9 @@ body {
     background: #ffffff;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 header {
@@ -1919,7 +1926,7 @@ textarea {
 }
 
 @media (max-width: 768px) {
-    body { overflow-x: hidden !important; padding: 10px !important; }
+    body { overflow-x: hidden !important; padding: 10px !important; width: 100%; max-width: 100vw; position: relative; }
     .container { max-width: 100% !important; margin: 0 !important; border-radius: 15px !important; }
     .app-container { padding: 15px !important; overflow-x: hidden !important; gap: 15px; }
     header { padding: 15px !important; flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; text-align: center !important; }
@@ -1932,7 +1939,7 @@ textarea {
     .form-grid { grid-template-columns: 1fr !important; }
     .form-grid.two-columns { grid-template-columns: 1fr !important; }
     .manual-item { grid-template-columns: 1fr !important; gap: 8px !important; }
-    .config-panel { width: 100% !important; right: -100% !important; }
+    .config-panel { width: 100vw !important; right: -100vw !important; max-width: 100vw !important; }
     .config-panel.active { right: 0 !important; }
     .config-item { grid-template-columns: 1fr !important; gap: 8px !important; }
     .config-item .btn-remove { width: 100% !important; border-radius: 6px !important; height: 36px !important; margin-top: 5px !important; }
@@ -2032,5 +2039,39 @@ textarea {
         .nav-buttons { padding-bottom: calc(15px + env(safe-area-inset-bottom)) !important; }
         .floating-button { bottom: calc(20px + env(safe-area-inset-bottom)) !important; }
         .floating-button.back-to-top { bottom: calc(80px + env(safe-area-inset-bottom)) !important; }
+    }
+}
+
+
+.btn-save-item {
+    background: var(--success);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    align-self: center;
+    margin-top: 15px;
+}
+ 
+.btn-save-item:hover {
+    background: #008f71;
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 184, 148, 0.4);
+}
+ 
+@media (max-width: 768px) {
+    .btn-save-item {
+        width: 100% !important;
+        border-radius: 6px !important;
+        height: 36px !important;
+        margin-top: 5px !important;
     }
 }
