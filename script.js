@@ -262,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(actualizarVisibilidadBotonesFlotantes, 200);
     window.addEventListener('scroll', actualizarVisibilidadBotonesFlotantes);
     
-    
     document.addEventListener('touchstart', function() {}, { passive: true });
 });
 
@@ -391,7 +390,6 @@ function calcularTotalesAutomaticos() {
     cotizacion.costos.materiales = precioVentaTotal;
     cotizacion.costos.costoRealMateriales = costoRealTotal;
 
-    // Solo actualizar el display del campo costo-materiales, no sobreescribir si el usuario lo editó
     const inputCostoMateriales = document.getElementById('costo-materiales');
     if (inputCostoMateriales && document.activeElement !== inputCostoMateriales) {
         inputCostoMateriales.value = Math.round(costoRealTotal);
@@ -407,16 +405,13 @@ function calcularTotalesAutomaticos() {
 function calcularTotalCotizacion() {
     const { precioVentaTotal, costoRealTotal, diferenciaMateriales } = calcularTotalesAutomaticos();
     
-    // Siempre usar el costoRealTotal calculado para la mano de obra
-    // El input costo-materiales es solo informativo/display
     const costoRealMateriales = costoRealTotal;
-
     const porcentajeManoObra = cotizacion.costos.manoObraPorcentaje || 0;
     
     let manoObra = 0;
     if (cotizacion.tipoServicio === 'decoracion') {
         if (cotizacion.tipoManoObra === 'porcentaje') {
-            manoObra = costoRealMateriales * (porcentajeManoObra / 100);
+            manoObra = precioVentaTotal * (porcentajeManoObra / 100); 
         } else if (cotizacion.tipoManoObra === 'manual') {
             manoObra = cotizacion.montoManoObraManual;
         }
@@ -429,9 +424,9 @@ function calcularTotalCotizacion() {
     
     let gananciaTotal = 0;
     if (cotizacion.tipoServicio === 'decoracion') {
-        gananciaTotal = diferenciaMateriales + manoObra + transporte;
+        gananciaTotal = diferenciaMateriales;
     } else if (cotizacion.tipoServicio === 'flores') {
-        gananciaTotal = diferenciaMateriales + transporte;
+        gananciaTotal = diferenciaMateriales;
     }
     
     const porcentajeGananciaTotal = costoRealMateriales > 0 ? (gananciaTotal / costoRealMateriales * 100) : 0;
@@ -554,7 +549,6 @@ function inicializarEventListeners() {
         });
     }
     
-    // Usar delegación en document para que funcionen aunque el paso esté oculto al inicio
     document.addEventListener('input', (e) => {
         if (e.target.id === 'porcentaje-mano-obra') {
             const val = parseFloat(e.target.value);
@@ -698,12 +692,10 @@ function validarCampo(campoId, valor) {
                 mostrarError(campoId, 'El tipo de evento es obligatorio');
                 return false;
             }
-            
             if (valor === 'otro') {
                 limpiarError(campoId);
                 return true;
             }
-            
             limpiarError(campoId);
             return true;
             
@@ -729,9 +721,7 @@ function validarCampo(campoId, valor) {
                 mostrarError(campoId, 'El tipo de servicio es obligatorio');
                 return false;
             }
-            
             if (!validarConsistenciaEventoServicio()) return false;
-            
             limpiarError(campoId);
             return true;
             
@@ -895,7 +885,6 @@ function updateStepUI() {
         cambiarTipoManoObra();
         actualizarVistaPreviaPDF();
         actualizarTooltipPDF();
-        
         calcularTotalCotizacion();
     }
     
@@ -1564,6 +1553,7 @@ function actualizarTooltipPDF() {
 function createConfigItemHTML(tipo, item, index) {
     if (tipo === 'tipo-evento' || tipo === 'tematica-evento') {
         const itemValue = typeof item === 'string' ? item : (item.nombre || item);
+        const saveFn = tipo === 'tipo-evento' ? 'guardarTiposEvento()' : 'guardarTematicasEvento()';
         return `
             <div class="config-item" data-index="${index}" data-tipo="${tipo}">
                 <div class="config-input-group">
@@ -1573,12 +1563,14 @@ function createConfigItemHTML(tipo, item, index) {
                            value="${itemValue}" 
                            oninput="actualizarConfigItem('${tipo}', ${index}, 'nombre', this.value)">
                 </div>
+                <button class="btn-save-item" onclick="${saveFn}" title="Guardar cambios">💾</button>
                 <button class="btn-remove" onclick="eliminarConfigItem('${tipo}', ${index})">×</button>
             </div>
         `;
     }
     
     if (tipo === 'paquete' || tipo === 'accesorio') {
+        const saveFn = tipo === 'paquete' ? 'guardarPaquetes()' : 'guardarAccesorios()';
         return `
             <div class="config-item" data-id="${item.id}" data-tipo="${tipo}">
                 <div class="config-input-group">
@@ -1586,19 +1578,17 @@ function createConfigItemHTML(tipo, item, index) {
                     <input type="text" placeholder="Ej: Globo Azul" value="${item.nombre || ''}" 
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'nombre', this.value)">
                 </div>
-                
                 <div class="config-input-group">
                     <div class="config-label">Precio Venta</div>
                     <input type="number" placeholder="RD$" value="${item.precio || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'precio', this.value)">
                 </div>
-                
                 <div class="config-input-group">
                     <div class="config-label">Costo Real</div>
                     <input type="number" placeholder="RD$" value="${item.costo || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'costo', this.value)">
                 </div>
-                
+                <button class="btn-save-item" onclick="${saveFn}" title="Guardar cambios">💾</button>
                 <button class="btn-remove" onclick="eliminarConfigItemPorId('${tipo}', ${item.id})">×</button>
             </div>
         `;
@@ -1612,25 +1602,22 @@ function createConfigItemHTML(tipo, item, index) {
                     <input type="text" placeholder="Ej: Rosas Rojas" value="${item.nombre || ''}" 
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'nombre', this.value)">
                 </div>
-                
                 <div class="config-input-group">
                     <div class="config-label">Precio Venta</div>
                     <input type="number" placeholder="RD$" value="${item.precio || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'precio', this.value)">
                 </div>
-                
                 <div class="config-input-group">
                     <div class="config-label">Costo Real</div>
                     <input type="number" placeholder="RD$" value="${item.costo || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'costo', this.value)">
                 </div>
-                
                 <div class="config-input-group">
                     <div class="config-label">Color</div>
                     <input type="text" placeholder="Ej: Rojo" value="${item.color || 'Mixto'}" 
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'color', this.value)">
                 </div>
-                
+                <button class="btn-save-item" onclick="guardarFlores()" title="Guardar cambios">💾</button>
                 <button class="btn-remove" onclick="eliminarConfigItemPorId('${tipo}', ${item.id})">×</button>
             </div>
         `;
@@ -1644,19 +1631,17 @@ function createConfigItemHTML(tipo, item, index) {
                     <input type="text" placeholder="Ej: Ramo Pequeño" value="${item.nombre || ''}" 
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'nombre', this.value)">
                 </div>
-                
                 <div class="config-input-group">
                     <div class="config-label">Precio Venta</div>
                     <input type="number" placeholder="RD$" value="${item.precio || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'precio', this.value)">
                 </div>
-                
                 <div class="config-input-group">
                     <div class="config-label">Costo Real</div>
                     <input type="number" placeholder="RD$" value="${item.costo || 0}" min="0" step="10"
                             oninput="actualizarConfigItemPorId('${tipo}', ${item.id}, 'costo', this.value)">
                 </div>
-                
+                <button class="btn-save-item" onclick="guardarArreglos()" title="Guardar cambios">💾</button>
                 <button class="btn-remove" onclick="eliminarConfigItemPorId('${tipo}', ${item.id})">×</button>
             </div>
         `;
@@ -1796,10 +1781,7 @@ function agregarTipoEvento() {
         if (configItems.length > 0) {
             const lastItem = configItems[configItems.length - 1];
             const input = lastItem.querySelector('input[type="text"]');
-            if (input) {
-                input.focus();
-                input.select();
-            }
+            if (input) { input.focus(); input.select(); }
         }
     }, 100);
 }
@@ -1815,10 +1797,7 @@ function agregarTematicaEvento() {
         if (configItems.length > 0) {
             const lastItem = configItems[configItems.length - 1];
             const input = lastItem.querySelector('input[type="text"]');
-            if (input) {
-                input.focus();
-                input.select();
-            }
+            if (input) { input.focus(); input.select(); }
         }
     }, 100);
 }
@@ -1826,14 +1805,8 @@ function agregarTematicaEvento() {
 function agregarPaquete() {
     const newId = configIdCounter++;
     configuracion.paquetes.push({ 
-        id: newId, 
-        nombre: `Nuevo Globo ${newId}`, 
-        precio: 0, 
-        costo: 0, 
-        emoji: '🎈', 
-        cantidad: 0, 
-        tipo: 'decoracion',
-        unidad: 'paquete'
+        id: newId, nombre: `Nuevo Globo ${newId}`, precio: 0, costo: 0, 
+        emoji: '🎈', cantidad: 0, tipo: 'decoracion', unidad: 'paquete'
     });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nuevo globo agregado');
@@ -1842,14 +1815,8 @@ function agregarPaquete() {
 function agregarAccesorio() {
     const newId = configIdCounter++;
     configuracion.accesorios.push({ 
-        id: newId, 
-        nombre: `Nuevo Accesorio ${newId}`, 
-        precio: 0, 
-        costo: 0, 
-        emoji: '✨', 
-        cantidad: 0, 
-        tipo: 'decoracion',
-        unidad: 'unidad'
+        id: newId, nombre: `Nuevo Accesorio ${newId}`, precio: 0, costo: 0, 
+        emoji: '✨', cantidad: 0, tipo: 'decoracion', unidad: 'unidad'
     });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nuevo accesorio agregado');
@@ -1858,15 +1825,8 @@ function agregarAccesorio() {
 function agregarFlor() {
     const newId = configIdCounter++;
     configuracion.flores.push({ 
-        id: newId, 
-        nombre: `Nueva Flor ${newId}`, 
-        precio: 0, 
-        costo: 0, 
-        emoji: '🌹', 
-        cantidad: 0, 
-        tipo: 'flores', 
-        color: 'Mixto',
-        unidad: 'flor'
+        id: newId, nombre: `Nueva Flor ${newId}`, precio: 0, costo: 0, 
+        emoji: '🌹', cantidad: 0, tipo: 'flores', color: 'Mixto', unidad: 'flor'
     });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nueva flor agregada');
@@ -1875,21 +1835,15 @@ function agregarFlor() {
 function agregarArreglo() {
     const newId = configIdCounter++;
     configuracion.arreglosFlorales.push({ 
-        id: newId, 
-        nombre: `Nuevo Arreglo ${newId}`, 
-        precio: 0, 
-        costo: 0, 
-        emoji: '💐', 
-        cantidad: 0, 
-        tipo: 'flores',
-        unidad: 'unidad'
+        id: newId, nombre: `Nuevo Arreglo ${newId}`, precio: 0, costo: 0, 
+        emoji: '💐', cantidad: 0, tipo: 'flores', unidad: 'unidad'
     });
     renderizarConfiguracion();
     mostrarNotificacion('✅ Nuevo arreglo agregado');
 }
 
 // ============================================
-// FUNCIÓN CARGAR CONFIGURACIÓN CORREGIDA
+// FUNCIÓN CARGAR CONFIGURACIÓN
 // ============================================
 function cargarConfiguracion() {
     const configGuardada = localStorage.getItem('arteyevents_config');
@@ -1901,33 +1855,17 @@ function cargarConfiguracion() {
             configuracion.tematicasEvento = configCargada.tematicasEvento || ['Clásica', 'Moderno', 'Vintage', 'Rústica', 'Minimalista', 'Bohemia', 'Elegante', 'Divertida'];
             
             configuracion.paquetes = (configCargada.paquetes || configuracion.paquetes).map(p => ({
-                ...p,
-                costo: p.costo !== undefined ? p.costo : p.precio * 0.3,
-                cantidad: 0,
-                unidad: p.unidad || 'paquete'
+                ...p, costo: p.costo !== undefined ? p.costo : p.precio * 0.3, cantidad: 0, unidad: p.unidad || 'paquete'
             }));
-            
             configuracion.accesorios = (configCargada.accesorios || configuracion.accesorios).map(a => ({
-                ...a,
-                costo: a.costo !== undefined ? a.costo : a.precio * 0.3,
-                cantidad: 0,
-                unidad: a.unidad || 'unidad'
+                ...a, costo: a.costo !== undefined ? a.costo : a.precio * 0.3, cantidad: 0, unidad: a.unidad || 'unidad'
             }));
-            
             configuracion.flores = (configCargada.flores || configuracion.flores).map(f => ({
-                ...f,
-                costo: f.costo !== undefined ? f.costo : f.precio * 0.3,
-                cantidad: 0,
-                unidad: f.unidad || 'flor'
+                ...f, costo: f.costo !== undefined ? f.costo : f.precio * 0.3, cantidad: 0, unidad: f.unidad || 'flor'
             }));
-            
             configuracion.arreglosFlorales = (configCargada.arreglosFlorales || configuracion.arreglosFlorales).map(af => ({
-                ...af,
-                costo: af.costo !== undefined ? af.costo : af.precio * 0.3,
-                cantidad: 0,
-                unidad: af.unidad || (af.nombre.includes('Ramo') ? 'ramo' : 
-                                   af.nombre.includes('Centro') ? 'centro' :
-                                   af.nombre.includes('Arco') ? 'arco' : 'unidad')
+                ...af, costo: af.costo !== undefined ? af.costo : af.precio * 0.3, cantidad: 0,
+                unidad: af.unidad || (af.nombre.includes('Ramo') ? 'ramo' : af.nombre.includes('Centro') ? 'centro' : af.nombre.includes('Arco') ? 'arco' : 'unidad')
             }));
             
             configuracion.manoObraPorcentaje = configCargada.manoObraPorcentaje || 30;
@@ -1950,7 +1888,7 @@ function cargarConfiguracion() {
 }
 
 // ============================================
-// FUNCIÓN GUARDAR CONFIGURACIÓN MODIFICADA
+// FUNCIÓN GUARDAR CONFIGURACIÓN
 // ============================================
 function guardarConfiguracion() {
     configuracion.manoObraPorcentaje = parseFloat(document.getElementById('porcentaje-mano-obra').value) || 0;
@@ -1966,7 +1904,7 @@ function guardarConfiguracion() {
     };
     
     localStorage.setItem('arteyevents_config', JSON.stringify(configToSave));
-    mostrarNotificacion('✅ Configuración guardada con éxito. Los costos reales se han guardado.');
+    mostrarNotificacion('✅ Configuración guardada con éxito.');
     toggleConfig();
     
     cargarConfiguracion();
@@ -2017,7 +1955,6 @@ function guardarCategoria(categoria, datos) {
     }
     
     configGuardada[categoria] = datos;
-    
     localStorage.setItem('arteyevents_config', JSON.stringify(configGuardada));
     
     if (categoria === 'tiposEvento') {
@@ -2188,9 +2125,7 @@ async function generarEncabezadoPDF(doc) {
             image.onerror = () => reject(new Error('Error al cargar el logo'));
             image.src = logoUrl + '?t=' + new Date().getTime();
         });
-        
         doc.addImage(img, 'PNG', 20, 5, 25, 25);
-        
     } catch (logoError) {
         console.log('Logo no cargado, usando alternativa:', logoError.message);
         doc.setFontSize(12);
@@ -2278,10 +2213,7 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     const maxY = pageHeight - margin - 10;
     
     function checkPageBreak(neededSpace) {
-        if (yPos + neededSpace > maxY) {
-            doc.addPage();
-            yPos = margin;
-        }
+        if (yPos + neededSpace > maxY) { doc.addPage(); yPos = margin; }
     }
 
     await generarEncabezadoPDF(doc);
@@ -2296,7 +2228,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
 
     if (itemsSeleccionados.length > 0) {
         checkPageBreak(50);
-
         doc.setFontSize(12);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(138, 43, 226);
@@ -2330,19 +2261,16 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
             doc.text(textoItem, margin + 2, yPos + 4);
             yPos += 6;
         });
-
         yPos += 10;
     }
 
     checkPageBreak(50);
-    
     doc.setDrawColor(138, 43, 226);
     doc.setLineWidth(0.3);
     doc.line(margin, yPos, pageWidth - margin, yPos);
     yPos += 8;
     
     const xCostos = pageWidth - margin - 5;
-    
     yPos += 8;
     
     doc.setDrawColor(138, 43, 226);
@@ -2369,7 +2297,6 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
         doc.setTextColor(0, 0, 0);
         doc.text("Notas Adicionales:", margin, yPos);
         yPos += 4;
-        
         doc.setFontSize(9);
         doc.setFont("helvetica", "normal");
         doc.setTextColor(80, 80, 80);
@@ -2381,11 +2308,9 @@ async function generarPDFModoPresupuestoSimple(doc, itemsSeleccionados, total) {
     checkPageBreak(20);
     doc.setFillColor(245, 245, 245);
     doc.rect(0, pageHeight - 20, pageWidth, 20, 'F');
-    
     doc.setFontSize(8);
     doc.setFont("helvetica", "italic");
     doc.setTextColor(150, 150, 150);
-    
     doc.text("Arte y Events - Decoración Profesional", pageWidth / 2, pageHeight - 10, { align: "center" });
 }
 
@@ -2403,10 +2328,7 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     const maxY = pageHeight - margin - 10;
     
     function checkPageBreak(neededSpace) {
-        if (yPos + neededSpace > maxY) {
-            doc.addPage();
-            yPos = margin;
-        }
+        if (yPos + neededSpace > maxY) { doc.addPage(); yPos = margin; }
     }
 
     await generarEncabezadoPDF(doc);
@@ -2421,7 +2343,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
 
     if (itemsSeleccionados.length > 0) {
         checkPageBreak(50);
-
         doc.setFontSize(12);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(138, 43, 226);
@@ -2464,19 +2385,16 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
             doc.text(textoItem, margin + 2, yPos + 4);
             yPos += 6;
         });
-
         yPos += 10;
     }
 
     checkPageBreak(50);
-    
     doc.setDrawColor(138, 43, 226);
     doc.setLineWidth(0.3);
     doc.line(margin, yPos, pageWidth - margin, yPos);
     yPos += 8;
     
     const xCostos = pageWidth - margin - 5;
-    
     doc.setFontSize(10);
     
     if (cotizacion.tipoServicio === 'decoracion') {
@@ -2485,13 +2403,11 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
             doc.text(formatoMonedaRD(cotizacion.costos.materiales), xCostos, yPos, { align: "right" });
             yPos += 5;
         }
-
         if (configPDF.mostrarManoObra && cotizacion.costos.manoObra > 0) {
             doc.text("Instalación y Montaje:", pageWidth / 2, yPos, { align: "left" });
             doc.text(formatoMonedaRD(cotizacion.costos.manoObra), xCostos, yPos, { align: "right" });
             yPos += 5;
         }
-        
         if (configPDF.mostrarTransporte && cotizacion.costos.transporte > 0) {
             doc.text("Transporte:", pageWidth / 2, yPos, { align: "left" });
             doc.text(formatoMonedaRD(cotizacion.costos.transporte), xCostos, yPos, { align: "right" });
@@ -2500,7 +2416,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     }
     
     yPos += 8;
-    
     doc.setDrawColor(138, 43, 226);
     doc.setLineWidth(0.5);
     doc.line(pageWidth / 2, yPos, pageWidth - margin, yPos);
@@ -2525,7 +2440,6 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
         doc.setTextColor(0, 0, 0);
         doc.text("Notas Adicionales:", margin, yPos);
         yPos += 4;
-        
         doc.setFontSize(9);
         doc.setFont("helvetica", "normal");
         doc.setTextColor(80, 80, 80);
@@ -2537,11 +2451,9 @@ async function generarPDFModoNormal(doc, itemsSeleccionados, total) {
     checkPageBreak(20);
     doc.setFillColor(245, 245, 245);
     doc.rect(0, pageHeight - 20, pageWidth, 20, 'F');
-    
     doc.setFontSize(8);
     doc.setFont("helvetica", "italic");
     doc.setTextColor(150, 150, 150);
-    
     doc.text("Arte y Events - Decoración Profesional", pageWidth / 2, pageHeight - 10, { align: "center" });
 }
 
@@ -2583,9 +2495,7 @@ function limpiarCamposCotizacion() {
         tipoServicio: '',
         tipoManoObra: 'porcentaje',
         montoManoObraManual: 0,
-        cliente: {
-            nombre: '', telefono: '', email: '', fechaEvento: '', lugarEvento: '', notas: ''
-        },
+        cliente: { nombre: '', telefono: '', email: '', fechaEvento: '', lugarEvento: '', notas: '' },
         tipoEvento: '',
         tematicaEvento: '',
         articulos: {
@@ -2595,14 +2505,7 @@ function limpiarCamposCotizacion() {
             arreglosFlorales: configuracion.arreglosFlorales.map(af => ({...af, cantidad: 0})),
             manuales: []
         },
-        costos: {
-            materiales: 0,
-            costoRealMateriales: 0,
-            transporte: 0,
-            manoObra: 0,
-            manoObraPorcentaje: 30,
-            total: 0
-        }
+        costos: { materiales: 0, costoRealMateriales: 0, transporte: 0, manoObra: 0, manoObraPorcentaje: 30, total: 0 }
     };
     
     document.getElementById('costo-transporte').value = 0;
@@ -2643,16 +2546,7 @@ function limpiarCamposCotizacion() {
     mejorarVisualizacionTotal();
     actualizarVisibilidadBotonesFlotantes();
     
-    const displays = [
-        'display-costo-real',
-        'display-precio-venta', 
-        'display-ganancia',
-        'display-porcentaje-ganancia',
-        'display-mano-obra',
-        'display-transporte',
-        'display-total-final'
-    ];
-    
+    const displays = ['display-costo-real','display-precio-venta','display-ganancia','display-porcentaje-ganancia','display-mano-obra','display-transporte','display-total-final'];
     displays.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
@@ -2731,13 +2625,13 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').then(registration => {
-      console.log('ServiceWorker registrado con éxito:', registration.scope);
-    }).catch(registrationError => {
-      console.log('Error al registrar ServiceWorker:', registrationError);
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').then(registration => {
+            console.log('ServiceWorker registrado con éxito:', registration.scope);
+        }).catch(registrationError => {
+            console.log('Error al registrar ServiceWorker:', registrationError);
+        });
     });
-  });
 }
 
-console.log('✅ Script COMPLETO cargado correctamente - Versión sin desglose de ganancia');
+console.log('✅ Script COMPLETO cargado correctamente - Con botón guardar por artículo');
